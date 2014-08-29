@@ -1,0 +1,305 @@
+/* -*- Mode: C -*-
+ *  
+ * quickguide.dox - Quick User Guide
+ *
+ * Copyright (c) 2007-2009 Cisco Systems Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/**
+@page quickguide Quick Start Guide
+For those in a hurry this page contains examples showing how to implement
+simple diagnostics. These will be further developed in later examples to take
+advantage of different software diagnostic functionality.
+
+You can click on any of the APIs in the examples to jump to the reference
+page for that API.
+
+@note Throughout these examples the names of the tests, rules, actions and
+components will be presented as string literals. In a real client it is 
+expected that these will be defined to ensure that the same name is used
+at all times.
+
+@section quickindex Quick Guide Index
+@li @ref example1
+@li @ref example2
+@li @ref example3
+@li @ref example4
+@li @ref example5
+@li @ref example6
+@li @ref example7
+@li @ref example8
+@li @ref example9
+@li @ref example10
+@li @ref example11
+@li @ref example12
+
+@section example1 Example 1 - Polled Test, Rule, and Action
+The most basic diagnostic has a single test and recovery action, connected
+together with a simple rule that runs the recovery action when the test signals
+a test failure. The test, rule and action may be created in any order since 
+the rule is allowed to use forward references to tests and actions 
+that don't yet exist.
+
+The client must provide the following:
+  - A Test Function (<code> example_test() </code>)
+  - A Recovery Action Function (<code> example_action() </code>)
+  - Register the Test and Recovery Action, and register a Rule interpreting the Test result to trigger the Recovery Action (swdiag_test_create_polled(), swdiag_action_create(), swdiag_rule_create())
+  - Signal that the diagnostic is complete via swdiag_test_chain_ready()
+
+@include example1_polledtest.c
+
+In this example the code interfacing with software diagnostics is kept in
+a separate file (and subsystem) than the subsystems that it is testing (shown
+here as <code> check_foo() </code> and <code> fix_foo() </code>). This
+enables diagnostics to be conditionally linked in, allowing for branches
+where software diagnostics is not yet available.
+
+Back to @ref quickindex Index
+
+@section example2 Example 2 - Notification Test, Rule and Recovery Action.
+
+What if you already have a detection mechanism in place to detect the fault,
+and want to inform software diagnostics of the defect (also see 
+@ref notifications). 
+
+In this example the client calls <code> example2_foo_failed() </code> whenever the 
+status of @e foo changes.
+
+@include example2_notification.c
+
+Back to @ref quickindex Index
+
+@section example3 Example 3 - Components
+
+A software diagnostics client should group their tests, rules and actions
+together into a component. This allows summarization of the health of the
+functional area that the client is testing. It also makes it easy for the
+end user to enable and disable all the diagnostics for a client in one go.
+
+In this example we are not using recovery actions, which means that
+when rules fail only the health of the component is affected.
+
+@note An example of a component would be @b IPC or @b Memory. Components
+may contain other components, so more complex containment trees could be 
+created. e.g. System -> Routing -> BGP
+
+@include example3_component.c
+
+Back to @ref quickindex Index
+
+@section example4 Example 4 - Instances
+
+Most often a client has many instances of the same thing to be tested. For
+example a set of interfaces. The client could create tests, rules and actions
+on a per instance based. Or better use the swdiag_instance_create() API to
+create lightweight instances of a single test, rule or action.
+
+@note The decision on whether to use instances or create more objects
+is based on whether rule configuration is required at an instance
+level.  When using instances all instances inherit the configuration
+(e.g. Test polling interval, rule type and values) from the base
+test/action/rule. Don't use instances if you think that the different
+instances may require different configuration. 
+
+@dot
+digraph g1 {
+TestInterfaceFoo1 -> RuleInterfaceFoo1 -> ActionInterfaceFoo1
+TestInterfaceFoo2 -> RuleInterfaceFoo2 -> ActionInterfaceFoo2
+TestInterfaceFoo3 -> RuleInterfaceFoo3 -> ActionInterfaceFoo3
+}
+@enddot
+
+Or using instances:
+
+@dot
+digraph g2 {
+TestInterfaceFoo -> RuleInterfaceFoo  -> ActionInterfaceFoo 
+TestInterfaceFoo -> TestFoo1 -> TestFoo2 -> TestFoo3 [rank=same]
+RuleInterfaceFoo -> RuleFoo1 -> RuleFoo2 -> RuleFoo3 [rank=same]
+ActionInterfaceFoo -> ActionFoo1 -> ActionFoo2 -> ActionFoo3 [rank=same]
+TestFoo1 [label="Foo1"]
+TestFoo2 [label="Foo2"]
+TestFoo3 [label="Foo3"]
+RuleFoo1 [label="Foo1"]
+RuleFoo2 [label="Foo2"]
+RuleFoo3 [label="Foo3"]
+ActionFoo1 [label="Foo1"]
+ActionFoo2 [label="Foo2"]
+ActionFoo3 [label="Foo3"]
+}
+@enddot
+
+Polled Test and Action functions get called with an instance name, when no
+instance name is provided then it is being called for the @e base test or 
+action. 
+
+For example, we could create a polled test for probing IPC ports, when 
+there are no IPC ports that test will be called at the specified polling
+interval with no instance name specified. Once some IPC Ports are created
+and test instances created to test them, then the test function will be called
+once for the base, and once for each instance.
+
+@include example4_instance.c
+
+Back to @ref quickindex Index
+
+@section example5 Example 5 - Chaining Rules
+
+A lot of the time the result of a test by itself is not enough to determine
+whether there is a fault. The test result must be filtered possibly a number
+of times. For example, a fault may depend on a threshold being exceeded for
+a pre-defined period of time. 
+
+In this example there is a polled test
+(<code>"Example5Test"</code>)that returns a percentage as a
+value. This percentage is filtered by a threshold rule
+(<code>Example5ThresholdRule"</code>). There is then a second rule
+(<code>"Example5TimeRule"</code>) that has the threshold rule as input
+that triggers if the threshold is exceeded more than 4 times in a row.
+
+Both the threshold and number of times in a row the threshold must be exceeded
+are configurable via the CLI. The type of the rule can also be changed, for
+example from N in a row to N over time M.
+
+@include example5_rules.c
+
+Back to @ref quickindex Index
+
+@section example6 Example 6 - Combining Rules
+
+Sometimes a rules result is determined from more than one input. In these
+cases logical rules may be used to combine the results from more than one
+test or rule.
+
+This provides a facility whereby rudimentary correlation between test
+results may be performed.
+
+For example a rule should fail when a test is failing and another test is
+returning a value less than a threshold over a period of time.
+
+@dot
+digraph g1 {
+Example6TestFoo -> Example6ThresholdRuleFoo -> Example6TimeRuleFoo -> Example6RuleAnd -> Example6Action
+Example6TestBar -> Example6RuleBar -> Example6RuleAnd
+}
+@enddot
+
+@include example6_combined_rules.c
+
+Also see @ref example7 for how to flesh out this example with differing severity levels.
+
+Back to @ref quickindex Index
+
+@section example7 Example 7 - Assigning custom severity levels
+
+By default all failing rules have a severity of medium (SWDIAG_SEVERITY_MEDIUM)
+meaning that the health of the owning component will decrement by that amount
+whenever that rule fails. 
+
+It is often the case that some rules by themselves should not affect the
+health of the component. And it is often the case that at other times some
+rules have a higher or lower severity than other rules.
+
+The swdiag_rule_set_severity() API is used to adjust the severity of a rule.
+
+Building on @ref example7 and @ref example3 this example adds
+different severity levels to the rules within a component.
+
+@include example7_rule_severity.c
+
+Back to @ref quickindex Index
+
+@section example8 Example 8 - Test from component health
+
+Rather than create a complex set of relationships between rules within 
+a component it may be desired to simply monitor the health of that component
+and trigger a recovery action (or user notification) when that health drops
+below a threshold using swdiag_test_create_comp_health().
+
+@include example8_rule_comp_health.c
+
+Back to @ref quickindex Index
+
+@section example10 Example 10 - Descriptions
+
+Should there be a diagnostic rule failure the user will be notified
+and will be instructed to execute the CLI which shows details of the rule
+and recovery action. In order for the diagnostics client author to
+convey some useful information to the customer a description
+may be added to tests, rules, actions and components using 
+swdiag_test_set_description(), swdiag_action_set_description(),
+swdiag_rule_set_description(), and swdiag_comp_set_description().
+
+@include example10_descriptions.c
+
+Back to @ref quickindex Index
+
+@section example11 Example 11 - Dependencies
+
+Software Diagnostics supports Root Cause Identification, which is a 
+mechanism which uses a user supplied tree of dependencies between rules
+and components to find the lowest failing rule, and that is deemed to
+be the root cause, and is the only rule to have its recovery action
+triggered.
+
+The API swdiag_depend_create() is used to create a dependency of one
+component or rule on another component or rule. The parent and child
+do not have to be in the same component, so it is quite possible
+and desirable for subsystems to export the name of their software
+diagnostics component and or rules so that other subsystems may reference
+them in their dependency tree.
+
+For example, a Redundancy client has a dependency on the Redundancy Facility,
+the Checkpointing Facility and on Memory. Therefore it should create 
+dependencies on the software diagnostic components that represent those
+subsystems.
+
+Failure to use the dependency mechanism means that recovery actions may
+get called for rules which have a lower root cause, which may further 
+confuse or even compound the fault.
+
+@include example11_dependencies.c
+
+Back to @ref quickindex Index
+
+@section example12 Example 12 - Flags
+
+In Redundant systems the diagnostics will be running on both the Active
+and Standby systems. Sometimes the diagnostics only apply to the Active
+or Standby, and should not be run elsewhere. 
+
+The client test could use rf_is_standby() or rf_is_active() within their
+test to return SWDIAG_RESULT_IGNORE.
+
+Alternatively the client could set flags (using
+swdiag_test_set_flags(), swdiag_rule_set_flags, and
+swdiag_action_set_flags()) on the tests, rules and actions to say that
+their operation ought to be limited.
+
+@include example12_flags.c
+
+Back to @ref quickindex Index
+
+*/
+
+

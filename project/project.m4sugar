@@ -1,0 +1,15 @@
+dnl
+dnl This file defines highest-level project meta-data in autoconf M4 format.
+dnl It is needed downstream by configure.ac.
+dnl
+define([PRJ_name],           [SWDiag])
+define([PRJ_name_lower],     [swdiag])
+define([PRJ_name_upper],     [SWDIAG])
+define([PRJ_url_website],    [http://code.google.com/p/libswdiag])
+define([PRJ_url_downloads],  [http://code.google.com/p/libswdiag/downloads/list])
+define([PRJ_url_discussion], [http://groups.google.com/group/libswdiag])
+define([PRJ_irc],            [irc://irc.freenode.net/libswdiag])
+define([PRJ_bugreport],      [eddyg@myreflection.org])
+define([PRJ_version_major],  [1])
+define([PRJ_version_minor],  [0])
+define([PRJ_version_point],  [0])
