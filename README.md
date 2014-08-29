@@ -1,0 +1,4 @@
+libswdiag
+=========
+
+Software DIagnostics
