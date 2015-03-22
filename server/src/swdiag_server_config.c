@@ -220,7 +220,20 @@ static boolean parse_tuples(char *configuration, jsmntok_t *tokens) {
                     }
                 }
                 (*token_ptr)++;
-            } else if (json_token_streq(configuration, token, "enabled-modules")) {
+            } else if (json_token_streq(configuration, token, "use-sendmail")) {
+                (*token_ptr)++;
+                token = *token_ptr;
+                if (is_valid_token(token) && token->type == JSMN_PRIMITIVE) {
+                    /*Should Sendmail be used, true or false */
+                    char *use_sendmail = json_token_to_str(configuration, token);
+                    if (use_sendmail) {
+                    	if (strcmp(use_sendmail, "true") == 0) {
+                    		server_config.use_sendmail = TRUE;
+                    	}
+                    }
+                }
+                (*token_ptr)++;
+            }else if (json_token_streq(configuration, token, "enabled-modules")) {
                 // eg. enabled-modules: ['diag_postgres', 'diag_diskspace', 'diag_memory']
                 (*token_ptr)++;
                 token = *token_ptr;

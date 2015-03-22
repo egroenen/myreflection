@@ -39,6 +39,7 @@ typedef struct {
     char alert_email_to[EMAIL_MAX];
     char alert_email_from[EMAIL_MAX];
     char smtp_hostname[HOSTNAME_MAX];
+    boolean use_sendmail;
     char http_root[FILEPATH_MAX];
     char http_port[HTTP_PORT_MAX];
     // TODO SMTP Auth must go somewhere - here?

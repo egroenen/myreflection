@@ -306,8 +306,20 @@ swdiag_result_t swdiag_server_email(const char *instance, void *context) {
         } else {
             strncpy(body, email->subject, MAXBUFLEN-1);
         }
-        /* I'm hardcoding the hostname to swdiag-server - it's not AFAIK important anyway. */
-        send_mail(server_config.smtp_hostname, "swdiag-server", server_config.alert_email_from, to, email->subject, server_config.alert_email_from, body);
+
+        if (server_config.use_sendmail == TRUE) {
+        	// Send via sendmail instead of connecting directly to the server ourselves.
+        	FILE *fp = popen("/usr/sbin/sendmail -t", "w");
+        	if (fp != NULL) {
+        		char full_email[MAXBUFLEN];
+        		snprintf(full_email, MAXBUFLEN, "From: %s\nTo: %s: Subject: %s\n\n%s\n", server_config.alert_email_from, to, email->subject, body);
+				size_t newLen = fwrite(full_email, sizeof(char), MAXBUFLEN, fp);
+				pclose(fp);
+			}
+        } else {
+			/* I'm hardcoding the hostname to swdiag-server - it's not AFAIK important anyway. */
+			send_mail(server_config.smtp_hostname, "swdiag-server", server_config.alert_email_from, to, email->subject, server_config.alert_email_from, body);
+        }
     }
 
     return result;
