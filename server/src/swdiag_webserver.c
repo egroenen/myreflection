@@ -47,6 +47,10 @@
  * return JSON so that the web interface can display the results in datatables
  * etc.
  */
+
+static struct mg_context *ctx;
+
+
 static void *https_request_callback(enum mg_event event,
         struct mg_connection *conn) {
 
@@ -159,7 +163,6 @@ boolean swdiag_webserver_start() {
     /*
      * Start the embedded monsoon web server running non-SSL (for now) on 7654
      */
-    struct mg_context *ctx;
     static const char *options[] = {"listening_ports", server_config.http_port,
                                     "document_root", server_config.http_root,
                                     "num_threads", "5",
@@ -173,4 +176,8 @@ boolean swdiag_webserver_start() {
         return FALSE;
     }
     return TRUE;
+}
+
+void swdiag_webserver_stop() {
+	mg_stop(ctx);
 }

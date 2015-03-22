@@ -1,7 +1,7 @@
 /*
- * swdiag_webserver.h - SW Diagnostics JSON web server
+ * check_sched.c - Unit Test Harness for swdiag_sched.c
  *
- * Copyright (c) 2012 Edward Groenendaal
+ * Copyright (c) 2014 Edward Groenendaal.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -22,12 +22,21 @@
  * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
+ * Test the contents of swdiag_sched.c using the "check" UT framework.
+ * Use "make check" to run these tests.
+ *
+ * Use ck_assert_msg() for things being tested in that test, and ck_assert()
+ * where it is not core  to the test at hand.
+ *
+ * April 2014, Edward Groenendaal
  */
+#include <check.h>
+#include "../src/swdiag_obj.h"
 
-#ifndef SWDIAG_SERVER_MODULE_H_
-#define SWDIAG_SERVER_MODULE_H_
+int
+main (void)
+{
+    return EXIT_SUCCESS;
+}
 
-extern boolean swdiag_webserver_start(void);
-extern void swdiag_webserver_stop(void);
-
-#endif /* SWDIAG_SERVER_MODULE_H_ */

@@ -37,6 +37,7 @@ char *swdiag_api_convert_name(const char *from_to_name);
 obj_t *swdiag_api_get_or_create(const char *name, obj_type_t type);
 
 void swdiag_api_init(void);
+void swdiag_api_terminate(void);
 
 void swdiag_set_slave(const char *slave_name);
 void swdiag_set_master(void);

@@ -126,13 +126,13 @@ boolean swdiag_cli_local_handle_free (cli_handle_t *handle)
      * database to display the contents. If those are not properly updated then
      * its a bug in the code.
      */
-    if (handle->instance) {
+    if (handle->instance && swdiag_obj_instance_validate(handle->instance, OBJ_TYPE_ANY)) {
         handle->instance->in_use = 0;
     }    
-    if (handle->last_obj) {
+    if (handle->last_obj && swdiag_obj_validate(handle->last_obj, OBJ_TYPE_ANY)) {
         handle->last_obj->i.in_use = 0;
     }    
-    if (handle->last_remote_obj) {
+    if (handle->last_remote_obj && swdiag_obj_validate(handle->last_remote_obj, OBJ_TYPE_ANY)) {
         handle->last_remote_obj->i.in_use = 0;
     }    
 
@@ -422,6 +422,10 @@ cli_handle_t *swdiag_cli_local_handle_allocate (cli_type_t type,
     handle->handle_id = get_new_handle_id();
     handle->type = type;
     handle->filter = filter;
+    handle->instance = NULL;
+    handle->last_obj = NULL;
+    handle->last_remote_obj = NULL;
+    handle->remote_comp = NULL;
     swdiag_list_add(handles_in_use, handle);
     swdiag_xos_time_set_now(&handle->handle_used_last_time);
     return (handle);
@@ -2648,7 +2652,7 @@ cli_obj_name_t *swdiag_cli_local_get_option_tbl (unsigned int handle_id,
             break;
         }    
 
-        swdiag_debug(NULL, "Table: name=%s rel=%d, remote=%d obj=0x%p",
+        swdiag_debug(NULL, "Table: name=%s rel=%d, remote=%d obj=%p",
                      obj->i.name, rel == OBJ_REL_COMP, 
                      obj->remote_location, obj);
 

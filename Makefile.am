@@ -2,7 +2,7 @@ lib_LTLIBRARIES = libswdiag.la
 
 bin_PROGRAMS =
 
-check_PROGRAMS =
+SUBDIRS = . tests
 
 EXTRA_DIST = LICENSE
 
@@ -142,16 +142,6 @@ dist-hook:
 
 endif
 
-###############################################################################
-
-DEJATOOL = main
-
-TESTLOGDIR = $(builddir)/testlog
-
-override RUNTESTDEFAULTFLAGS = --tool $$tool --srcdir $$srcdir/testsuite --outdir $(TESTLOGDIR)
-
-###############################################################################
-
 libswdiagincdir = $(pkgincludedir)
 
 libswdiaginc_HEADERS = \
@@ -209,19 +199,6 @@ MK_CXX_D    =
 MK_CXX_I = \
     -I$(top_builddir)/include -I$(top_srcdir)/include -I$(top_srcdir)/src \
     -I$(top_builddir)/src
-
-###############################################################################
-
-##
-## workaround: DejaGNU adds a hard-coded dependency on Makefile
-## and need to create logdir
-##
-Makefile: ${Makefile}
-	touch $@
-	$(mkdir_p) $(TESTLOGDIR)
-
-
-###############################################################################
 
 ##
 ## include GNUmakefiles which are not full-fledged automake citizens but

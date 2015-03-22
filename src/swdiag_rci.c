@@ -794,6 +794,7 @@ static boolean rci_map_function (obj_instance_t *instance,
         default:
             swdiag_error("Internal error, found unexpected obj type "
                          "in dependencies");
+			break;
         }
         break;
     case RCI_MAP_COMP_PARENTS:
@@ -808,6 +809,7 @@ static boolean rci_map_function (obj_instance_t *instance,
         default:
             swdiag_error("Internal error, found unexpected obj type "
                          "in dependencies");
+			break;
         }
         break;
     case RCI_MAP_CHILDREN:
@@ -822,6 +824,7 @@ static boolean rci_map_function (obj_instance_t *instance,
         default:
             swdiag_error("Internal error, found unexpected obj type "
                          "in dependencies");
+			break;
         }
         break;
     case RCI_MAP_COMP_CHILDREN:
@@ -836,6 +839,7 @@ static boolean rci_map_function (obj_instance_t *instance,
         default:
             swdiag_error("Internal error, found unexpected obj type "
                          "in dependencies");
+			break;
         }
         break;
     }
@@ -944,7 +948,7 @@ static boolean rci_map_function (obj_instance_t *instance,
                     rule_instance = swdiag_obj_instance_by_name(element_obj, 
                                                                 instance_name);
                     swdiag_debug(rule_instance->obj->i.name,
-                                 "RCI: Looking for instance '%s', got 0x%p", 
+                                 "RCI: Looking for instance '%s', got %p",
                                  instance_name, rule_instance);
                     
                     if (rule_instance && 

@@ -232,7 +232,7 @@ xos_timer_t *swdiag_xos_timer_create (xos_timer_expiry_fn_t *fn, void *context)
     }
     timer_queue.tail = timer;
 
-    swdiag_debug(NULL, "XOS timer %d created", timer->id);
+    swdiag_debug(NULL, "XOS timer %p created", (void*)timer->id);
     return (timer);
 }
 #elif __APPLE__
@@ -272,8 +272,8 @@ void swdiag_xos_timer_start (xos_timer_t *timer,
 
     timer->started = TRUE;
     if (timer_settime(timer->id, 0, &timer_val, NULL) == -1) {
-        swdiag_error("XOS timer_start(%d) (%lu,%lu) failed (%s)", 
-                     timer->id, delay_sec, delay_nsec, strerror(errno));
+        swdiag_error("XOS timer_start(%p) (%lu,%lu) failed (%s)",
+                     (void*)timer->id, delay_sec, delay_nsec, strerror(errno));
         return;
     }
     //swdiag_debug(NULL, "XOS timer %d started with delay(%lu,%lu)",
@@ -309,7 +309,7 @@ void xos_timer_stop (xos_timer_t *timer)
 void swdiag_xos_timer_delete (xos_timer_t *timer)
 {
     if (timer) {
-        swdiag_debug(NULL, "XOS timer %d deleted", timer->id);
+        swdiag_debug(NULL, "XOS timer %p deleted", (void*)timer->id);
         xos_timer_stop(timer);
         free(timer);
     }
@@ -411,6 +411,7 @@ xos_thread_t *swdiag_xos_thread_create (const char *name,
     boolean rc;
     xos_thread_t *thread;
     pthread_t tid;
+    pthread_attr_t attr;
 
     if (!swdiag_thread || !start_fn) {
         return (NULL);
@@ -438,7 +439,10 @@ xos_thread_t *swdiag_xos_thread_create (const char *name,
         return (NULL);
     }
 
-    rc = pthread_create(&tid, NULL, (void*)start_fn, swdiag_thread);
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+
+    rc = pthread_create(&tid, &attr, (void*)start_fn, swdiag_thread);
     if (rc) {
         swdiag_error("POSIX thread create failed");
         free(thread);
@@ -449,32 +453,40 @@ xos_thread_t *swdiag_xos_thread_create (const char *name,
         swdiag_thread->id = (int)tid;
     }
 
-    swdiag_debug(NULL, "POSIX thread %p created", thread->tid);
+    swdiag_debug(NULL, "POSIX thread %d created", (int)thread->tid);
     return (thread);
 }
 
 /*
  * Destroy another thread given by the parameter.
  */
-boolean swdiag_xos_thread_destroy (xos_thread_t *thread)
+boolean swdiag_xos_thread_destroy (swdiag_thread_t *swdiag_thread)
 {
     int rc;
     int tid;
+    xos_thread_t *thread;
 
-    if (!thread) {
+    if (!swdiag_thread) {
         swdiag_error("POSIX thread destroy");
         return (FALSE);
     }
 
-    tid = thread->tid;
-    rc = pthread_cancel(tid);
-    if (rc) {
-        swdiag_debug(NULL, "POSIX destroy %d failed with %d", tid, rc);
-        return (FALSE);
-    }
+    thread = swdiag_thread->xos;
+
+    // Cancelling a pthread is error prone, better to signal the thread
+    // to quit itself, so this is commented out now.
+
+//    tid = thread->tid;
+//    rc = pthread_cancel(tid);
+//    if (rc) {
+//        swdiag_debug(NULL, "POSIX destroy %d failed with %d", tid, rc);
+//        return (FALSE);
+//    }
 
     free(thread);
     swdiag_debug(NULL, "POSIX thread %d destroyed", tid);
+
+    free(swdiag_thread->name);
     return (TRUE);
 }
 
@@ -541,7 +553,7 @@ boolean swdiag_xos_thread_release (xos_thread_t *thread)
     }
 
     if (thread->work_to_do) {
-        swdiag_error("POSIX thread already running");
+        swdiag_debug(NULL, "POSIX thread already running");
         pthread_mutex_unlock(&thread->run_test_mutex);
         return (FALSE);
     }

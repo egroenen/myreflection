@@ -45,7 +45,7 @@
  * List of free list elements
  */
 static swdiag_list_element_t *free_elements = NULL;
-
+static xos_critical_section_t *free_elements_lock = NULL;
 /*******************************************************************
  * Local Functions
  *******************************************************************/
@@ -55,15 +55,16 @@ static swdiag_list_element_t *new_list_element (void)
     swdiag_list_element_t *element = NULL;
     char *memory_block;
     int i;
-    static xos_critical_section_t *lock = NULL;
 
-    if (!lock) {
-        lock = swdiag_xos_critical_section_create();
+
+    if (!free_elements_lock) {
+    	free_elements_lock = swdiag_xos_critical_section_create();
     }
 
-    swdiag_xos_critical_section_enter(lock);
+    swdiag_xos_critical_section_enter(free_elements_lock);
 
     if (free_elements == NULL) {
+    	swdiag_trace(NULL, "Allocated new block of elements");
         memory_block = calloc(HEADER_MALLOC_MULTIPLIER, 
                               sizeof(swdiag_list_element_t));
         
@@ -79,12 +80,12 @@ static swdiag_list_element_t *new_list_element (void)
 
     if (free_elements) {
         element = free_elements;
-        free_elements = free_elements->next;
+        free_elements = element->next;
         element->next = NULL;
         element->data = NULL;
     } 
 
-    swdiag_xos_critical_section_exit(lock);
+    swdiag_xos_critical_section_exit(free_elements_lock);
     
     return(element);
 }
@@ -97,8 +98,10 @@ static swdiag_list_element_t *new_list_element (void)
 static void free_list_element (swdiag_list_element_t *element)
 {
     if (element) {
+    	swdiag_xos_critical_section_enter(free_elements_lock);
         element->next = free_elements;
         free_elements = element;
+        swdiag_xos_critical_section_exit(free_elements_lock);
     }
 }
 
@@ -114,6 +117,50 @@ static void free_list_element (swdiag_list_element_t *element)
 swdiag_list_element_t *swdiag_ut_expose_free_list (void)
 {
     return(free_elements);
+}
+
+/*
+ * Check that the list is valid.
+ */
+static boolean validate_list (swdiag_list_t *list)
+{
+	switch(list->num_elements) {
+	case 0:
+		if (list->head != NULL || list->tail != NULL) {
+			swdiag_error("Empty list with head or tail %p", list);
+			return FALSE;
+		}
+		break;
+	case 1:
+		if (list->head == NULL || list->tail == NULL) {
+			swdiag_error("Populated list with empty head or tail %p", list);
+			return FALSE;
+		}
+		if (list->head != list->tail) {
+			swdiag_error("List with one element head != tail %p", list);
+			return FALSE;
+		}
+		if (list->head->next != NULL) {
+			swdiag_error("List with one element head->next != NULL %p", list);
+			return FALSE;
+		}
+		break;
+	default:
+		if (list->head == NULL || list->tail == NULL) {
+			swdiag_error("Populated list with empty head or tail %p", list);
+			return FALSE;
+		}
+		if (list->head->next == NULL) {
+			swdiag_error("Populated list head->next == NULL %p", list);
+			return FALSE;
+		}
+		if (list->tail->next != NULL) {
+			swdiag_error("Populated list tail->next != NULL %p", list);
+			return FALSE;
+		}
+		break;
+	}
+	return TRUE;
 }
 
 /*
@@ -188,18 +235,23 @@ void swdiag_list_insert (swdiag_list_t *list,
         return;
     }
 
+    swdiag_xos_critical_section_enter(list->lock);
+
+    if (!validate_list(list)) {
+		return;
+	}
+
     /*
      * This check should be removed for performance reasons prior
      * to release.
      */
     if (swdiag_list_find(list, data)) {
         swdiag_error("%s: duplicate element", __FUNCTION__);
+        swdiag_xos_critical_section_exit(list->lock);
         return;
     }
 
     element = new_list_element();
-
-    swdiag_xos_critical_section_enter(list->lock);
 
     head = list->head;
 
@@ -207,6 +259,7 @@ void swdiag_list_insert (swdiag_list_t *list,
         element->data = data;
 
         if (prev) {
+        	swdiag_debug(NULL, "List insert with a previous");
             next = prev->next;
             prev->next = element;
         } else {
@@ -214,6 +267,11 @@ void swdiag_list_insert (swdiag_list_t *list,
             head = element;
         }
         element->next = next;
+    } else {
+    	// No element.
+    	swdiag_error("Could not get a list element");
+        swdiag_xos_critical_section_exit(list->lock);
+        return;
     }
     
     list->head = head;
@@ -232,6 +290,11 @@ void swdiag_list_insert (swdiag_list_t *list,
         }
     }
     list->num_elements++;
+
+    if (!validate_list(list)) {
+		return;
+	}
+
     swdiag_xos_critical_section_exit(list->lock);
 }
 
@@ -251,6 +314,10 @@ boolean swdiag_list_remove (swdiag_list_t *list, void *data)
     }
 
     swdiag_xos_critical_section_enter(list->lock);
+
+    if (!validate_list(list)) {
+		return FALSE;
+	}
 
     previous = NULL;
     current = list->head;
@@ -282,10 +349,14 @@ boolean swdiag_list_remove (swdiag_list_t *list, void *data)
                 list->tail = previous;
             }
 
+            // put the free element back in the free pool.
             free_list_element(current);
 
             list->num_elements--;
 
+            if (!validate_list(list)) {
+        		return FALSE;
+        	}
             /*
              * Assume that there is only one match in the list and bail.
              */
@@ -295,6 +366,11 @@ boolean swdiag_list_remove (swdiag_list_t *list, void *data)
         previous = current;
         current = current->next;
     }
+
+    if (!validate_list(list)) {
+		return FALSE;
+	}
+
     swdiag_xos_critical_section_exit(list->lock);
     return(retval);
 }
@@ -321,6 +397,10 @@ void swdiag_list_push (swdiag_list_t *list, void *data)
 
         swdiag_xos_critical_section_enter(list->lock);
 
+        if (!validate_list(list)) {
+    		return;
+    	}
+
         if (!list->head) {
             list->head = element;
         }
@@ -332,11 +412,17 @@ void swdiag_list_push (swdiag_list_t *list, void *data)
         list->tail = element;
         
         list->num_elements++;
+
+        if (!validate_list(list)) {
+    		return;
+    	}
+
         swdiag_xos_critical_section_exit(list->lock);
     } else {
         swdiag_error("%s: could not allocate element", __FUNCTION__);
     }
 }
+
 
 /*
  * swdiag_list_pop()
@@ -348,11 +434,23 @@ void *swdiag_list_pop (swdiag_list_t *list)
     swdiag_list_element_t *head;
     void *data;
 
-    if (!list || !list->head) {
+    if (!list || !list->lock) {
         return(NULL);
     }
+
     swdiag_xos_critical_section_enter(list->lock);
+
+    if (!validate_list(list)) {
+    	return NULL;
+    }
+
     head = list->head;
+
+    if (!head) {
+    	// Empty list.
+        swdiag_xos_critical_section_exit(list->lock);
+    	return(NULL);
+    }
 
     list->head = head->next;
 
@@ -364,9 +462,14 @@ void *swdiag_list_pop (swdiag_list_t *list)
     }
 
     data = head->data;
+    // Put the list element back in the free pool
     free_list_element(head);
 
     list->num_elements--;
+
+    if (!validate_list(list)) {
+		return NULL;
+	}
     swdiag_xos_critical_section_exit(list->lock);
 
     return(data);
@@ -398,9 +501,8 @@ boolean swdiag_list_find (swdiag_list_t *list, const void *data)
     boolean retval = FALSE;
 
     if (list) {
-        current = list->head;
-
         swdiag_xos_critical_section_enter(list->lock);
+        current = list->head;
         while(current) {
             if (current->data == data) {
                 retval = TRUE;

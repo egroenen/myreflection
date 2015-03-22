@@ -60,7 +60,8 @@ typedef struct sched_test_queue_s {
     swdiag_list_t *queue;
 } sched_test_queue_t;
 
-void swdiag_sched_initialize(void);
+void swdiag_sched_init(void);
+void swdiag_sched_terminate(void);
 void swdiag_sched_add_test(obj_instance_t *test_instance, boolean force);
 void swdiag_sched_remove_test(obj_instance_t *test_instance);
 void swdiag_sched_kill(void);

@@ -1,0 +1,5 @@
+*.o
+*.log
+*~
+*.pyc
+autom4te.cache/*

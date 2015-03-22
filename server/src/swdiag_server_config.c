@@ -79,16 +79,18 @@ boolean config_parse(char *filename) {
     if (filename) {
         FILE *fp = fopen(filename, "r");
 
+        swdiag_debug(NULL, "Parsing Configuration '%s'", filename);
+
         if (fp != NULL) {
             // Have a file that we can read, parse it.
             char *configuration = calloc(MAXBUFLEN + 1, sizeof(char));
             if (!configuration) {
-                fprintf(stderr, "Error: memory allocation failure '%s'\n", filename);
+                swdiag_error("Error: memory allocation failure '%s'\n", filename);
                 return FALSE;
             }
             size_t newLen = fread(configuration, sizeof(char), MAXBUFLEN, fp);
             if (newLen == 0) {
-                fprintf(stderr, "Error: empty configuration for file '%s'\n", filename);
+                swdiag_error("Error: empty configuration for file '%s'\n", filename);
             } else {
                 configuration[++newLen] = '\0'; /* Just to be safe. */
             }
@@ -98,7 +100,7 @@ boolean config_parse(char *filename) {
             }
             free(configuration);
         } else {
-            fprintf(stderr, "Warning: Could not open the swdiag-server configuration file '%s'\n", filename);
+            swdiag_error("Warning: Could not open the swdiag-server configuration file '%s'\n", filename);
             return ret;
         }
     }
@@ -234,7 +236,7 @@ static boolean parse_tuples(char *configuration, jsmntok_t *tokens) {
                             if (modulename) {
                                 server_config.modules[i] = strdup(modulename);
                             } else {
-                                fprintf(stderr, "WARNING: Could not understand the configuration reading modules\n");
+                                swdiag_error("WARNING: Could not understand the configuration reading modules\n");
                                 break;
                             }
                         }
@@ -247,12 +249,12 @@ static boolean parse_tuples(char *configuration, jsmntok_t *tokens) {
                 /*
                  * Unknown configuration paramater - go on to the next one.
                  */
-                fprintf(stderr, "WARNING: Could not understand the configuration. Token %s\n",
+                swdiag_error("WARNING: Could not understand the configuration. Token %s\n",
                         json_token_to_str(configuration, token));
                 (*token_ptr)++;
             }
         } else {
-            fprintf(stderr, "WARNING: Could not understand the configuration directive type\n");
+            swdiag_error("WARNING: Could not understand the configuration directive type\n");
             (*token_ptr)++;
         }
         token = *token_ptr;

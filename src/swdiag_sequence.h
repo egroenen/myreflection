@@ -63,5 +63,6 @@ swdiag_result_t swdiag_seq_test_run(obj_instance_t *test_instance,
 void swdiag_seq_from_action_complete(obj_instance_t *action_instance,
                                      swdiag_result_t result);
 void swdiag_seq_init(void);
+void swdiag_seq_terminate(void);
 
 #endif

@@ -133,21 +133,24 @@
 /* @{ */
 /**
  * Use for tests that should run as quickly as possible, each test should 
- * run quickly so as to not block other tests from running.
+ * run quickly so as to not block other tests from running (must be greater
+ * than 1 second).
+ *
  * Default is 1 minute.
  */
-#define SWDIAG_PERIOD_FAST   (1000 * 60)
+#define SWDIAG_PERIOD_FAST   (1000 * 2)
+
 /**
  * Use for tests that should run every so often.
  * Default is 5 minutes.
  */
-#define SWDIAG_PERIOD_NORMAL (1000 * 60 * 5)
+#define SWDIAG_PERIOD_NORMAL (1000 * 2 * 5)
 /**
  * Use for tests that should not be run frequently, possibly because the 
  * test takes a while to complete.
  * Default is 30 mins.
  */
-#define SWDIAG_PERIOD_SLOW   (1000 * 60 * 30)
+#define SWDIAG_PERIOD_SLOW   (1000 * 2 * 30)
 /* @} */
 
 /** 
@@ -1400,5 +1403,14 @@ unsigned int swdiag_health_get(const char *component_name);
  */
 void *swdiag_get_context(const char *obj_name);
 
+/** Loop until the system exits
+ *
+ */
+void swdiag_start(void);
+
+/** Stop the system
+ *
+ */
+void swdiag_stop(void);
 /*@}*/
 #endif 

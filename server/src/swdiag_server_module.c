@@ -105,6 +105,8 @@ void modules_init(char *modules_path) {
         closedir(d);
     }
 
+    swdiag_debug(NULL, "Processing modules from %s, %d files found", modules_path, moduleCount);
+
     if (moduleCount > 0) {
         modules_ = (char**) calloc(moduleCount, sizeof(void*));
         moduleCount = 0;
@@ -115,6 +117,8 @@ void modules_init(char *modules_path) {
                 if (is_valid_module(filename)) {
                     modules_[moduleCount++] = strdup(filename);
                     swdiag_debug(NULL, "Added MODULE '%s'", modules_[moduleCount-1]);
+                } else {
+                    swdiag_debug(NULL, "Invalid MODULE '%s'", filename);
                 }
             }
             closedir(d);
@@ -130,13 +134,13 @@ boolean modules_process_config() {
         char *filename = malloc(MAXBUFLEN+1);
 
         if (!filename || !configuration || strlen(modules_path_) > (MAXBUFLEN/2)) {
-            fprintf(stderr, "Error: memory allocation failure\n");
+            swdiag_error("Error: memory allocation failure\n");
             return FALSE;
         }
         for (i = 0; i < moduleCount; i++) {
             swdiag_debug(NULL, "Processing configuration for MODULE '%s'", modules_[i]);
             if (strlen(modules_[i]) > (MAXBUFLEN/2)) {
-                fprintf(stderr, "Error: filename too long\n");
+                swdiag_error("Error: filename too long\n");
                 return FALSE;
             }
             strcpy(filename, modules_path_);
@@ -147,9 +151,9 @@ boolean modules_process_config() {
             FILE *fp = popen(filename, "r");
             if (fp != NULL) {
                 size_t newLen = fread(configuration, sizeof(char), MAXBUFLEN, fp);
-                swdiag_trace(NULL, "Reading module configuration '%s', %d bytes read", filename, newLen);
+                swdiag_trace(NULL, "Reading module configuration '%s', %zu bytes read", filename, newLen);
                 if (newLen == 0) {
-                    fprintf(stderr, "Error: empty configuration for module file '%s'\n", filename);
+                    swdiag_error("Error: empty configuration for module file '%s'\n", filename);
                     break;
                 } else {
                     configuration[newLen] = '\0'; /* Just to be safe. */
@@ -180,7 +184,7 @@ swdiag_result_t swdiag_server_exec_test(const char *instance, void *context, lon
     char *filename = malloc(strlen(modules_path_) + MAXBUFLEN);
 
     if (!filename || !test_results) {
-        fprintf(stderr, "Error: memory allocation failure\n");
+        swdiag_error("Error: memory allocation failure\n");
         return FALSE;
     }
 
@@ -234,7 +238,7 @@ swdiag_result_t swdiag_server_exec_action(const char *instance, void *context) {
     char *filename = malloc(strlen(modules_path_) + MAXBUFLEN);
 
     if (!filename || !test_results) {
-        fprintf(stderr, "Error: memory allocation failure\n");
+        swdiag_error("Error: memory allocation failure\n");
         return FALSE;
     }
 

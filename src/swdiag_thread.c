@@ -80,6 +80,9 @@ long swdiag_thread_cpu (void)
     swdiag_thread_t *thread;
     long cpu = 0;
 
+    if (!thread_free_queue || !thread_executing_queue) {
+    	return 0;
+    }
     /*
      * Check running processes first
      */
@@ -156,6 +159,10 @@ static void thread_main (swdiag_thread_t *thread)
 
     while(!thread->quit) {
         if (swdiag_xos_thread_wait(thread->xos)) {
+
+        	if (thread->quit) {
+        		continue;
+        	}
             /*
              * We have a job to do.
              */
@@ -169,32 +176,37 @@ static void thread_main (swdiag_thread_t *thread)
                     calculate_throttle_delay();
                 }
 
-                // swdiag_debug(NULL, "Thread %s(%d) starting job 0x%x", thread->name, thread->id, thread->job);
-                thread->job->execute(thread, thread->job->context);
-
-                //swdiag_debug(NULL, "Thread %s(%d) completed job", thread->name, thread->id);
                 /*
-                 * Finished, free the job.
+                 * Run the job.
+                 */
+                swdiag_debug(NULL, "Thread %s(%d) starting job %p", thread->name, thread->id, thread->job);
+                thread->job->execute(thread, thread->job->context);
+                swdiag_debug(NULL, "Thread %s(%d) completed job", thread->name, thread->id);
+
+                /*
+                 * Finished, free or recycle the job
                  */
                 if (free_job_requests && 
                     free_job_requests->num_elements < THREAD_REQUEST_LOW_WATER) {
+                	// Recyle the job.
                     swdiag_list_push(free_job_requests, thread->job);
                 } else {
+                	// Free it, we have enough job in the free queue.
                     free(thread->job);
                 }
                 thread->job = NULL;
 
                 /*
-                 * Any other jobs pending?
+                 * Any other jobs pending? Lets do them now.
                  */
                 thread->job = swdiag_list_pop(job_pending_queue);
             }
 
             /*
-             * Remove the thread from the executing queue
+             * No more work to do, Remove the thread from the executing queue
              */
             swdiag_list_remove(thread_executing_queue, thread);
-            swdiag_list_add(thread_free_queue, thread);
+            swdiag_list_push(thread_free_queue, thread);
         } else {
             swdiag_thread_kill(thread);
         }
@@ -204,6 +216,7 @@ static void thread_main (swdiag_thread_t *thread)
      * Thread is quitting, free memory for the thread.
      */    
     swdiag_debug(NULL, "Thread %s(%d) killed", thread->name, thread->id);
+    swdiag_xos_thread_destroy(thread);
     free(thread);
 }
 
@@ -264,7 +277,7 @@ void swdiag_thread_init (void)
     /*
      * Create a diagnostic that monitors our CPU and throttles it when
      * it exceeds a threshold.
-     *
+     */
     swdiag_test_create_polled(SWDIAG_THREAD_CPU_USAGE,
                               swdiag_thread_cpu_monitor,
                               NULL,
@@ -329,9 +342,9 @@ void swdiag_thread_init (void)
         throttle_high = obj->t.rule;
     }
 
-    *
+    /*
      * Don't trigger the low when the high is already triggering
-     *
+     */
     swdiag_depend_create(SWDIAG_THREAD_CPU_WARN, SWDIAG_THREAD_CPU_HIGH);
 
     swdiag_comp_create(SWDIAG_COMPONENT);
@@ -345,7 +358,7 @@ void swdiag_thread_init (void)
                               NULL);
     
     swdiag_test_chain_ready(SWDIAG_THREAD_CPU_USAGE);
-    */
+
 }
 
 /*
@@ -375,6 +388,33 @@ static thread_job_t *thread_alloc_job (thread_function_exe_t execute,
     return(job);
 }
 
+static void thread_free_jobs (void)
+{
+	thread_job_t *job = NULL;
+
+	if (free_job_requests) {
+		while ((job = swdiag_list_pop(free_job_requests)) != NULL) {
+			free(job);
+		}
+		swdiag_list_free(free_job_requests);
+		free_job_requests = NULL;
+	}
+
+	if (job_pending_queue) {
+		while ((job = swdiag_list_pop(job_pending_queue)) != NULL) {
+			free(job);
+		}
+		swdiag_list_free(job_pending_queue);
+		job_pending_queue = NULL;
+	}
+}
+
+void swdiag_thread_terminate (void)
+{
+	swdiag_thread_kill_threads();
+	thread_free_jobs();
+}
+
 /*
  * swdiag_thread_request()
  *
@@ -400,9 +440,10 @@ void swdiag_thread_request (thread_function_exe_t execute,
         return;
     }
 
+    //swdiag_trace(NULL, "thread free queue %d, executing %d", thread_free_queue->num_elements, thread_executing_queue->num_elements);
     thread = swdiag_list_pop(thread_free_queue);
 
-    if (thread) {
+    if (thread && !thread->quit) {
         /*
          * Got a thread, tell it to run the supplied function with the
          * context.
@@ -414,31 +455,26 @@ void swdiag_thread_request (thread_function_exe_t execute,
             swdiag_thread_kill(thread);
             return;
         }
-        swdiag_list_add(thread_executing_queue, thread);
+        swdiag_list_push(thread_executing_queue, thread);
     } else {
         /*
          * No threads free, add to the pending queue.
          */
-        swdiag_list_add(job_pending_queue, job);
+        swdiag_list_push(job_pending_queue, job);
     }
 }
 
 void swdiag_thread_kill (swdiag_thread_t *thread)
 {
+    swdiag_debug(NULL, "Requesting thread %p to quit", thread);
+
     if (thread && thread->xos) {
+    	thread->job = NULL;
         thread->quit = TRUE;
+        swdiag_debug(NULL, "Requesting thread %p to quit", thread);
         swdiag_xos_thread_release(thread->xos);
         /*
          * Remove this thread from the free and executing queues
-         */
-
-        /*
-         * Need to clean up the xos thread?
-         */
-
-        /*
-         * Can't free the memory for the thread since it may still
-         * be in use.
          */
     }
 }
@@ -470,4 +506,39 @@ void swdiag_thread_ut_clear_pending (thread_function_exe_t function)
     throttle_delay = 0;
 
     return;
+}
+
+/***
+ * When shutting down (or during UT) we need to be able to close all
+ * our threads.
+ */
+void swdiag_thread_kill_threads ()
+{
+	swdiag_debug(NULL, "killing all threads in thread pool");
+
+	if (thread_free_queue != NULL) {
+		swdiag_debug(NULL, "killing all threads in thread free pool %p", thread_free_queue);
+
+		// kill off the free threads and pop them from
+		// the queue.
+		swdiag_thread_t *thread;
+		while ((thread = (swdiag_thread_t*)swdiag_list_pop(thread_free_queue)) != NULL) {
+			swdiag_thread_kill(thread);
+		}
+		swdiag_list_free(thread_free_queue);
+		thread_free_queue = NULL;
+	}
+
+	if (thread_executing_queue != NULL) {
+		swdiag_debug(NULL, "killing all threads in thread executing pool %p", thread_executing_queue);
+
+		// kill off the executing threads and pop them from
+		// the queue.
+		swdiag_thread_t *thread;
+		while ((thread = (swdiag_thread_t*)swdiag_list_pop(thread_executing_queue)) != NULL) {
+			swdiag_thread_kill(thread);
+		}
+		swdiag_list_free(thread_executing_queue);
+		thread_executing_queue = NULL;
+	}
 }

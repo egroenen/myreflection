@@ -1562,3 +1562,15 @@ void swdiag_seq_init (void)
         }
     }
 }
+
+void swdiag_seq_terminate (void)
+{
+	// Free up the contexts
+	seq_thread_context_t *context;
+
+	while ((context = swdiag_list_pop(free_seq_contexts)) != NULL) {
+		free(context);
+	}
+	swdiag_list_free(free_seq_contexts);
+	free_seq_contexts = NULL;
+}

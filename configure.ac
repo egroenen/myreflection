@@ -35,7 +35,7 @@ AC_MSG_NOTICE([
   -->])
 
 AC_CONFIG_AUX_DIR([autoaux])
-AM_INIT_AUTOMAKE([1.9.2 foreign subdir-objects nostdinc no-dist-gzip dist-bzip2 dist-zip dejagnu])
+AM_INIT_AUTOMAKE([1.9.2 foreign subdir-objects nostdinc no-dist-gzip dist-bzip2 dist-zip])
 AC_CONFIG_SRCDIR([src/swdiag_api.c])
 
 # disable unused langs (improves config speed, reduces configure file size)
@@ -45,6 +45,10 @@ AC_DEFUN([_LT_AC_LANG_RC_CONFIG], [:])
 
 AC_CANONICAL_HOST
 
+AM_PROG_CC_C_O
+
+# Sets CHECK_CFLAGS
+AM_PATH_CHECK()
 
 ###############################################################################
 # add configure options
@@ -85,9 +89,7 @@ AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
-#AC_PROG_LIBTOOL
-LT_INIT
-AM_PROG_CC_C_O
+AC_PROG_LIBTOOL
 
 #AC_CHECK_PROG([FOUND_HELP2MAN],[help2man],[yes],[no])
 
@@ -452,8 +454,9 @@ AC_SUBST([X_MINGW_LIBS])
 
 AC_CONFIG_HEADERS([src/config.h])
 
-AC_CONFIG_FILES([Makefile])
-AC_CONFIG_FILES([include/project.h])
-AC_CONFIG_FILES([project/project.m4])
+AC_CONFIG_FILES([Makefile
+                include/project.h
+                project/project.m4
+                tests/Makefile])
 
 AC_OUTPUT

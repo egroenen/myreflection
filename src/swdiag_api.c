@@ -46,6 +46,12 @@
 
 obj_state_t default_obj_state = OBJ_STATE_ENABLED;
 
+/*
+ * The system is running, setting this to FALSE will cause the system
+ * to stop if it was already running.
+ */
+static boolean running = FALSE;
+
 /*******************************************************************
  * Local functions
  *******************************************************************/
@@ -2426,7 +2432,7 @@ void swdiag_rule_set_type (const char *rule_name,
                          fnstr, rule_name, operand_n, operand_m);
             return;
         }
-        /* FALLTHRU */
+        /* no break */
     case SWDIAG_RULE_N_IN_TIME_M:
         if (operand_n < 1) {
             swdiag_error("%s - rule '%s' N operand less than 1 (%ld)", 
@@ -3421,8 +3427,7 @@ void swdiag_api_comp_enable_guts (const char *comp_name,
              */
             instance->state = OBJ_STATE_ENABLED;
         }
-        
-        /* FALLTHRU */
+        /* no break */
     case OBJ_STATE_ENABLED:
         /*
          * Ensure that all member objects are enabled as well
@@ -3527,7 +3532,7 @@ void swdiag_api_comp_default (const char *comp_name)
     case OBJ_STATE_ENABLED:
     case OBJ_STATE_DISABLED:
         instance->state = instance->default_state;
-        /* FALLTHRU */
+        /* no break */
     case OBJ_STATE_CREATED:
         /*
          * Clear any configured CLI state
@@ -3670,8 +3675,7 @@ void swdiag_api_comp_disable_guts (const char *comp_name, boolean cli)
              */
             instance->state = OBJ_STATE_DISABLED;
         }
-
-        /* FALLTHRU */
+        /* no break */
     case OBJ_STATE_DISABLED:
         /*
          * Ensure that all member objects are disabled as well
@@ -4043,7 +4047,38 @@ void swdiag_set_slave (const char *component_name)
     swdiag_obj_db_unlock();
 }
 
+void swdiag_start (void)
+{
+	swdiag_trace(NULL, "Starting");
 
+	swdiag_sched_init();
+    swdiag_thread_init();
+    swdiag_obj_init();
+    swdiag_api_init();
+    swdiag_seq_init();
+
+	running = TRUE;
+	while(running) {
+		swdiag_xos_sleep(1000);
+	}
+
+	// notify all of our subsystems to stop their threads, and clean up memory
+	swdiag_sched_terminate();
+	swdiag_thread_terminate();
+	swdiag_seq_terminate();
+	swdiag_api_terminate();
+	swdiag_obj_terminate();
+
+	swdiag_trace(NULL, "Stopped");
+	//swdiag_xos_sleep(2000);
+}
+
+void swdiag_stop (void)
+{
+	swdiag_trace(NULL, "Stopping");
+
+	running = FALSE;
+}
 /* Enable or Disable test notification.
  * 
  * API which can be used if user wishes to receive notification from swdiag if
@@ -4394,4 +4429,9 @@ void swdiag_api_init (void)
     }
 
     swdiag_action_enable(SWDIAG_ACTION_NOOP, NULL);
+}
+
+void swdiag_api_terminate (void)
+{
+	// Nothing to do.
 }
