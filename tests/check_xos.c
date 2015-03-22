@@ -136,23 +136,29 @@ static int cs_order[2];
 static void cs_thread1(swdiag_thread_t *thread)
 {
 	xos_critical_section_t *cs = (void*)thread->job;
+	swdiag_debug(NULL, "thread 1 about to enter");
 	swdiag_xos_critical_section_enter(cs);
+	swdiag_debug(NULL, "thread 1 entered");
 	swdiag_xos_sleep(5000);
 	if (cs_order[0] == 0) {
 		cs_order[0] = 1;
 	}
 	swdiag_xos_critical_section_exit(cs);
+	swdiag_debug(NULL, "thread 1 exited");
 }
 
 static void cs_thread2(swdiag_thread_t *thread)
 {
 	xos_critical_section_t *cs = (void*)thread->job;
-	swdiag_xos_sleep(2000);
+	swdiag_debug(NULL, "thread 2 about to enter");
 	swdiag_xos_critical_section_enter(cs);
+	swdiag_debug(NULL, "thread 2 entered");
+	swdiag_xos_sleep(2000);
 	if (cs_order[0] == 0) {
 		cs_order[0] = 2;
 	}
 	swdiag_xos_critical_section_exit(cs);
+	swdiag_debug(NULL, "thread 2 exited");
 }
 
 /*
@@ -184,8 +190,12 @@ START_TEST (test_swdiag_xos_critical_section)
 
 	void *status;
 
-	pthread_join(thread1->xos->tid, &status);
+	pthread_join(thread1->xos->tid, &status); // these do NOT wait for the thread to finish!
 	pthread_join(thread2->xos->tid, &status);
+
+	pthread_exit(NULL);
+
+	swdiag_debug(NULL, "Apparently both threads have finished, %d ran first", cs_order[0]);
 
 	// Check the order that the threads were run, the first thread
 	// with the 5sec delay should have been first, the second should be
