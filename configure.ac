@@ -4,7 +4,8 @@
 
 m4_include([project/project.m4sugar])
 
-m4_define([SVNINFO],m4_esyscmd([svn info 2>/dev/null]))
+#m4_define([SVNINFO],m4_esyscmd([svn info 2>/dev/null]))
+m4_define([SVNINFO],m4_esyscmd([git describe --abbrev=4 --dirty --always --tags 2>/dev/null]))
 
 changequote(<<,>>)dnl
     m4_define(<<PRJ_repo_url>>,m4_bregexp(SVNINFO,<<^URL: *\(.+\)>>,<<\1>>))
@@ -20,7 +21,7 @@ m4_define([PRJ_version_hex],m4_format([0x%04x%02x%02x],PRJ_version_major,PRJ_ver
 
 m4_define([PRJ_version],ifelse(
     PRJ_repo_type,[stable],m4_format([%s],PRJ_repo_branch),
-    m4_format([%s-r%d],PRJ_repo_branch,PRJ_repo_rev)))
+    m4_format([%s-%s],PRJ_repo_branch,PRJ_repo_rev)))
 
 ###############################################################################
 # initialization
@@ -90,6 +91,7 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
+LT_INIT
 
 #AC_CHECK_PROG([FOUND_HELP2MAN],[help2man],[yes],[no])
 
