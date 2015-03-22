@@ -56,7 +56,7 @@ time_t swdiag_xos_get_time (void)
 /*
  * swdiag_xos_sleep()
  *
- * Sleep for 'time' seconds.
+ * Sleep for 'time' milliseconds.
  */
 void swdiag_xos_sleep (uint milliseconds)
 {

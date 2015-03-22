@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 #
 # Example swdiag server module written in shell script. This simple script
 # monitors the free disk space available on this Unix based machine. When

@@ -42,7 +42,7 @@ void swdiag_xos_trace (trace_event_t *event)
 {
     static boolean initialised = FALSE;
 
-    if (!initialised) {
+    if (!running_in_terminal && !initialised) {
         openlog("swdiag", (LOG_ODELAY | LOG_PID), LOG_LOCAL5);
         initialised = TRUE;
     }
@@ -52,21 +52,21 @@ void swdiag_xos_trace (trace_event_t *event)
         if (running_in_terminal) {
             printf("INFO: %s\n", event->string);
         } else {
-            syslog(LOG_INFO, event->string);
+            syslog(LOG_INFO, "%s", event->string);
         }
         break;
     case TRACE_ERROR:
         if (running_in_terminal) {
             fprintf(stderr, "ERROR: %s\n", event->string);
         } else {
-            syslog(LOG_ERR, event->string);
+            syslog(LOG_ERR, "%s", event->string);
         }
         break;
     case TRACE_DEBUG:
         if (running_in_terminal) {
             printf("debug: %s\n", event->string);
         } else {
-            syslog(LOG_DEBUG, event->string);
+            syslog(LOG_DEBUG, "%s", event->string);
         }
         break;
     default:

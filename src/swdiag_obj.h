@@ -369,6 +369,7 @@ void swdiag_obj_comp_link_obj(obj_comp_t *comp, obj_t *obj);
 void swdiag_obj_unlink_from_comp(obj_t *obj);
 
 void swdiag_obj_init(void);
+void swdiag_obj_terminate(void);
 
 boolean swdiag_obj_validate(obj_t *obj, obj_type_t type);
 boolean swdiag_obj_instance_validate(obj_instance_t *instance, 

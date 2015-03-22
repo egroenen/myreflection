@@ -65,7 +65,7 @@ typedef void (xos_thread_start_fn_t)(swdiag_thread_t *thread);
 xos_thread_t *swdiag_xos_thread_create(const char *name,
                                        xos_thread_start_fn_t *start_routine,
                                  swdiag_thread_t *swdiag_thread);
-boolean swdiag_xos_thread_destroy(xos_thread_t *thread);
+boolean swdiag_xos_thread_destroy(swdiag_thread_t *swdiag_thread);
 boolean swdiag_xos_thread_wait(xos_thread_t *thread);
 boolean swdiag_xos_thread_release(xos_thread_t *thread);
 void swdiag_xos_thread_suspend(xos_thread_t *thread);
@@ -125,7 +125,7 @@ typedef enum xos_event_e {
     XOS_EVENT_GUARD_TIMEOUT,
 } xos_event_t;
 
-void swdiag_xos_sleep(uint seconds);
+void swdiag_xos_sleep(uint milliseconds);
 xos_event_t swdiag_xos_wait_on_event(int *detail);
 
 //void xos_wake_on_event_timer(xos_timer_t *timer);

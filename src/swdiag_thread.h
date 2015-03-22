@@ -84,10 +84,12 @@ struct swdiag_thread_s {
 };
 
 extern void swdiag_thread_init(void);
+extern void swdiag_thread_terminate(void);
 extern void swdiag_thread_request(thread_function_exe_t execute, 
                                   thread_function_dsp_t display,
                                   void *context);
 extern void swdiag_thread_kill(swdiag_thread_t *thread);
+extern void swdiag_thread_kill_threads(void);
 
 #define SWDIAG_THREAD_CPU_USAGE "SWDiag CPU Util"
 #define SWDIAG_THREAD_THROTTLE_WARN "SWDiag Throttle CPU Warning"

@@ -246,6 +246,9 @@ static void sched_thread_main (swdiag_thread_t *thread)
         }
     }
     swdiag_debug(NULL, "Schedular thread exited");
+
+    swdiag_xos_thread_destroy(sched_thread);
+    free(sched_thread);
     sched_thread = NULL;
 }
 
@@ -261,6 +264,22 @@ static void create_queues (void)
     test_queues[TEST_QUEUE_USER].queue = swdiag_list_create();
 }
 
+static void destroy_queues (void)
+{
+	sched_test_t *sched_test;
+	int q;
+	sched_test_queue_t *test_queue;
+
+	queues_blocked = TRUE;
+
+	for (q = TEST_QUEUE_FIRST; q < NBR_TEST_QUEUES; q++) {
+		test_queue = &test_queues[q];
+		while ((sched_test = swdiag_list_pop(test_queue->queue)) != NULL) {
+			sched_test->queued = TEST_QUEUE_NONE;
+		}
+		swdiag_list_free(test_queue->queue);
+	}
+}
 /*
  * Check all the queues and start/restart the test start timer if necessary
  */
@@ -311,15 +330,14 @@ static void check_test_start_timer (void)
              * The soonest test should have been started already! 
              * no need to start the timer, just inform the schedular
              * thread to check the queues and run this test.
+             *
+             * Ignore any errors if it is already running.
              */
             //swdiag_debug(NULL, "SCHED check test start - immediately "
             //             "releasing thread to run %s",
             //             sched_test->instance->name);
 
-            if (!swdiag_xos_thread_release(sched_thread->xos)) {
-                swdiag_error("SCHED check test start - failed to "
-                             "release event thread");
-            }
+            swdiag_xos_thread_release(sched_thread->xos);
 
         } else {
             //swdiag_debug(NULL, "SCHED check test start - '%s', now=%lu, then=%lu",
@@ -748,11 +766,11 @@ static swdiag_result_t recover_schedular (const char *instance_name,
 }
 
 /*
- * swdiag_sched_initialize()
+ * swdiag_sched_init()
  *
  * Initialise the scheduler.
  */
-void swdiag_sched_initialize (void)
+void swdiag_sched_init (void)
 {
     obj_t *obj;
     obj_test_t *test;
@@ -786,10 +804,6 @@ void swdiag_sched_initialize (void)
     swdiag_test_chain_ready(SWDIAG_SCHEDULAR_TEST);*/
 
     create_queues();
-    swdiag_thread_init();
-    swdiag_obj_init();
-    swdiag_api_init();
-    swdiag_seq_init();
 
     /*
      * Queue all existing tests to the test queues, rest will be added
@@ -826,6 +840,11 @@ void swdiag_sched_initialize (void)
     swdiag_obj_db_unlock();
 }
 
+void swdiag_sched_terminate()
+{
+	swdiag_sched_kill();
+	destroy_queues();
+}
 /*
  * swdiag_sched_kill()
  *
@@ -835,6 +854,8 @@ void swdiag_sched_kill (void)
 {
     if (sched_thread) {
         sched_thread->quit = TRUE;
+        swdiag_xos_thread_release(sched_thread->xos);
+        swdiag_xos_sleep(1); // Give it time to run and exit
     }
 }
 

@@ -194,7 +194,7 @@ int send_mail_message(int n_sock, const char *from, const char *to,
 
 	/* Now send the terminator*/
 	if (send(n_sock, MSG_TERM, strlen(MSG_TERM), 0) == SOCKET_ERROR) {
-		fprintf(stderr, "Could not send the message terminator.\n", msg);
+		fprintf(stderr, "Could not send the message terminator.\n");
 		return ERROR;
 	}
 
