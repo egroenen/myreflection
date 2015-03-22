@@ -126,7 +126,7 @@ START_TEST (test_swdiag_xos_sleep)
 		swdiag_xos_time_diff(&time1, &time2, &diff);
 		swdiag_debug(NULL, "Sleep Before %lu , After %lu, Diff %lu", time1.nsec, time2.nsec, diff.nsec)
 		unsigned long diff_msec = diff.nsec / 1E6;
-		ck_assert(diff_msec == 100);
+		ck_assert(diff_msec >= 100 && diff_msec <= 200);
 	}
 }
 END_TEST
