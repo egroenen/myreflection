@@ -138,19 +138,19 @@
  *
  * Default is 1 minute.
  */
-#define SWDIAG_PERIOD_FAST   (1000 * 2)
+#define SWDIAG_PERIOD_FAST   (1000 * 60)
 
 /**
  * Use for tests that should run every so often.
  * Default is 5 minutes.
  */
-#define SWDIAG_PERIOD_NORMAL (1000 * 2 * 5)
+#define SWDIAG_PERIOD_NORMAL (1000 * 60 * 5)
 /**
  * Use for tests that should not be run frequently, possibly because the 
  * test takes a while to complete.
  * Default is 30 mins.
  */
-#define SWDIAG_PERIOD_SLOW   (1000 * 2 * 30)
+#define SWDIAG_PERIOD_SLOW   (1000 * 60 * 30)
 /* @} */
 
 /** 
