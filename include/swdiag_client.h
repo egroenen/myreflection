@@ -138,7 +138,7 @@
  *
  * Default is 1 minute.
  */
-#define SWDIAG_PERIOD_FAST   (1000 * 60)
+#define SWDIAG_PERIOD_FAST   (1000 * 5)
 
 /**
  * Use for tests that should run every so often.

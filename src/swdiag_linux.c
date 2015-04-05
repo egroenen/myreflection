@@ -78,9 +78,43 @@ const char *swdiag_xos_errmsg_to_name (const void *msgsym)
     return("invalid errmsg");
 }
 
-char *swdiag_xos_sstrncpy (char *s1, const char *s2, unsigned long max)
+/* safe_srncpy() is Copyright 1998 by Mark Whitis
+ * All Rights reserved.
+ * use it or distribute it (including for profit) at your own risk
+ * but please don't GPL it.  Retain this notice.  Modified versions
+ * should be clearly labeled as such.
+ * This Version has stripped out the error code
+ */
+char *swdiag_xos_sstrncpy (char *dst, const char *src, unsigned long size)
 {
-    return (strncpy(s1, s2, max));
+	/* Make sure destination buffer exists and has positive size */
+
+	if(!dst) {
+		return(dst);
+	}
+	if(size<1) {
+		return(dst);
+	}
+
+	/* treat NULL and "", identically */
+	if(!src) {
+	 dst[0]=0;
+	 return(dst);
+	}
+
+	size--;  /* leave room for trailing zero */
+	while(*src && ( size-- > 0 ) ) {
+		*(dst+1) = 0; // moving zero terminator
+		*dst++ = *src++;
+	}
+	*dst = 0;
+
+	// zero fill rest of dst buffer
+	while( size-- > 0 ) {
+	 *dst++ = 0;
+	}
+
+	return(dst);
 }
 
 char *swdiag_xos_sstrncat (char *s1, const char *s2, unsigned long max)

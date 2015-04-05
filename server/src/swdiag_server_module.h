@@ -72,4 +72,6 @@ typedef struct {
     char command[EMAIL_COMMAND_MAX];
 } email_context;
 
+extern char *sstrncpy (char *dst, const char *src, unsigned long size); // Safe strncpy
+
 #endif /* SWDIAG_SERVER_MODULE_H_ */

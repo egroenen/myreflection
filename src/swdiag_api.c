@@ -354,7 +354,7 @@ static swdiag_result_t user_notify_action (const char *instance_name,
 
 /*
  * Copy the name and replace all spaces with underscores, and our
- * seperator for remote/local namespace also goes to underscores.
+ * separator for remote/local namespace also goes to underscores.
  */
 char *swdiag_api_convert_name (const char *from_to_name)
 {

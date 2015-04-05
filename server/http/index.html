@@ -1,77 +1,160 @@
-<!DOCTYPE html>
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="prime-ui-0.2/production/prime-ui-0.2-min.css" />
-<link rel="stylesheet" type="text/css" href="jquery-ui-1.9.1.custom/css/start/jquery-ui-1.9.1.custom.min.css"/>
-
-<script src="jquery-ui-1.9.1.custom/js/jquery-1.8.2.js"></script>
-<script src="jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.min.js"></script>
-<script src="prime-ui-0.2/production/prime-ui-0.2-min.js"></script>
-
-<script type="text/javascript">
-    var timer;
-    var swdiag = {
-    	    refreshInterval: 5000,
-    };
+<!doctype html>
+<html lang="en">
+	<head>
+	    <meta charset="utf-8" />
+	    <link rel="icon" type="image/png" href="assets/img/favicon.ico">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	
+	    <title>Software Diagnostics</title>
+	
+	    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+	    <meta name="viewport" content="width=device-width" />
+	    
+	    <link href="bootstrap3/css/bootstrap.css" rel="stylesheet" />
+	    <link href="assets/css/gsdk.css" rel="stylesheet"/>
+	    
+	    <link href="assets/css/demo.css" rel="stylesheet" /> 
+	        
+	    <!--     Fonts and icons     -->
+	    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	    <link href='http://fonts.googleapis.com/css?family=Grand+Hotel' rel='stylesheet' type='text/css'>  
+	    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+	    <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+	    
+	</head>
+	<body>
+	<nav class="navbar navbar-ct-azure navbar-icons">
+              <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                </div>
+	 <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav navbar-right">                               
+                    <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="pe-7s-keypad"></i>
+                                <p>
+                                    Menu
+                                    <b class="caret"></b>
+                                </p>
+                          </a>
+                          <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                          </ul>
+                    </li>
+                     <li>
+                       <a href="">
+                            <i class="pe-7s-global"></i>
+                            <p>Explore</p>
+                        </a>
+                    </li>
+                    <li>
+                       <a href="">
+                            <i class="pe-7s-config"></i>
+                            <p>Settings</p>
+                        </a>
+                    </li>
     
-    swdiag.refreshPanel = function(event, index) {
-        $.ajax({  
-            type: "GET",  
-            url: './tabcontent/' + index,  
-            dataType: "html",  
-            context: this,  
-            success: function(data) {  
-                $('#dynamic').children('div.pui-tabview-panels').children().eq(index).html(data);
-                if ($('#dynamic').puitabview('getActiveIndex') == index) {
-                    timer = window.setTimeout(function(){swdiag.refreshPanel(event, index)}, swdiag.refreshInterval);
-                }
-            }
-        });
+                  </ul>
+                </div><!-- /.navbar-collapse -->
+              </div><!-- /.container-fluid -->
+            </nav>
+	
+	    <div class="wrapper">
+            <div class="container">
+                <div id="cards" class="row">
+                    <div class="col-md-3 item">
+		                <div class="card card-horizontal">
+		                     <div class="row">
+		                         <div class="col-md-2">
+		                             <div class="image" style="background-image: url(&quot;assets/img/blog_1.png&quot;); background-position: center center; background-size: cover;">
+		                                 <img alt="..." src="assets/img/blog_1.png" style="display: none;">                                
+		                                
+		                             </div>
+		                         </div>
+		                         <div class="col-md-10">
+		                              <div class="content">
+		                                <p class="category text-info">
+		                                     <i class="fa fa-trophy"></i> Best of
+		                                 </p>
+		
+		                                 <a href="#">
+		                                     <h4 class="title">Title</h4>
+		                                 </a>
+		                                 <a href="#">
+		                                     <span class="description">Something</span>
+		                                 </a>
+		                                  <div class="footer">
+		                                     <div class="stats">
+		                                        <a href="#">
+		                                         <i class="fa fa-heart"></i><span class="health"> 231 Likes</span>/<span class="confidence"></span>
+		                                        </a>
+		                                     </div>
+		                                 </div>
+		                             </div>
+		                         </div>
+		                     </div>
+		                </div>
+		            </div>
+		        </div>
+            </div>   
+		</div>
+	</body>
+
+    <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
+    <script src="assets/js/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
+
+    <script src="bootstrap3/js/bootstrap.js" type="text/javascript"></script>
+    
+    <!--  Plugins -->
+    <script src="assets/js/gsdk-checkbox.js"></script>
+    <script src="assets/js/gsdk-morphing.js"></script>
+    <script src="assets/js/gsdk-radio.js"></script>
+    <script src="assets/js/gsdk-bootstrapswitch.js"></script>
+    <script src="assets/js/bootstrap-select.js"></script>
+    <script src="assets/js/bootstrap-datepicker.js"></script>
+    <script src="assets/js/chartist.min.js"></script>
+    <script src="assets/js/jquery.tagsinput.js"></script>
+    <script src="assets/js/chain.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    
+    <script src="assets/js/get-shit-done.js"></script>
+    
+    <script type="text/javascript">
+        var timer;
+        var swdiag = {
+                refreshInterval: 5000,
+        };
         
-    }
-    
-    $(function() {
-       $('#dynamic').puitabview({
-    	   change: function(event, index) {
-    		   window.clearTimeout(timer);
-    		   swdiag.refreshPanel(event, index);
-    	   },
-       });
-    });
-</script>
+        
+        function refreshPanel(index) {
+        	$.getJSON('/comp/System', function(data) {
+        		$('#cards').items('replace', data);
+        		timer = window.setTimeout(function(){refreshPanel(index)}, swdiag.refreshInterval);
+        	});
+        }
+        
+        $(document).ready(function() {
+            window.clearTimeout(timer);
+            $.getJSON('/comp/System', function(data) {
+                $('#cards').items(data).chain();
+                timer = window.setTimeout(function(){refreshPanel(0)}, swdiag.refreshInterval);
+            });
+        });
 
-</head>
-<body>
-
-<div id="dynamic">  
-    <ul>
-        <li><a href="#tab1">Overview</a></li>
-        <li><a href="#tab2">Components</a></li>  
-        <li><a href="#tab3">Tests</a></li>  
-        <li><a href="#tab4">Rules</a></li>
-        <li><a href="#tab5">Actions</a></li>  
-    </ul>  
-    <div>  
-        <div id="tab1">  
-            <p>Static content</p>  
-        </div>  
-        <div id="tab2">  
-            <p>Dynamic Content for Tab 2</p>  
-        </div>  
-        <div id="tab3">  
-            <p>Dynamic Content for Tab 3</p>  
-        </div>  
-        <div id="tab4">  
-            <p>Dynamic Content for Tab 4</p>  
-        </div>
-        <div id="tab4">  
-            <p>Dynamic Content for Tab 5</p>  
-        </div> 
-    </div>  
-</div>  
-
-
-
-</body>
+    </script>
 </html>
 

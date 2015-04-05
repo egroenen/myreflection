@@ -118,17 +118,10 @@ dist_swdiag_modules_SCRIPTS = \
 
 swdiag_htmldir    = $(datadir)/swdiag/
 nobase_dist_swdiag_html_DATA = \
-                    server/http/prime-ui-0.2/production/prime-ui-0.2-min.js \
-                    server/http/prime-ui-0.2/production/prime-ui-0.2-min.css \
                     server/http/index.html \
-                    server/http/jquery-ui-1.9.1.custom/css/start/jquery-ui-1.9.1.custom.min.css \
-                    server/http/jquery-ui-1.9.1.custom/css/start/images/ui-bg_gloss-wave_75_2191c0_500x100.png \
-                    server/http/jquery-ui-1.9.1.custom/css/start/images/ui-bg_flat_75_aaaaaa_40x100.png \
-                    server/http/jquery-ui-1.9.1.custom/css/start/images/ui-bg_inset-hard_100_fcfdfd_1x100.png \
-                    server/http/jquery-ui-1.9.1.custom/css/start/images/ui-bg_gloss-wave_45_e14f1c_500x100.png \
-                    server/http/jquery-ui-1.9.1.custom/css/start/images/ui-icons_d8e7f3_256x240.png \
-                    server/http/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.min.js \
-                    server/http/jquery-ui-1.9.1.custom/js/jquery-1.8.2.js
+                    server/http/assets/js/get-shit-done.js
+                    
+                    
 
 
 #init_ddir         = $(sysconfdir)/rc.d/init.d

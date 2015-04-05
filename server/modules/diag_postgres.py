@@ -50,7 +50,7 @@ def main():
         except OSError:
             pass
         # Can't use a structure and json libs 'cos they are not in python 2.4
-        print '''[{"comp":{"name":"Postgres"}},
+        print '''[{"comp":{"name":"Postgres", "parent":"System"}},
                 {"test":{"name":"pg_poll_processes",
                         "polled":true,
                         "interval":"fast",

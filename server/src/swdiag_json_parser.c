@@ -351,8 +351,8 @@ static boolean parse_test(char *module, char *request, jsmntok_t **token_ptr, ch
                 if (polled) {
                     test_context *context = calloc(1, sizeof(test_context));
                     if (context) {
-                        strncpy(context->module_name, module, SWDIAG_MAX_NAME_LEN-1);
-                        strncpy(context->test_name, test_name, SWDIAG_MAX_NAME_LEN-1);
+                        sstrncpy(context->module_name, module, SWDIAG_MAX_NAME_LEN);
+                        sstrncpy(context->test_name, test_name, SWDIAG_MAX_NAME_LEN);
                         swdiag_test_create_polled(test_name, swdiag_server_exec_test, context, interval);
                     }
                 } else {
@@ -632,8 +632,8 @@ static boolean parse_action(char *module, char *request, jsmntok_t **token_ptr, 
         if (ret == TRUE && action_name != NULL) {
             test_context *context = calloc(1, sizeof(test_context));
             if (context) {
-                strncpy(context->module_name, module, SWDIAG_MAX_NAME_LEN-1);
-                strncpy(context->test_name, action_name, SWDIAG_MAX_NAME_LEN-1);
+                sstrncpy(context->module_name, module, SWDIAG_MAX_NAME_LEN);
+                sstrncpy(context->test_name, action_name, SWDIAG_MAX_NAME_LEN);
                 swdiag_action_create(action_name, swdiag_server_exec_action, context);
             }
         }
@@ -734,11 +734,11 @@ static boolean parse_email(char *module, char *request, jsmntok_t **token_ptr, c
                 if (alert_to) {
                     // to can be NULL, in which case use the default email address
                     // from the configuration.
-                    strncpy(context->to, alert_to, EMAIL_TO_MAX-1);
+                    sstrncpy(context->to, alert_to, EMAIL_TO_MAX);
                 }
-                strncpy(context->subject, alert_subject, EMAIL_SUBJECT_MAX-1);
+                sstrncpy(context->subject, alert_subject, EMAIL_SUBJECT_MAX);
                 if (email_command) {
-                strncpy(context->command, email_command, EMAIL_COMMAND_MAX-1);
+                sstrncpy(context->command, email_command, EMAIL_COMMAND_MAX);
                 } else {
                     context->command[0] = '\0';
                 }
@@ -815,8 +815,8 @@ static boolean parse_instance(char *module, char *request, jsmntok_t **token_ptr
             // that context.
             if (!delete) {
                 test_context *context = calloc(1, sizeof(test_context));
-                strncpy(context->module_name, module, SWDIAG_MAX_NAME_LEN-1);
-                strncpy(context->test_name, object_name, SWDIAG_MAX_NAME_LEN-1);
+                sstrncpy(context->module_name, module, SWDIAG_MAX_NAME_LEN);
+                sstrncpy(context->test_name, object_name, SWDIAG_MAX_NAME_LEN);
                 swdiag_instance_create(object_name, instance_name, context);
             } else {
                 swdiag_instance_delete(object_name, instance_name);

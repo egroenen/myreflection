@@ -1,1 +1,41 @@
-Lots and lots of things today - automatic baselining the main thing, proxy functionality
+Lots and lots of things today - automatic baselining the main thing, proxy functionality.
+
+ o New UI using gtsk
+   o change server to deliver JSON instead of text so that the UI can format it as it sees fit.
+   o How to visualise the health of the system without hardcoding anything. It is naturally a tree, 
+     however visualising a tree isn't the nicest of UIs (maybe). InfoVis has some nice stuff
+     the Squarified TreeMap is good - but maybe not for the average user.
+   o Bear in mind that the idea is that swdiag does everything behind the scenes, the UI is not
+     for monitoring, it is there is see why swdiag has or has not taken action.
+   o History is very important, we need to see which actions have been performed, and why they
+     were performed. This should be front page, a list of recovery actions that have been performed
+     and the ability to drill in and see why.  
+   o change server to deliver JSON instead of text so that the UI can format it as it sees fit.
+   
+ o Authentication (oauth2?)
+ o Configuration via UI
+   Need a way for the probe to specify possible configuration parameters so that the
+   UI knows how to render them. Then also need a way for them to be written back to the
+   filesystem. For example the diskpace probe may show the available filesystems and allow
+   you to ignore ones that are expected to be full.
+   
+   o Need way of specifying via the UI the rule thresholds so that they may be customised by
+   the user if need be.
+   o Need a way via the UI of restoring to factory resets the configuration.
+ o Need a way for the UI to "ignore" results from specific rules since we know they are bogus
+   or expected.
+ o Documentation for how to create a probe in different languages, with examples
+ o Mechanism for clients to communicate with each other including dependencies
+ o External reflector probes, for external testing of our own services. This is another swdiag instance
+   configured to allow reflections. Possibility of providing a free/paid for swdiag.io hosted service
+   for monitoring of Internet facing systems.
+ 
+ Client specific TODOs (issues that I have with some software)
+ 
+ o Integrate with Kodi including dependencies on OS running swdiag server monitoring the OS
+   o Check that the filesystems for the movies being available, if not try resetting the networking
+     to kick start it.
+   o Check for hanging threads, especially in plugins, kick them after too long.
+   
+  
+ 

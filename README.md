@@ -21,3 +21,5 @@ export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 Added ipkg python so that we can run our tests
 
+Ensure that your path is export PATH=/opt/bin:/usr/local/bin:$PATH
+

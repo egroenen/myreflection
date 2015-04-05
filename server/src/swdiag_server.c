@@ -208,29 +208,29 @@ int main (int argc, char **argv)
     free(config_path);
 
     if (server_config.smtp_hostname[0] == '\0') {
-        strncpy(server_config.smtp_hostname, "localhost", HOSTNAME_MAX-1);
+        sstrncpy(server_config.smtp_hostname, "localhost", HOSTNAME_MAX);
     }
 
     if (modules_path == NULL) {
     	if (server_config.modules_path[0] == '\0') {
-    		strncpy(server_config.modules_path, DEFAULT_MODULES_PATH, FILEPATH_MAX-1);
+    		sstrncpy(server_config.modules_path, DEFAULT_MODULES_PATH, FILEPATH_MAX);
     	}
     } else {
-    	strncpy(server_config.modules_path, modules_path, FILEPATH_MAX-1);
+    	sstrncpy(server_config.modules_path, modules_path, FILEPATH_MAX);
     	free(modules_path);
     }
 
     if (http_path == NULL) {
 		if (server_config.http_root[0] == '\0') {
-			strncpy(server_config.http_root, DEFAULT_HTTP_PATH, FILEPATH_MAX-1);
+			sstrncpy(server_config.http_root, DEFAULT_HTTP_PATH, FILEPATH_MAX);
 		}
     } else {
-		strncpy(server_config.http_root, http_path, FILEPATH_MAX-1);
+		sstrncpy(server_config.http_root, http_path, FILEPATH_MAX);
 		free(http_path);
     }
 
     if (server_config.http_port[0] == '\0') {
-        strncpy(server_config.http_port, http_port, HTTP_PORT_MAX-1);
+        sstrncpy(server_config.http_port, http_port, HTTP_PORT_MAX);
     }
 
     modules_init(server_config.modules_path);

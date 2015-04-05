@@ -34,7 +34,7 @@ def getMemInfo():
   
 def main():
     if options.conf:
-        print '"comp":{"name":"Memory"},'
+        print '"comp":{"name":"Memory", "parent":"System"},'
         print '"test":{"name":"memory_poll_meminfo",'
         print '        "polled":true,'
         print '        "interval":"fast",'
