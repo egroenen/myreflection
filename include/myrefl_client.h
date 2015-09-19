@@ -1,7 +1,8 @@
 /* 
- * swdiag_client.h - Software Diagnostics Client API
+ * myrefl_client.h - My Reflection Software Diagnostics Client API
  *
  * Copyright (c) 2007-2009 Cisco Systems Inc.
+ * Copyright (c) 2010-2015 Edward Groenendaal
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -27,7 +28,7 @@
 /*
  * Public API for scheduling online diagnostic tests to detect
  * and recover from software faults. Also see the CLI API for
- * access to the status of Software Diagnsotics.
+ * access to the status of Software Diagnostics.
  */
 
 /**
@@ -36,8 +37,8 @@
  * to register and configure their components, tests, rules and actions.
  */
    
-#ifndef __SWDIAG_CLIENT_H__
-#define __SWDIAG_CLIENT_H__
+#ifndef __MYREFL_CLIENT_H__
+#define __MYREFL_CLIENT_H__
 
 /*******************************************************************
  * Tests
@@ -48,8 +49,8 @@
  *
  * @brief
  * API used for creating, configuring and deleting software
- * diagnostic tests. Create a test via swdiag_test_create_polled() or 
- * swdiag_test_create_notification().
+ * diagnostic tests. Create a test via myrefl_test_create_polled() or
+ * myrefl_test_create_notification().
  *
  * @note Once a test has been created it must be linked to a rule before
  * it will affect the health of the system, and that rule connected to a
@@ -62,38 +63,38 @@
  * names using test and rule instances and no action function.
  *
  * @code
- * swdiag_result_t foo_test (const char *instance, 
+ * myrefl_result_t foo_test (const char *instance,
  *                           void *context,
  *                           int *retval)
  * {
  *     hwidbtype *hwidb;
  *
  *     if (!instance || !context) {
- *         return(SWDIAG_RESULT_ABORT);
+ *         return(MYREFL_RESULT_ABORT);
  *     }
  *
  *     hwidb = (hwidbtype*)context;
  *
  *     if (hwidb->bar) {
  *         *retval = hwidb->counter;
- *         return(SWDIAG_RESULT_VALUE);
+ *         return(MYREFL_RESULT_VALUE);
  *     } else {
- *         return(SWDIAG_RESULT_ABORT);
+ *         return(MYREFL_RESULT_ABORT);
  *     }
  * }
  * 
  * void foo_init (void)
  * { 
- *     swdiag_test_create_polled("Test", foo_test, NULL, SWDIAG_FREQ_NORMAL);
- *     swdiag_rule_create("Rule", "Test", SWDIAG_ACTION_NOOP);
- *     swdiag_rule_set_type("Rule", SWDIAG_RULE_GREATER_THAN_N, 80, 0);
+ *     myrefl_test_create_polled("Test", foo_test, NULL, MYREFL_FREQ_NORMAL);
+ *     myrefl_rule_create("Rule", "Test", MYREFL_ACTION_NOOP);
+ *     myrefl_rule_set_type("Rule", MYREFL_RULE_GREATER_THAN_N, 80, 0);
  *     
  *     FOR_ALL_HWIDBS(hwidb) {
- *         swdiag_instance_create("Test", hwidb->name, hwidb);
- *         swdiag_instance_create("Rule", hwidb->name, hwidb);
+ *         myrefl_instance_create("Test", hwidb->name, hwidb);
+ *         myrefl_instance_create("Rule", hwidb->name, hwidb);
  *     }
  *
- *     swdiag_test_chain_ready("Test");
+ *     myrefl_test_chain_ready("Test");
  * }
  * @endcode
  */
@@ -103,20 +104,20 @@
 /**
  * @name Maximum object name length
  *
- * Maximum length of any object name or instance name used by swdiag.
+ * Maximum length of any object name or instance name used by myrefl.
  * Should a name be longer than this it will be truncated to fit. This
  * limit is imposed by some OS's limitations (31). Don't change it without
  * taking that into account.
  */
-#define SWDIAG_MAX_NAME_LEN 31
+#define MYREFL_MAX_NAME_LEN 31
 
 /**
  * @name Maximum object description length
  *
- * Maximum length of object description used by swdiag.
+ * Maximum length of object description used by myrefl.
  * Should the description be longer than this it will be truncated to fit. 
  */
-#define SWDIAG_MAX_DESC_LEN 1024
+#define MYREFL_MAX_DESC_LEN 1024
 
 /**
  * @name Internal Polling Periods
@@ -138,36 +139,36 @@
  *
  * Default is 1 minute.
  */
-#define SWDIAG_PERIOD_FAST   (1000 * 5)
+#define MYREFL_PERIOD_FAST   (1000 * 5)
 
 /**
  * Use for tests that should run every so often.
  * Default is 5 minutes.
  */
-#define SWDIAG_PERIOD_NORMAL (1000 * 60 * 5)
+#define MYREFL_PERIOD_NORMAL (1000 * 60 * 5)
 /**
  * Use for tests that should not be run frequently, possibly because the 
  * test takes a while to complete.
  * Default is 30 mins.
  */
-#define SWDIAG_PERIOD_SLOW   (1000 * 60 * 30)
+#define MYREFL_PERIOD_SLOW   (1000 * 60 * 30)
 /* @} */
 
 /** 
  * Result of an test, rule or action
  *
- * @bug SWDIAG_RESULT_IN_PROGRESS not implemented
+ * @bug MYREFL_RESULT_IN_PROGRESS not implemented
  */
-typedef enum swdiag_result_e {
-    SWDIAG_RESULT_INVALID = 0, /**< Invalid result, used to identify errors */
-    SWDIAG_RESULT_PASS,        /**< test, rule or action passed */
-    SWDIAG_RESULT_FAIL,        /**< test, rule or action failed */
-    SWDIAG_RESULT_VALUE,       /**< test returned a value rather than pass/fail */
-    SWDIAG_RESULT_IN_PROGRESS, /**< test or action is still in progress */
-    SWDIAG_RESULT_ABORT,       /**< test or action was aborted prior or during */
-    SWDIAG_RESULT_IGNORE,      /**< test or action result should be ignored, e.g. for a test applied to a base object */
-    SWDIAG_RESULT_LAST         /**< not to be used. */
-} swdiag_result_t;
+typedef enum myrefl_result_e {
+    MYREFL_RESULT_INVALID = 0, /**< Invalid result, used to identify errors */
+    MYREFL_RESULT_PASS,        /**< test, rule or action passed */
+    MYREFL_RESULT_FAIL,        /**< test, rule or action failed */
+    MYREFL_RESULT_VALUE,       /**< test returned a value rather than pass/fail */
+    MYREFL_RESULT_IN_PROGRESS, /**< test or action is still in progress */
+    MYREFL_RESULT_ABORT,       /**< test or action was aborted prior or during */
+    MYREFL_RESULT_IGNORE,      /**< test or action result should be ignored, e.g. for a test applied to a base object */
+    MYREFL_RESULT_LAST         /**< not to be used. */
+} myrefl_result_t;
 
 /** Polled test callback
  *
@@ -181,18 +182,18 @@ typedef enum swdiag_result_e {
  *                     to to be interpreted by any associated rule
  *
  * @result Status of the test
- * @retval SWDIAG_RESULT_PASS   The test passed
- * @retval SWDIAG_RESULT_FAIL   The test failed
- * @retval SWDIAG_RESULT_VALUE  THe test is returning a value to be interpreted by a rule
- * @retval SWDIAG_RESULT_ABORT  The test could not be run
- * @retval SWDIAG_RESULT_IN_PROGRESS The test is still in progress, use swdiag_test_notify() when complete.
+ * @retval MYREFL_RESULT_PASS   The test passed
+ * @retval MYREFL_RESULT_FAIL   The test failed
+ * @retval MYREFL_RESULT_VALUE  THe test is returning a value to be interpreted by a rule
+ * @retval MYREFL_RESULT_ABORT  The test could not be run
+ * @retval MYREFL_RESULT_IN_PROGRESS The test is still in progress, use myrefl_test_notify() when complete.
  * 
  * @note Where a test has instances the test function will be called for 
  *       each instance as well as the owning test. Therefore it is the 
  *       responsibility of the test function to ignore tests that have
  *       no valid instance (i.e. instance is NULL).
  */
-typedef swdiag_result_t swdiag_test_t(const char *instance, 
+typedef myrefl_result_t myrefl_test_t(const char *instance,
                                       void *context, 
                                       long *value);
 
@@ -207,48 +208,48 @@ typedef swdiag_result_t swdiag_test_t(const char *instance,
  *
  * If the test function is going to take a long time it should run in
  * its own process or thread and return from the test_func immediately
- * with the return value of SWDIAG_RESULT_IN_PROGRESS. Once the test
- * is complete the swdiag_test_notify() API should be used to notify
+ * with the return value of MYREFL_RESULT_IN_PROGRESS. Once the test
+ * is complete the myrefl_test_notify() API should be used to notify
  * the results of the test.
  *
  * If your test should not be run everywhere then use the 
- * swdiag_test_location() to override the default.
+ * myrefl_test_location() to override the default.
  *
- * @param test_name Test name for refering to this test by rules, dependencies
+ * @param test_name Test name for referring to this test by rules, dependencies
  *                  and the CLI.
  * @param test_func Pointer to the test function to be invoked
  * @param context   Opaque Context to be passed to test_func when invoked
  * @param period    Polling interval in milli-seconds (ms)
  *
  * @pre A test with test_name may already exist
- * @post A test with test_name will exist with these parameters set and swdiag_test_chain_ready() will have to be called
+ * @post A test with test_name will exist with these parameters set and myrefl_test_chain_ready() will have to be called
  *
- * @see swdiag_rule_create(), swdiag_test_chain_ready(), swdiag_test_notify()
+ * @see myrefl_rule_create(), myrefl_test_chain_ready(), myrefl_test_notify()
  *
  */
-void swdiag_test_create_polled(const char *test_name,
-                               swdiag_test_t test_func,
+void myrefl_test_create_polled(const char *test_name,
+                               myrefl_test_t test_func,
                                void *context,
                                unsigned int period);
 
 /** Create a Notification Test
  *
  * A test which is fully contained in the instrumented module, and
- * will inform the SW diags via the swdiag_test_notify() API when
+ * will inform the SW diags via the myrefl_test_notify() API when
  * it is triggered. Test results are passed to the associated rule
  * to be interpreted and acted upon.
  *
  * @param test_name Name of the Notification test.
  *
- * @pre test_name may already exist, if it does then swdiag_test_chain_ready() will have to be called
+ * @pre test_name may already exist, if it does then myrefl_test_chain_ready() will have to be called
  *
- * @see swdiag_test_notify(), swdiag_rule_create()
+ * @see myrefl_test_notify(), myrefl_rule_create()
  */
-void swdiag_test_create_notification(const char *test_name);
+void myrefl_test_create_notification(const char *test_name);
 
 /** Notification of the result of a test
  *
- * Notify swdiag of the status for a notification test instance, or 
+ * Notify myrefl of the status for a notification test instance, or
  * an asynchronous polled test result.
  *
  * If this test has had instances created on it then the instance_name
@@ -266,11 +267,11 @@ void swdiag_test_create_notification(const char *test_name);
  *
  * @pre test_name has been created and is enabled
  *
- * @see swdiag_test_create_notification(), swdiag_rule_create()
+ * @see myrefl_test_create_notification(), myrefl_rule_create()
  */
-void swdiag_test_notify(const char *test_name,
+void myrefl_test_notify(const char *test_name,
                         const char *instance_name,
-                        swdiag_result_t result,
+                        myrefl_result_t result,
                         long value);
 
 /** Test Flags
@@ -284,27 +285,27 @@ void swdiag_test_notify(const char *test_name,
  * @codeexample
  *  Set the test location to be only on the Active RP for "Test"
  * @code
- *   flags = swdiag_test_get_flags("Test");
- *   swdiag_test_set_flags("Test", (flags & ~SWDIAG_TEST_LOCATION_ALL) | 
- *                                  SWDIAG_TEST_LOCATION_ACTIVE_RP);
+ *   flags = myrefl_test_get_flags("Test");
+ *   myrefl_test_set_flags("Test", (flags & ~MYREFL_TEST_LOCATION_ALL) |
+ *                                  MYREFL_TEST_LOCATION_ACTIVE_RP);
  * @endcode
  *
  * @note Notifications for tests will be ignored unless the test
  *       is configured to receive them at that location
  *
- * @bug SWDIAG_TEST_LOCATION_STANDBY_RP not implemented
- * @bug SWDIAG_TEST_LOCATION_LC not implemented
+ * @bug MYREFL_TEST_LOCATION_STANDBY_RP not implemented
+ * @bug MYREFL_TEST_LOCATION_LC not implemented
  * 
- * @see swdiag_test_get_flags(), swdiag_test_set_flags()
+ * @see myrefl_test_get_flags(), myrefl_test_set_flags()
  */
-typedef enum swdiag_test_flags_e {
-    SWDIAG_TEST_NONE                = 0x0000, /**< No flags defined */
-    SWDIAG_TEST_LOCATION_ACTIVE_RP  = 0x0001, /**< Execute polled test on Active RP */
-    SWDIAG_TEST_LOCATION_STANDBY_RP = 0x0002, /**< Execute polled test on Standby RP */
-    SWDIAG_TEST_LOCATION_LC         = 0x0004, /**< Execute polled test on Line Card */
-    SWDIAG_TEST_LOCATION_ALL        = 0x0007, /**< Execute polled test in all locations */
-    SWDIAG_TEST_FLAG_ALL            = (SWDIAG_TEST_LOCATION_ALL),
-} swdiag_test_flags_t;
+typedef enum myrefl_test_flags_e {
+    MYREFL_TEST_NONE                = 0x0000, /**< No flags defined */
+    MYREFL_TEST_LOCATION_ACTIVE_RP  = 0x0001, /**< Execute polled test on Active RP */
+    MYREFL_TEST_LOCATION_STANDBY_RP = 0x0002, /**< Execute polled test on Standby RP */
+    MYREFL_TEST_LOCATION_LC         = 0x0004, /**< Execute polled test on Line Card */
+    MYREFL_TEST_LOCATION_ALL        = 0x0007, /**< Execute polled test in all locations */
+    MYREFL_TEST_FLAG_ALL            = (MYREFL_TEST_LOCATION_ALL),
+} myrefl_test_flags_t;
 
 
 
@@ -322,7 +323,7 @@ typedef enum swdiag_test_flags_e {
  *
  * @note The user could replicate this functionality using a polled 
  *       test that returned the health of the component. However the
- *       test created by swdiag_test_create_comp_health() has private
+ *       test created by myrefl_test_create_comp_health() has private
  *       access to the infra code that performs the health calculations
  *       and so will return changes in health as a notification immediately
  *       rather than having to wait for a polling period.
@@ -330,7 +331,7 @@ typedef enum swdiag_test_flags_e {
  * @param[in] test_name Test name to create
  * @param[in] comp_name Component to monitor
  */
-void swdiag_test_create_comp_health(const char *test_name,
+void myrefl_test_create_comp_health(const char *test_name,
                                     const char *comp_name);
 
 /** Set a tests flags
@@ -346,21 +347,21 @@ void swdiag_test_create_comp_health(const char *test_name,
  * @codeexample
  *  Set the test location to be only on the Active RP for "Test"
  * @code
- *   flags = swdiag_test_get_flags("Test");
- *   swdiag_test_set_flags("Test", (flags & ~SWDIAG_TEST_LOCATION_ALL) | 
- *                                  SWDIAG_TEST_LOCATION_ACTIVE_RP);
+ *   flags = myrefl_test_get_flags("Test");
+ *   myrefl_test_set_flags("Test", (flags & ~MYREFL_TEST_LOCATION_ALL) |
+ *                                  MYREFL_TEST_LOCATION_ACTIVE_RP);
  * @endcode
- * @see swdiag_test_get_flags()
+ * @see myrefl_test_get_flags()
  */
-void swdiag_test_set_flags(const char *test_name,
-                           swdiag_test_flags_t flags);
+void myrefl_test_set_flags(const char *test_name,
+                           myrefl_test_flags_t flags);
 
 /** Get a tests flags
  *
  * Get the flags that modify the behaviour of this test from the defaults.
  *
  * @param[in] test_name Test name to get the flags for
- * @return The flags for this test, SWDIAG_TEST_NONE if the test_name 
+ * @return The flags for this test, MYREFL_TEST_NONE if the test_name
  *         was not found.
  *
  * @pre Test with test_name exists
@@ -368,13 +369,13 @@ void swdiag_test_set_flags(const char *test_name,
  * @codeexample
  *  Set the test location to be only on the Active RP for "Test"
  * @code
- *   flags = swdiag_test_get_flags("Test");
- *   swdiag_test_set_flags("Test", (flags & ~SWDIAG_TEST_LOCATION_ALL) | 
- *                                  SWDIAG_TEST_LOCATION_ACTIVE_RP);
+ *   flags = myrefl_test_get_flags("Test");
+ *   myrefl_test_set_flags("Test", (flags & ~MYREFL_TEST_LOCATION_ALL) |
+ *                                  MYREFL_TEST_LOCATION_ACTIVE_RP);
  * @endcode
- * @see swdiag_test_set_flags()
+ * @see myrefl_test_set_flags()
  */
-swdiag_test_flags_t swdiag_test_get_flags(const char *test_name);
+myrefl_test_flags_t myrefl_test_get_flags(const char *test_name);
 
 /** Delete a test and or instances
  *
@@ -384,9 +385,9 @@ swdiag_test_flags_t swdiag_test_get_flags(const char *test_name);
  *
  * @pre A test with test_name exists
  *
- * @see swdiag_instance_delete()
+ * @see myrefl_instance_delete()
  */
-void swdiag_test_delete(const char *test_name);
+void myrefl_test_delete(const char *test_name);
 
 /** Test and all chained rules and actions are configured and ready
  *
@@ -398,9 +399,9 @@ void swdiag_test_delete(const char *test_name);
  * when in this state they are will be ignored by Software Diagnostics.
  *
  * After the objects have been configured they may be enabled or
- * disabled explicitly (via swdiag_test_enable(),
- * swdiag_rule_enable(), swdiag_action_enable(), swdiag_comp_enable())
- * or swdiag_test_chain_ready() may be used to set a test and all of
+ * disabled explicitly (via myrefl_test_enable(),
+ * myrefl_rule_enable(), myrefl_action_enable(), myrefl_comp_enable())
+ * or myrefl_test_chain_ready() may be used to set a test and all of
  * the rules and actions that are connected to this test to the
  * default state for the system.
  *
@@ -411,7 +412,7 @@ void swdiag_test_delete(const char *test_name);
  *
  * @pre Test with test_name must exist, and should be configured.
  */ 
-void swdiag_test_chain_ready(const char *test_name);
+void myrefl_test_chain_ready(const char *test_name);
 
 /** Explicitly Enable a test
  *
@@ -423,12 +424,12 @@ void swdiag_test_chain_ready(const char *test_name);
  *
  * @pre Test with test_name must exist, and should be configured.
  *
- * @warning swdiag_test_chain_ready() should be used to signal that the test
+ * @warning myrefl_test_chain_ready() should be used to signal that the test
  *          is ready to be used.
  *
- * @see swdiag_test_disable(), swdiag_test_chain_ready()
+ * @see myrefl_test_disable(), myrefl_test_chain_ready()
  */
-void swdiag_test_enable(const char *test_name, const char *instance_name);
+void myrefl_test_enable(const char *test_name, const char *instance_name);
 
 /** Explicitly Disable a test
  * 
@@ -440,9 +441,9 @@ void swdiag_test_enable(const char *test_name, const char *instance_name);
  *
  * @pre Test with test_name must exist, and should be configured.
  *
- * @see swdiag_test_enable(), swdiag_test_chain_ready()
+ * @see myrefl_test_enable(), myrefl_test_chain_ready()
  */
-void swdiag_test_disable(const char *test_name, const char *instance_name);
+void myrefl_test_disable(const char *test_name, const char *instance_name);
 
 /** Set the description for a test
  *
@@ -454,14 +455,14 @@ void swdiag_test_disable(const char *test_name, const char *instance_name);
  *
  * @pre Test with test_name may exist.
  */
-void swdiag_test_set_description(const char *test_name,
+void myrefl_test_set_description(const char *test_name,
                                  const char *description);
 
 /** Set autopass for notification tests
  *
- * Notification tests sometimes only notify swdiags on failure, and not
+ * Notification tests sometimes only notify myrefls on failure, and not
  * when the failure has been corrected. For example memory allocation
- * failures. In these cases it is advised to use swdiag_test_set_autopass()
+ * failures. In these cases it is advised to use myrefl_test_set_autopass()
  * to signal that the failure is no longer of concern at a set delay after
  * a failure. 
  *
@@ -474,7 +475,7 @@ void swdiag_test_set_description(const char *test_name,
  *
  * @pre Test with test_name may exist
  */
-void swdiag_test_set_autopass(const char *test_name,
+void myrefl_test_set_autopass(const char *test_name,
                               unsigned int delay);
                           
 /* @} */
@@ -489,7 +490,7 @@ void swdiag_test_set_autopass(const char *test_name,
  * API used to create, delete and configure diagnostic recovery actions to be
  * triggered when a diagnostic rule fails based on a test result.
  *
- * @see swdiag_rule_create(), swdiag_test_create_polled(), swdiag_test_create_notification()
+ * @see myrefl_rule_create(), myrefl_test_create_polled(), myrefl_test_create_notification()
  */
 
 /* @{ */
@@ -505,42 +506,42 @@ void swdiag_test_set_autopass(const char *test_name,
  *       some OS's it may not be implemented.
  *
  * @codeexample
- * Using the SWDIAG_ACTION_RELOAD to trigger a system reload when processor
+ * Using the MYREFL_ACTION_RELOAD to trigger a system reload when processor
  * memory is exhausted for a 10 minutes.
  * @code
- * swdiag_rule_create("NoMemory", DIAG_MEMORY_TEST, SWDIAG_ACTION_NOOP);
- * swdiag_rule_set_type("NoMemory", SWDIAG_RULE_EQUAL_TO, 0, 0);
- * swdiag_rule_create("NoMemoryOverTime", "NoMemory",  SWDIAG_ACTION_RELOAD);
- * swdiag_rule_set_type("NoMemoryOverTime", SWDIAG_RULE_FAIL_FOR_TIME_N, (ONEMIN*10), 0);
+ * myrefl_rule_create("NoMemory", DIAG_MEMORY_TEST, MYREFL_ACTION_NOOP);
+ * myrefl_rule_set_type("NoMemory", MYREFL_RULE_EQUAL_TO, 0, 0);
+ * myrefl_rule_create("NoMemoryOverTime", "NoMemory",  MYREFL_ACTION_RELOAD);
+ * myrefl_rule_set_type("NoMemoryOverTime", MYREFL_RULE_FAIL_FOR_TIME_N, (ONEMIN*10), 0);
  * @endcode
  */
-#define SWDIAG_ACTION_RELOAD               "Built-in-reload"
+#define MYREFL_ACTION_RELOAD               "Built-in-reload"
 /**
  * Action to switchover to a redundant processor immediately. On a non
  * HA system this action will display a message and return.
  *
  * @codeexample
- * Using the SWDIAG_ACTION_SWITCHOVER to trigger a system switchover 
+ * Using the MYREFL_ACTION_SWITCHOVER to trigger a system switchover
  * when processor memory is exhausted on the Active for a 10 minutes and
  * the Standby is at 100% health.
  * @note The severity of the "StandbyHealthy" rule is set to 
- *       SWDIAG_SEVERITY_NONE since the Standby being at 100% health is not
+ *       MYREFL_SEVERITY_NONE since the Standby being at 100% health is not
  *       a fault.
  * @code
- * swdiag_rule_create("NoMemory", DIAG_MEMORY_TEST, SWDIAG_ACTION_NOOP);
- * swdiag_rule_set_type("NoMemory", SWDIAG_RULE_EQUAL_TO, 0, 0);
- * swdiag_rule_create("NoMemoryOverTime", "NoMemory",  SWDIAG_ACTION_NOOP);
- * swdiag_rule_set_type("NoMemoryOverTime", SWDIAG_RULE_FAIL_FOR_TIME_N, (ONEMIN*10), 0);
- * swdiag_test_create_comp_health("StandbyHealth", SWDIAG_STANDBY_COMP);
- * swdiag_rule_create("StandbyHealthy", "StandbyHealth", SWDIAG_ACTION_NOOP);
- * swdiag_rule_set_type("StandbyHealthy", SWDIAG_RULE_EQUAL_TO, 1000, 0);
- * swdiag_rule_set_severity("StandbyHealthy", SWDIAG_SEVERITY_NONE);
- * swdiag_rule_create("NoMemorySwitchover", "NoMemoryOverTime", SWDIAG_ACTION_SWITCHOVER);
- * swdiag_rule_add_input("NoMemorySwitchover", "StandbyHealthy");
- * swdiag_rule_set_type("NoMemorySwitchover", SWDIAG_RULE_AND, 0, 0);
+ * myrefl_rule_create("NoMemory", DIAG_MEMORY_TEST, MYREFL_ACTION_NOOP);
+ * myrefl_rule_set_type("NoMemory", MYREFL_RULE_EQUAL_TO, 0, 0);
+ * myrefl_rule_create("NoMemoryOverTime", "NoMemory",  MYREFL_ACTION_NOOP);
+ * myrefl_rule_set_type("NoMemoryOverTime", MYREFL_RULE_FAIL_FOR_TIME_N, (ONEMIN*10), 0);
+ * myrefl_test_create_comp_health("StandbyHealth", MYREFL_STANDBY_COMP);
+ * myrefl_rule_create("StandbyHealthy", "StandbyHealth", MYREFL_ACTION_NOOP);
+ * myrefl_rule_set_type("StandbyHealthy", MYREFL_RULE_EQUAL_TO, 1000, 0);
+ * myrefl_rule_set_severity("StandbyHealthy", MYREFL_SEVERITY_NONE);
+ * myrefl_rule_create("NoMemorySwitchover", "NoMemoryOverTime", MYREFL_ACTION_SWITCHOVER);
+ * myrefl_rule_add_input("NoMemorySwitchover", "StandbyHealthy");
+ * myrefl_rule_set_type("NoMemorySwitchover", MYREFL_RULE_AND, 0, 0);
  * @endcode
  */
-#define SWDIAG_ACTION_SWITCHOVER           "Built-in-switchover"
+#define MYREFL_ACTION_SWITCHOVER           "Built-in-switchover"
 /**
  * Action to reload the redundant processor immediately. On a non
  * HA system this action will display a message and return. 
@@ -549,15 +550,15 @@ void swdiag_test_set_autopass(const char *test_name,
  * Reload the Standby processor whenever it drops to under 50% health
  * for more than 10mins
  * @code
- * swdiag_test_create_comp_health("StandbyHealth", SWDIAG_STANDBY_COMP);
- * swdiag_rule_create("StandbyUnhealthy", "StandbyHealth", SWDIAG_ACTION_NOOP);
- * swdiag_rule_set_type("StandbyUnhealthy", SWDIAG_RULE_LESS_THAN_N, 500, 0);
- * swdiag_rule_create("StandbyUnhealthOverTime", "StandbyUnhealthy", SWDIAG_ACTION_SWITCHOVER);
- * swdiag_rule_set_type("StandbyUnhealthyOverTime", SWDIAG_RULE_FAIL_FOR_TIME_N, (ONEMIN*10), 0);
+ * myrefl_test_create_comp_health("StandbyHealth", MYREFL_STANDBY_COMP);
+ * myrefl_rule_create("StandbyUnhealthy", "StandbyHealth", MYREFL_ACTION_NOOP);
+ * myrefl_rule_set_type("StandbyUnhealthy", MYREFL_RULE_LESS_THAN_N, 500, 0);
+ * myrefl_rule_create("StandbyUnhealthOverTime", "StandbyUnhealthy", MYREFL_ACTION_SWITCHOVER);
+ * myrefl_rule_set_type("StandbyUnhealthyOverTime", MYREFL_RULE_FAIL_FOR_TIME_N, (ONEMIN*10), 0);
  * @endcode
  */
 
-#define SWDIAG_ACTION_RELOAD_STANDBY        "Built-in-reload-standby"
+#define MYREFL_ACTION_RELOAD_STANDBY        "Built-in-reload-standby"
 /*
  * Action to reload the system during the next maintenance interval,
  * if configured. If no maintainence interval is configured then this
@@ -567,35 +568,35 @@ void swdiag_test_set_autopass(const char *test_name,
  * Reload the Standby processor at the next maintenance period whenever 
  * it drops to under 50% health for more than 10mins
  * @code
- * swdiag_test_create_comp_health("StandbyHealth", SWDIAG_STANDBY_COMP);
- * swdiag_rule_create("StandbyUnhealthy", "StandbyHealth", SWDIAG_ACTION_NOOP);
- * swdiag_rule_set_type("StandbyUnhealthy", SWDIAG_RULE_LESS_THAN_N, 500, 0);
- * swdiag_rule_create("StandbyUnhealthOverTime", "StandbyUnhealthy", SWDIAG_ACTION_SCHEDULED_SWITCHOVER);
- * swdiag_rule_set_type("StandbyUnhealthyOverTime", SWDIAG_RULE_FAIL_FOR_TIME_N, (ONEMIN*10), 0);
+ * myrefl_test_create_comp_health("StandbyHealth", MYREFL_STANDBY_COMP);
+ * myrefl_rule_create("StandbyUnhealthy", "StandbyHealth", MYREFL_ACTION_NOOP);
+ * myrefl_rule_set_type("StandbyUnhealthy", MYREFL_RULE_LESS_THAN_N, 500, 0);
+ * myrefl_rule_create("StandbyUnhealthOverTime", "StandbyUnhealthy", MYREFL_ACTION_SCHEDULED_SWITCHOVER);
+ * myrefl_rule_set_type("StandbyUnhealthyOverTime", MYREFL_RULE_FAIL_FOR_TIME_N, (ONEMIN*10), 0);
  * @endcode
  */
-#define SWDIAG_ACTION_SCHEDULED_RELOAD     "Built-in-scheduled-reload"
+#define MYREFL_ACTION_SCHEDULED_RELOAD     "Built-in-scheduled-reload"
 /**
  * Action to switchover to a redundant processor during the next maintenance interval,
  * if configured. If no maintainence interval is configured then this
  * action will display a message and return.
  */
-#define SWDIAG_ACTION_SCHEDULED_SWITCHOVER "Built-in-scheduled-switchover"
+#define MYREFL_ACTION_SCHEDULED_SWITCHOVER "Built-in-scheduled-switchover"
 /**
  * Action that does nothing, should be used when chaining rules together and no actions are required during the intermediate stages.
  * 
  * @codeexample
- * Using the SWDIAG_ACTION_NOOP built in action to trigger only if a threshold is exceeded more than 4 out of the last 5 times,
+ * Using the MYREFL_ACTION_NOOP built in action to trigger only if a threshold is exceeded more than 4 out of the last 5 times,
  * @code
- * swdiag_test_create_polled("Test", test_func, NULL, SWDIAG_PERIOD_NORMAL);
- * swdiag_rule_create("Rule1", "Test", SWDIAG_ACTION_NOOP);
- * swdiag_rule_set_type("Rule1", SWDIAG_RULE_GREATER_THAN_N, 5, 0);
- * swdiag_rule_create("Rule2", "Rule1", "Action");
- * swdiag_rule_set_type("Rule2", SWDIAG_RULE_N_IN_M, 4, 5);
- * swdiag_action_create("Action", action_func, NULL);
+ * myrefl_test_create_polled("Test", test_func, NULL, MYREFL_PERIOD_NORMAL);
+ * myrefl_rule_create("Rule1", "Test", MYREFL_ACTION_NOOP);
+ * myrefl_rule_set_type("Rule1", MYREFL_RULE_GREATER_THAN_N, 5, 0);
+ * myrefl_rule_create("Rule2", "Rule1", "Action");
+ * myrefl_rule_set_type("Rule2", MYREFL_RULE_N_IN_M, 4, 5);
+ * myrefl_action_create("Action", action_func, NULL);
  * @endcode
  */
-#define SWDIAG_ACTION_NOOP                 "Built-in-No-op"
+#define MYREFL_ACTION_NOOP                 "Built-in-No-op"
 /* @} */
 
 /** Recovery action callback
@@ -607,45 +608,45 @@ void swdiag_test_set_autopass(const char *test_name,
  * @param[in] context Context as provided by the client when the action  
  *                    or instance was created.
  * @result Status of the recovery action
- * @retval SWDIAG_RESULT_PASS   The recovery action passed
- * @retval SWDIAG_RESULT_FAIL   The recovery action failed
- * @retval SWDIAG_RESULT_ABORT  The recovery action could not be run
- * @retval SWDIAG_RESULT_IN_PROGRESS The recovery action is still in progress, use swdiag_action_complete() when complete.
+ * @retval MYREFL_RESULT_PASS   The recovery action passed
+ * @retval MYREFL_RESULT_FAIL   The recovery action failed
+ * @retval MYREFL_RESULT_ABORT  The recovery action could not be run
+ * @retval MYREFL_RESULT_IN_PROGRESS The recovery action is still in progress, use myrefl_action_complete() when complete.
  */
-typedef swdiag_result_t swdiag_action_t(const char *instance, 
+typedef myrefl_result_t myrefl_action_t(const char *instance,
                                         void *context);
 
 /** Create a Recovery Action
  *
  * Execute the function provided with the context when called. If the
  * action can not complete in a reasonable time then it may need to 
- * return SWDIAG_ACTION_IN_PROGRESS and call swdiag_action_complete()
+ * return MYREFL_ACTION_IN_PROGRESS and call myrefl_action_complete()
  * when complete.
  *
  * @param[in] action_name Name of the action to create
  * @param[in] action_func Client recovery action function to call
  * @param[in] context     Client provided opaque context to provide recovery action when called
  */
-void swdiag_action_create(const char *action_name,
-                          swdiag_action_t action_func,
+void myrefl_action_create(const char *action_name,
+                          myrefl_action_t action_func,
                           void *context);
 
 /** Asynchronous Recovery Action Complete
  *
  * A recovery action which returned a value of
- * SWDIAG_RESULT_IN_PROGRESS when originally called uses
- * swdiag_action_complete() when it has completed the recovery action.
+ * MYREFL_RESULT_IN_PROGRESS when originally called uses
+ * myrefl_action_complete() when it has completed the recovery action.
  *
  * @param[in] action_name Name of the action that has completed
  * @param[in] instance_name Optional instance name, NULL if not using instances
  * @param[in] result Result of the recovery action
- * @retval SWDIAG_RESULT_PASS   The recovery action passed
- * @retval SWDIAG_RESULT_FAIL   The recovery action failed
- * @retval SWDIAG_RESULT_ABORT  The recovery action could not be run
+ * @retval MYREFL_RESULT_PASS   The recovery action passed
+ * @retval MYREFL_RESULT_FAIL   The recovery action failed
+ * @retval MYREFL_RESULT_ABORT  The recovery action could not be run
  */
-void swdiag_action_complete(const char *action_name,
+void myrefl_action_complete(const char *action_name,
                             const char *instance_name,
-                            swdiag_result_t result);
+                            myrefl_result_t result);
 
 /** Create a user alert action
  * 
@@ -655,7 +656,7 @@ void swdiag_action_complete(const char *action_name,
  * @param[in] action_name Name of the action to create
  * @param[in] notification_string String to display to the user when this action is triggered
  */
-void swdiag_action_create_user_alert(const char *action_name,
+void myrefl_action_create_user_alert(const char *action_name,
                                      const char *notification_string);
 
 /** Delete a recovery action
@@ -664,7 +665,7 @@ void swdiag_action_create_user_alert(const char *action_name,
  * 
  * @pre An action with the name action_name exists
  */
-void swdiag_action_delete(const char *action_name);
+void myrefl_action_delete(const char *action_name);
 
 /** Set the description for a recovery action
  * 
@@ -675,7 +676,7 @@ void swdiag_action_delete(const char *action_name);
  * @param[in] action_name Name of the action
  * @param[in] description Description to attach to this action
  */
-void swdiag_action_set_description(const char *action_name,
+void myrefl_action_set_description(const char *action_name,
                                    const char *description);
 
 /** Action Flags
@@ -689,23 +690,23 @@ void swdiag_action_set_description(const char *action_name,
  * @codeexample
  *  Set the test location to be only on the Active RP for "Action"
  * @code
- *   flags = swdiag_action_get_flags("Action");
- *   swdiag_action_set_flags("Action", (flags & ~SWDIAG_ACTION_LOCATION_ALL) | 
- *                                      SWDIAG_ACTION_LOCATION_ACTIVE_RP);
+ *   flags = myrefl_action_get_flags("Action");
+ *   myrefl_action_set_flags("Action", (flags & ~MYREFL_ACTION_LOCATION_ALL) |
+ *                                      MYREFL_ACTION_LOCATION_ACTIVE_RP);
  * @endcode
  *
- * @bug SWDIAG_ACTION_LOCATION_STANDBY_RP not implemented
- * @bug SWDIAG_ACTION_LOCATION_LC not implemented
+ * @bug MYREFL_ACTION_LOCATION_STANDBY_RP not implemented
+ * @bug MYREFL_ACTION_LOCATION_LC not implemented
  
- * @see swdiag_action_get_flags(), swdiag_action_set_flags()
+ * @see myrefl_action_get_flags(), myrefl_action_set_flags()
  */
-typedef enum swdiag_action_flags_e {
-    SWDIAG_ACTION_NONE                = 0x0000, /**< No flags defined */
-    SWDIAG_ACTION_LOCATION_ACTIVE_RP  = 0x0001, /**< Execute action on Active RP */
-    SWDIAG_ACTION_LOCATION_STANDBY_RP = 0x0002, /**< Execute action on Standby RP */
-    SWDIAG_ACTION_LOCATION_LC         = 0x0004, /**< Execute action on Line Card */
-    SWDIAG_ACTION_LOCATION_ALL        = 0x0007, /**< Execute action in all locations */
-} swdiag_action_flags_t;
+typedef enum myrefl_action_flags_e {
+    MYREFL_ACTION_NONE                = 0x0000, /**< No flags defined */
+    MYREFL_ACTION_LOCATION_ACTIVE_RP  = 0x0001, /**< Execute action on Active RP */
+    MYREFL_ACTION_LOCATION_STANDBY_RP = 0x0002, /**< Execute action on Standby RP */
+    MYREFL_ACTION_LOCATION_LC         = 0x0004, /**< Execute action on Line Card */
+    MYREFL_ACTION_LOCATION_ALL        = 0x0007, /**< Execute action in all locations */
+} myrefl_action_flags_t;
 
 /** Set an actions flags
  *
@@ -720,20 +721,20 @@ typedef enum swdiag_action_flags_e {
  * @codeexample
  *  Set the action location to be only on the Active RP for "Action"
  * @code
- *   flags = swdiag_action_get_flags("Action");
- *   swdiag_action_set_flags("Action", (flags & ~SWDIAG_ACTION_LOCATION_ALL) | 
- *                                      SWDIAG_ACTION_LOCATION_ACTIVE_RP);
+ *   flags = myrefl_action_get_flags("Action");
+ *   myrefl_action_set_flags("Action", (flags & ~MYREFL_ACTION_LOCATION_ALL) |
+ *                                      MYREFL_ACTION_LOCATION_ACTIVE_RP);
  * @endcode
- * @see swdiag_action_get_flags()
+ * @see myrefl_action_get_flags()
  */
-void swdiag_action_set_flags(const char *action_name,
-                             swdiag_action_flags_t flags);
+void myrefl_action_set_flags(const char *action_name,
+                             myrefl_action_flags_t flags);
 /** Get an actions flags
  *
  * Get the flags that modify the behaviour of this action
  *
  * @param[in] action_name Action name to get the flags for
- * @return The flags for this action, SWDIAG_ACTION_NONE if the action_name 
+ * @return The flags for this action, MYREFL_ACTION_NONE if the action_name
  *         was not found.
  *
  * @pre Action with action_name exists
@@ -741,13 +742,13 @@ void swdiag_action_set_flags(const char *action_name,
  * @codeexample
  *  Set the action location to be only on the Active RP for "Action"
  * @code
- *   flags = swdiag_action_get_flags("Action");
- *   swdiag_action_set_flags("Action", (flags & ~SWDIAG_ACTION_LOCATION_ALL) | 
- *                                      SWDIAG_ACTION_LOCATION_ACTIVE_RP);
+ *   flags = myrefl_action_get_flags("Action");
+ *   myrefl_action_set_flags("Action", (flags & ~MYREFL_ACTION_LOCATION_ALL) |
+ *                                      MYREFL_ACTION_LOCATION_ACTIVE_RP);
  * @endcode
- * @see swdiag_action_set_flags()
+ * @see myrefl_action_set_flags()
  */
-swdiag_action_flags_t swdiag_action_get_flags(const char *action_name);
+myrefl_action_flags_t myrefl_action_get_flags(const char *action_name);
 
 /** Explicitly Enable an action
  *
@@ -759,12 +760,12 @@ swdiag_action_flags_t swdiag_action_get_flags(const char *action_name);
  *
  * @pre Action with action_name must exist, and should be configured.
  *
- * @note swdiag_test_chain_ready() should be used to signal that the test
+ * @note myrefl_test_chain_ready() should be used to signal that the test
  *       chain, including this action, is ready to be used.
  *
- * @see swdiag_action_disable(), swdiag_test_chain_ready()
+ * @see myrefl_action_disable(), myrefl_test_chain_ready()
  */
-void swdiag_action_enable(const char *action_name, const char *instance_name);
+void myrefl_action_enable(const char *action_name, const char *instance_name);
 
 /** Explicitly Disable an action
  * 
@@ -776,9 +777,9 @@ void swdiag_action_enable(const char *action_name, const char *instance_name);
  *
  * @pre Action with action_name must exist, and should be configured.
  *
- * @see swdiag_action_enable(), swdiag_test_chain_ready()
+ * @see myrefl_action_enable(), myrefl_test_chain_ready()
  */
-void swdiag_action_disable(const char *action_name, const char *instance_name);
+void myrefl_action_disable(const char *action_name, const char *instance_name);
 
 /* @} */
 
@@ -792,14 +793,14 @@ void swdiag_action_disable(const char *action_name, const char *instance_name);
  * API used to create, delete and configure diagnostic recovery actions to be
  * triggered when a diagnostic rule fails based on a test result.
  *
- * @see swdiag_action_create(), swdiag_test_create_polled(), swdiag_test_create_notification()
+ * @see myrefl_action_create(), myrefl_test_create_polled(), myrefl_test_create_notification()
  */ 
 
 /* @{ */
 
 /** Create a rule
  * Create a rule with the default behaviour of triggering the specified
- * Action when the specified Test fails (SWDIAG_RULE_ON_FAIL).
+ * Action when the specified Test fails (MYREFL_RULE_ON_FAIL).
  *
  * @param[in] rule_name               New rule name for this rule
  * @param[in] input_test_or_rule_name Input trigger for the rule, may be a test or another rule
@@ -810,53 +811,53 @@ void swdiag_action_disable(const char *action_name, const char *instance_name);
  * created and enabled, fails, and is then attached to a rule then
  * that rulke will immediately trigger causing the recovery action to
  * be called. This may not be the desired effect if for example the
- * type is to be changed to SWDIAG_RULE_N_EVER.
+ * type is to be changed to MYREFL_RULE_N_EVER.
  */
-void swdiag_rule_create(const char *rule_name,
+void myrefl_rule_create(const char *rule_name,
                         const char *input_test_or_rule_name,
                         const char *action_name);
 
 /** Type of rule
  */
-typedef enum swdiag_rule_operator_e {
-    SWDIAG_RULE_INVALID = 0,   /**< invalid value, not to be used */
-    SWDIAG_RULE_ON_FAIL = 1,   /**< trigger action upon test fail (default) */
-    SWDIAG_RULE_DISABLE,       /**< disable trigger action */
-    SWDIAG_RULE_EQUAL_TO_N,    /**< trigger action when value == op1 */
-    SWDIAG_RULE_NOT_EQUAL_TO_N,/**< trigger action when value != op1 */
-    SWDIAG_RULE_LESS_THAN_N,   /**< trigger action when value < op1 */
-    SWDIAG_RULE_GREATER_THAN_N,/**< trigger action when value > op1 */
-    SWDIAG_RULE_N_EVER,        /**< After N occurrences */
-    SWDIAG_RULE_N_IN_ROW,      /**< After N occurences in a row */
-    SWDIAG_RULE_N_IN_M,        /**< N fails out of M runs */
-    SWDIAG_RULE_RANGE_N_TO_M,  /**< Fail if within the specific range */
-    SWDIAG_RULE_N_IN_TIME_M,   /**< N occurrences in M milliseconds */ 
-    SWDIAG_RULE_FAIL_FOR_TIME_N, /**< Failed for M milliseconds */
-    SWDIAG_RULE_OR,            /**< Any input is passing */
-    SWDIAG_RULE_AND,           /**< All inputs are passing */
-    SWDIAG_RULE_LAST,          /**< Last value - not to be used  */
-} swdiag_rule_operator_t;
+typedef enum myrefl_rule_operator_e {
+    MYREFL_RULE_INVALID = 0,   /**< invalid value, not to be used */
+    MYREFL_RULE_ON_FAIL = 1,   /**< trigger action upon test fail (default) */
+    MYREFL_RULE_DISABLE,       /**< disable trigger action */
+    MYREFL_RULE_EQUAL_TO_N,    /**< trigger action when value == op1 */
+    MYREFL_RULE_NOT_EQUAL_TO_N,/**< trigger action when value != op1 */
+    MYREFL_RULE_LESS_THAN_N,   /**< trigger action when value < op1 */
+    MYREFL_RULE_GREATER_THAN_N,/**< trigger action when value > op1 */
+    MYREFL_RULE_N_EVER,        /**< After N occurrences */
+    MYREFL_RULE_N_IN_ROW,      /**< After N occurences in a row */
+    MYREFL_RULE_N_IN_M,        /**< N fails out of M runs */
+    MYREFL_RULE_RANGE_N_TO_M,  /**< Fail if within the specific range */
+    MYREFL_RULE_N_IN_TIME_M,   /**< N occurrences in M milliseconds */
+    MYREFL_RULE_FAIL_FOR_TIME_N, /**< Failed for M milliseconds */
+    MYREFL_RULE_OR,            /**< Any input is passing */
+    MYREFL_RULE_AND,           /**< All inputs are passing */
+    MYREFL_RULE_LAST,          /**< Last value - not to be used  */
+} myrefl_rule_operator_t;
 
 /** Change the type of the rule
  *
- * Change the rule type to one of swdiag_rule_operator_t, providing the
+ * Change the rule type to one of myrefl_rule_operator_t, providing the
  * N and M operands where appropriate (as indicated by the name of the rule
  * type).
  *
  * e.g.@n
- *       SWDIAG_RULE_LESS_THAN_N requires that operand_n have a value@n
- *       SWDIAG_RULE_AND does not use either operand@n
- *       SWDIAG_RULE_RANGE_N_TO_M uses both N and M@n
+ *       MYREFL_RULE_LESS_THAN_N requires that operand_n have a value@n
+ *       MYREFL_RULE_AND does not use either operand@n
+ *       MYREFL_RULE_RANGE_N_TO_M uses both N and M@n
  *
- * The default rule type when the rule is created is SWDIAG_RULE_ON_FAIL.
+ * The default rule type when the rule is created is MYREFL_RULE_ON_FAIL.
  *
  * @param[in] rule_name Name of the rule to change the type on
  * @param[in] operator  Rule type to change the rule to
  * @param[in] operand_n Optional operand for value N in the rule, 0 if not required
  * @param[in] operand_m Optional operand for value M in the rule, 0 if not required
  */
-void swdiag_rule_set_type(const char *rule_name,
-                          swdiag_rule_operator_t operator,
+void myrefl_rule_set_type(const char *rule_name,
+                          myrefl_rule_operator_t operator,
                           long operand_n,
                           long operand_m);
 
@@ -868,7 +869,7 @@ void swdiag_rule_set_type(const char *rule_name,
  * @param[in] rule_name Name of the rule to add the input to
  * @param[in] input_test_or_rule_name Name of the Rule or Test to add as an input
  */
-void swdiag_rule_add_input(const char *rule_name,
+void myrefl_rule_add_input(const char *rule_name,
                            const char *input_test_or_rule_name);
 
 /** Rule Flags
@@ -882,26 +883,26 @@ void swdiag_rule_add_input(const char *rule_name,
  * @codeexample
  *  Set the rule location to be only on the Active RP for "Rule"
  * @code
- *   flags = swdiag_rule_get_flags("Rule");
- *   swdiag_rule_set_flags("Rule", (flags & ~SWDIAG_RULE_LOCATION_ALL) | 
- *                                  SWDIAG_ACTION_RULE_ACTIVE_RP);
+ *   flags = myrefl_rule_get_flags("Rule");
+ *   myrefl_rule_set_flags("Rule", (flags & ~MYREFL_RULE_LOCATION_ALL) |
+ *                                  MYREFL_ACTION_RULE_ACTIVE_RP);
  * @endcode
  *
- * @bug SWDIAG_RULE_LOCATION_STANDBY_RP not implemented
- * @bug SWDIAG_RULE_LOCATION_LC not implemented
+ * @bug MYREFL_RULE_LOCATION_STANDBY_RP not implemented
+ * @bug MYREFL_RULE_LOCATION_LC not implemented
  *
- * @see swdiag_rule_get_flags(), swdiag_rule_set_flags()
+ * @see myrefl_rule_get_flags(), myrefl_rule_set_flags()
  */
-typedef enum swdiag_rule_flags_e {
-    SWDIAG_RULE_NONE                = 0x0000, /**< No flags defined */
-    SWDIAG_RULE_LOCATION_ACTIVE_RP  = 0x0001, /**< Process rule on Active RP */
-    SWDIAG_RULE_LOCATION_STANDBY_RP = 0x0002, /**< Process rule on Standby RP */
-    SWDIAG_RULE_LOCATION_LC         = 0x0004, /**< Process rule on Line Card */
-    SWDIAG_RULE_LOCATION_ALL        = 0x0007, /**< Process rule in all locations (default) */
-    SWDIAG_RULE_TRIGGER_ROOT_CAUSE  = 0x0010, /**< Only trigger recovery action if rule is the root cause (default) */
-    SWDIAG_RULE_TRIGGER_ALWAYS      = 0x0020, /**< Trigger the recovery action whenever this rule fails */
-    SWDIAG_RULE_NO_RESULT_STATS     = 0x0040, /**< Don't keep stats on this rule since it doesn't indicate anything on its own */
-} swdiag_rule_flags_t;
+typedef enum myrefl_rule_flags_e {
+    MYREFL_RULE_NONE                = 0x0000, /**< No flags defined */
+    MYREFL_RULE_LOCATION_ACTIVE_RP  = 0x0001, /**< Process rule on Active RP */
+    MYREFL_RULE_LOCATION_STANDBY_RP = 0x0002, /**< Process rule on Standby RP */
+    MYREFL_RULE_LOCATION_LC         = 0x0004, /**< Process rule on Line Card */
+    MYREFL_RULE_LOCATION_ALL        = 0x0007, /**< Process rule in all locations (default) */
+    MYREFL_RULE_TRIGGER_ROOT_CAUSE  = 0x0010, /**< Only trigger recovery action if rule is the root cause (default) */
+    MYREFL_RULE_TRIGGER_ALWAYS      = 0x0020, /**< Trigger the recovery action whenever this rule fails */
+    MYREFL_RULE_NO_RESULT_STATS     = 0x0040, /**< Don't keep stats on this rule since it doesn't indicate anything on its own */
+} myrefl_rule_flags_t;
 
 /** Set a rules flags
  *
@@ -916,21 +917,21 @@ typedef enum swdiag_rule_flags_e {
  * @codeexample
  *  Set the rule location to be only on the Active RP for "Rule"
  * @code
- *   flags = swdiag_rule_get_flags("Rule");
- *   swdiag_rule_set_flags("Rule", (flags & ~SWDIAG_RULE_LOCATION_ALL) | 
- *                                  SWDIAG_RULE_LOCATION_ACTIVE_RP);
+ *   flags = myrefl_rule_get_flags("Rule");
+ *   myrefl_rule_set_flags("Rule", (flags & ~MYREFL_RULE_LOCATION_ALL) |
+ *                                  MYREFL_RULE_LOCATION_ACTIVE_RP);
  * @endcode
- * @see swdiag_rule_get_flags()
+ * @see myrefl_rule_get_flags()
  */
-void swdiag_rule_set_flags(const char *rule_name,
-                           swdiag_rule_flags_t flags);
+void myrefl_rule_set_flags(const char *rule_name,
+                           myrefl_rule_flags_t flags);
 
 /** Get a rules flags
  *
  * Get the flags that modify the behaviour of this rule
  *
  * @param[in] rule_name Rule name to get the flags for
- * @return The flags for this rule, SWDIAG_RULE_NONE if the rule_name 
+ * @return The flags for this rule, MYREFL_RULE_NONE if the rule_name
  *         was not found.
  *
  * @pre Rule with rule_name exists
@@ -938,13 +939,13 @@ void swdiag_rule_set_flags(const char *rule_name,
  * @codeexample
  *  Set the rule location to be only on the Active RP for "Rule"
  * @code
- *   flags = swdiag_rule_get_flags("Rule");
- *   swdiag_rule_set_flags("Rule", (flags & ~SWDIAG_RULE_LOCATION_ALL) | 
- *                                  SWDIAG_RULE_LOCATION_ACTIVE_RP);
+ *   flags = myrefl_rule_get_flags("Rule");
+ *   myrefl_rule_set_flags("Rule", (flags & ~MYREFL_RULE_LOCATION_ALL) |
+ *                                  MYREFL_RULE_LOCATION_ACTIVE_RP);
  * @endcode
- * @see swdiag_rule_set_flags()
+ * @see myrefl_rule_set_flags()
  */
-swdiag_rule_flags_t swdiag_rule_get_flags(const char *rule_name);
+myrefl_rule_flags_t myrefl_rule_get_flags(const char *rule_name);
 
 /** Delete a rule
  * 
@@ -952,7 +953,7 @@ swdiag_rule_flags_t swdiag_rule_get_flags(const char *rule_name);
  * 
  * @pre A rule with the name rule_name exists
  */
-void swdiag_rule_delete(const char *rule_name);
+void myrefl_rule_delete(const char *rule_name);
 
 /** Set the description for a rule
  * 
@@ -963,7 +964,7 @@ void swdiag_rule_delete(const char *rule_name);
  * @param[in] rule_name Name of the rule
  * @param[in] description Description to attach to this rule
  */
-void swdiag_rule_set_description(const char *rule_name,
+void myrefl_rule_set_description(const char *rule_name,
                                  const char *description);
 
 /** Rule Severity
@@ -977,15 +978,15 @@ void swdiag_rule_set_description(const char *rule_name,
  * the system high whenever it is proven to be still performing its
  * core work regardless of failures within the system.
  */
-typedef enum swdiag_severity_e {
-    SWDIAG_SEVERITY_CATASTROPHIC = 1000, /**< 100% health impact */
-    SWDIAG_SEVERITY_CRITICAL     =  500, /**<  50% health impact */
-    SWDIAG_SEVERITY_HIGH         =  200, /**<  20% health impact */
-    SWDIAG_SEVERITY_MEDIUM       =  100, /**<  10% health impact */
-    SWDIAG_SEVERITY_LOW          =   50, /**<   5% health impact */
-    SWDIAG_SEVERITY_NONE         =    0, /**<   No health impact */
-    SWDIAG_SEVERITY_POSITIVE     = -200, /**< -20% health impact */
-} swdiag_severity_t;
+typedef enum myrefl_severity_e {
+    MYREFL_SEVERITY_CATASTROPHIC = 1000, /**< 100% health impact */
+    MYREFL_SEVERITY_CRITICAL     =  500, /**<  50% health impact */
+    MYREFL_SEVERITY_HIGH         =  200, /**<  20% health impact */
+    MYREFL_SEVERITY_MEDIUM       =  100, /**<  10% health impact */
+    MYREFL_SEVERITY_LOW          =   50, /**<   5% health impact */
+    MYREFL_SEVERITY_NONE         =    0, /**<   No health impact */
+    MYREFL_SEVERITY_POSITIVE     = -200, /**< -20% health impact */
+} myrefl_severity_t;
 
 /** Set the impact of this rule
  *
@@ -995,13 +996,13 @@ typedef enum swdiag_severity_e {
  * @param[in] rule_name Name of the rule
  * @param[in] severity    Severity of this rule
  */
-void swdiag_rule_set_severity(const char *rule_name,
-                              swdiag_severity_t severity);
+void myrefl_rule_set_severity(const char *rule_name,
+                              myrefl_severity_t severity);
 
 /** Add subsequent actions to a rule
  * 
  * Sometimes it is desirable to have more than one action triggered
- * from a single rule. Using swdiag_rule_add_action() many actions
+ * from a single rule. Using myrefl_rule_add_action() many actions
  * may be triggered in sequence
  *
  * @param[in] rule_name Name of the rule to add the action to
@@ -1011,7 +1012,7 @@ void swdiag_rule_set_severity(const char *rule_name,
  *       run. There is no way of removing an action from a rule at 
  *       this time.
  */
-void swdiag_rule_add_action(const char *rule_name,
+void myrefl_rule_add_action(const char *rule_name,
                             const char *action_name);
 
 /** Explicitly Enable a Rule
@@ -1024,12 +1025,12 @@ void swdiag_rule_add_action(const char *rule_name,
  *
  * @pre Rule with rule_name must exist, and should be configured.
  *
- * @note swdiag_test_chain_ready() should be used to signal that the rule
+ * @note myrefl_test_chain_ready() should be used to signal that the rule
  *       is ready to be used.
  *
- * @see swdiag_rule_disable(), swdiag_test_chain_ready()
+ * @see myrefl_rule_disable(), myrefl_test_chain_ready()
  */
-void swdiag_rule_enable(const char *rule_name, const char *instance_name);
+void myrefl_rule_enable(const char *rule_name, const char *instance_name);
 
 /** Explicitly Disable a Rule
  * 
@@ -1041,9 +1042,9 @@ void swdiag_rule_enable(const char *rule_name, const char *instance_name);
  *
  * @pre Rule with rule_name must exist, and should be configured.
  *
- * @see swdiag_rule_enable(), swdiag_test_chain_ready()
+ * @see myrefl_rule_enable(), myrefl_test_chain_ready()
  */
-void swdiag_rule_disable(const char *rule_name, const char *instance_name);
+void myrefl_rule_disable(const char *rule_name, const char *instance_name);
 
 /* @} */
 /*******************************************************************
@@ -1073,7 +1074,7 @@ void swdiag_rule_disable(const char *rule_name, const char *instance_name);
  * @param[in] parent_rule_or_comp Name of the parent component or rule
  * @param[in] child_rule_or_comp  Name of the child component or rule
  */
-void swdiag_depend_create(const char *parent_rule_or_comp,
+void myrefl_depend_create(const char *parent_rule_or_comp,
                           const char *child_rule_or_comp);
 
 /** Delete a dependency
@@ -1087,7 +1088,7 @@ void swdiag_depend_create(const char *parent_rule_or_comp,
  * @todo Not implemented since it is quite hard, considering not 
  *       ever implementing instead and removing this declaration.
  */
-void swdiag_depend_delete(const char *parent_rule_or_comp,
+void myrefl_depend_delete(const char *parent_rule_or_comp,
                           const char *child_rule_or_comp);
 
 /* @} */
@@ -1129,13 +1130,13 @@ void swdiag_depend_delete(const char *parent_rule_or_comp,
 /* @{ */
 /**
  * System component that contains all rules, tests, actions and components 
- * within this instance of swdiag.
+ * within this instance of myrefl.
  */
-#define SWDIAG_SYSTEM_COMP "System"
+#define MYREFL_SYSTEM_COMP "System"
 /**
- * Component used to represent the Standby RP on the swdiag Master
+ * Component used to represent the Standby RP on the myrefl Master
  */
-#define SWDIAG_STANDBY_COMP "StandbyRP"
+#define MYREFL_STANDBY_COMP "StandbyRP"
 
 /* @} */
 
@@ -1145,12 +1146,12 @@ void swdiag_depend_delete(const char *parent_rule_or_comp,
  * health associated with it calculated from the results and severity of
  * all of its member objects.
  *
- * Objects should be added to the component using the swdiag_comp_contains()
- * and swdiag_comp_contains_many() APIs.
+ * Objects should be added to the component using the myrefl_comp_contains()
+ * and myrefl_comp_contains_many() APIs.
  *
  * @param[in] component_name Name of the component to create
  */
-void swdiag_comp_create(const char *component_name);
+void myrefl_comp_create(const char *component_name);
 
 /** Add object to component
  * 
@@ -1165,7 +1166,7 @@ void swdiag_comp_create(const char *component_name);
  * @param[in] parent_component_name Name of the component to add the object to
  * @param[in] child_object_name Name of the object to add
  */
-void swdiag_comp_contains(const char *parent_component_name,
+void myrefl_comp_contains(const char *parent_component_name,
                           const char *child_object_name);
 
 /** Add objects to component
@@ -1180,16 +1181,16 @@ void swdiag_comp_contains(const char *parent_component_name,
  * Example of adding some objects to a component
  * @code
  * {
- *     swdiag_test_create_notification("Test1");
- *     swdiag_rule_create("Rule1", "Test1", "Action1");
- *     swdiag_action_create("Action1", action_func, NULL);
- *     swdiag_comp_create("Comp1");
+ *     myrefl_test_create_notification("Test1");
+ *     myrefl_rule_create("Rule1", "Test1", "Action1");
+ *     myrefl_action_create("Action1", action_func, NULL);
+ *     myrefl_comp_create("Comp1");
  *
- *     swdiag_comp_contains_many("Comp1", "Test1", "Rule1", "Action1", NULL);
+ *     myrefl_comp_contains_many("Comp1", "Test1", "Rule1", "Action1", NULL);
  * }
  * @endcode
  */
-void swdiag_comp_contains_many(const char *parent_component_name,
+void myrefl_comp_contains_many(const char *parent_component_name,
                                const char *child_object_name,
                                ...);
 
@@ -1197,11 +1198,11 @@ void swdiag_comp_contains_many(const char *parent_component_name,
  * 
  * Delete a component, which will also delete all the objects within this 
  * component. If you don't want to delete the objects within this component
- * then move them to a different component first using swdiag_comp_contains()
+ * then move them to a different component first using myrefl_comp_contains()
  *
  * @param[in] component_name Name of component to delete
  */
-void swdiag_comp_delete(const char *component_name);
+void myrefl_comp_delete(const char *component_name);
 
 /** Explicitly Enable a Component
  *
@@ -1211,9 +1212,9 @@ void swdiag_comp_delete(const char *component_name);
  *
  * @param[in] comp_name Name of the component to be enabled
  *
- * @see swdiag_comp_disable()
+ * @see myrefl_comp_disable()
  */
-void swdiag_comp_enable(const char *comp_name);
+void myrefl_comp_enable(const char *comp_name);
 
 /** Explicitly Disable a component
  * 
@@ -1223,9 +1224,9 @@ void swdiag_comp_enable(const char *comp_name);
  *
  * @param[in] comp_name Name of the test to be disabled
  *
- * @see swdiag_comp_enable()
+ * @see myrefl_comp_enable()
  */
-void swdiag_comp_disable(const char *comp_name);
+void myrefl_comp_disable(const char *comp_name);
 
 /** Set the description for a component
  * 
@@ -1236,7 +1237,7 @@ void swdiag_comp_disable(const char *comp_name);
  * @param[in] component_name Name of the component
  * @param[in] description Description to attach to this component
  */
-void swdiag_comp_set_description(const char *component_name,
+void myrefl_comp_set_description(const char *component_name,
                                  const char *description);
 
 /*@}*/
@@ -1272,59 +1273,59 @@ void swdiag_comp_set_description(const char *component_name,
  * lots of instances of the same test, rule and action.
  * @code
  * 
- * swdiag_result_t hwidb_check_consistency (const char *instance, 
+ * myrefl_result_t hwidb_check_consistency (const char *instance,
  *                                          void *context,
  *                                          long *value)
  * {
  *     hwidbtype *hwidb;
  *
  *     if (!instance || !context) {
- *         return(SWDIAG_RESULT_ABORT);
+ *         return(MYREFL_RESULT_ABORT);
  *     }
  *
  *     hwidb = (hwidbtype*)context;
  *
  *     if (check_consistency(hwidb)) {
- *         return(SWDIAG_RESULT_PASS);
+ *         return(MYREFL_RESULT_PASS);
  *     } else {
- *         return(SWDIAG_RESULT_FAIL);
+ *         return(MYREFL_RESULT_FAIL);
  *     }
  * }
  * 
- * swdiag_result_t hwidb_reset (const char *instance, void *context)
+ * myrefl_result_t hwidb_reset (const char *instance, void *context)
  * {
  *     hwidbtype *hwidb;
  * 
  *     if (!instance || !context) {
- *         return(SWDIAG_RESULT_ABORT);
+ *         return(MYREFL_RESULT_ABORT);
  *     }
  *     
  *     hwidb = (hwidbtype*)context;
  *   
  *     (*hwidb->reset)(hwidb);
  *
- *     return(SWDIAG_RESULT_PASS);
+ *     return(MYREFL_RESULT_PASS);
  * }
  * 
  * {
  *     hwidbtype *hwidb;
  *     
- *     swdiag_test_create_polled("HWIDBConsistencyCheck", 
+ *     myrefl_test_create_polled("HWIDBConsistencyCheck",
  *                               hwidb_check_consistency,
  *                               NULL,
- *                               SWDIAG_PERIOD_SLOW);
- *     swdiag_action_create("HWIDBReset",
+ *                               MYREFL_PERIOD_SLOW);
+ *     myrefl_action_create("HWIDBReset",
  *                           hwidb_reset,
  *                           NULL);
- *     swdiag_rule_create("HWIDBConsistency", 
+ *     myrefl_rule_create("HWIDBConsistency",
  *                        "HWIDBConsistencyCheck",
  *                        "HWIDBReset");
  *     FOR_ALL_HWIDBS(hwidb) {
- *         swdiag_instance_create("HWIDBConsistencyCheck", hwidb->name, hwidb);
- *         swdiag_instance_create("HWIDBConsistency", hwidb->name, hwidb);
- *         swdiag_instance_create("HWIDBReset", hwidb->name, hwidb);
+ *         myrefl_instance_create("HWIDBConsistencyCheck", hwidb->name, hwidb);
+ *         myrefl_instance_create("HWIDBConsistency", hwidb->name, hwidb);
+ *         myrefl_instance_create("HWIDBReset", hwidb->name, hwidb);
  *     }
- *     swdiag_test_chain_ready("HWIDBConsistencyCheck");
+ *     myrefl_test_chain_ready("HWIDBConsistencyCheck");
  * }
  * @endcode
  *
@@ -1336,22 +1337,22 @@ void swdiag_comp_set_description(const char *component_name,
  * {
  *     hwidbtype *hwidb;
  *     
- *     swdiag_test_create_polled("HWIDBConsistencyCheck", 
+ *     myrefl_test_create_polled("HWIDBConsistencyCheck",
  *                               hwidb_check_consistency,
  *                               NULL,
- *                               SWDIAG_PERIOD_SLOW);
- *     swdiag_rule_create("HWIDBConsistency", 
+ *                               MYREFL_PERIOD_SLOW);
+ *     myrefl_rule_create("HWIDBConsistency",
  *                        "HWIDBConsistencyCheck",
- *                        SWDIAG_ACTION_RELOAD);
+ *                        MYREFL_ACTION_RELOAD);
  *     FOR_ALL_HWIDBS(hwidb) {
- *         swdiag_instance_create("HWIDBConsistencyCheck", hwidb->name, hwidb);
- *         swdiag_instance_create("HWIDBConsistency", hwidb->name, hwidb);
+ *         myrefl_instance_create("HWIDBConsistencyCheck", hwidb->name, hwidb);
+ *         myrefl_instance_create("HWIDBConsistency", hwidb->name, hwidb);
  *     }
- *     swdiag_test_chain_ready("HWIDBConsistencyCheck");
+ *     myrefl_test_chain_ready("HWIDBConsistencyCheck");
  * }
  * @endcode
  */
-void swdiag_instance_create(const char *object, 
+void myrefl_instance_create(const char *object,
                             const char *instance, 
                             void *context);
 
@@ -1360,7 +1361,7 @@ void swdiag_instance_create(const char *object,
  * @param[in] object Object name to delete the instance from
  * @param[in] instance Instance name to delete
  */
-void swdiag_instance_delete(const char *object, 
+void myrefl_instance_delete(const char *object,
                             const char *instance);
 /*@}*/
 /*******************************************************************
@@ -1376,8 +1377,8 @@ void swdiag_instance_delete(const char *object,
  *
  */
 /* @{ */
-#define SWDIAG_HEALTH_FULL  1000
-#define SWDIAG_HEALTH_EMPTY 0
+#define MYREFL_HEALTH_FULL  1000
+#define MYREFL_HEALTH_EMPTY 0
 /* @} */
 
 /** Set the absolute health of a component
@@ -1388,7 +1389,7 @@ void swdiag_instance_delete(const char *object,
  * @param[in] component_name Name of the component to set the health on
  * @param[in] health Value to set the health to
  */
-void swdiag_health_set(const char *component_name,
+void myrefl_health_set(const char *component_name,
                        unsigned int health);
 
 /** Get the absolute health of a component
@@ -1396,21 +1397,21 @@ void swdiag_health_set(const char *component_name,
  * @param[in] component_name Name of the component
  * @returns The health of the component as an integer between 0 and 1000, i.e. to convert to a percentage divde by 10
  */
-unsigned int swdiag_health_get(const char *component_name);
+unsigned int myrefl_health_get(const char *component_name);
 
 /** Get the context for an existing object
  *
  */
-void *swdiag_get_context(const char *obj_name);
+void *myrefl_get_context(const char *obj_name);
 
 /** Loop until the system exits
  *
  */
-void swdiag_start(void);
+void myrefl_start(void);
 
 /** Stop the system
  *
  */
-void swdiag_stop(void);
+void myrefl_stop(void);
 /*@}*/
 #endif 
