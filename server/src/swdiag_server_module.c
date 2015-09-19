@@ -304,11 +304,62 @@ swdiag_result_t swdiag_server_email(const char *instance, void *context) {
                 pclose(fp);
             }
         } else {
-            strncpy(body, email->subject, MAXBUFLEN-1);
+            sstrncpy(body, email->subject, MAXBUFLEN);
         }
-        /* I'm hardcoding the hostname to swdiag-server - it's not AFAIK important anyway. */
-        send_mail(server_config.smtp_hostname, "swdiag-server", server_config.alert_email_from, to, email->subject, server_config.alert_email_from, body);
+
+        if (server_config.use_sendmail == TRUE) {
+        	// Send via sendmail instead of connecting directly to the server ourselves.
+        	FILE *fp = popen("/usr/sbin/sendmail -t", "w");
+        	if (fp != NULL) {
+        		char full_email[MAXBUFLEN];
+        		snprintf(full_email, MAXBUFLEN, "From: %s\n\rTo: %s: Subject: %s\n\r\n\r%s\n\r", server_config.alert_email_from, to, email->subject, body);
+				size_t newLen = fwrite(full_email, sizeof(char), MAXBUFLEN, fp);
+				pclose(fp);
+			}
+        } else {
+			/* I'm hardcoding the hostname to swdiag-server - it's not AFAIK important anyway. */
+			send_mail(server_config.smtp_hostname, "swdiag-server", server_config.alert_email_from, to, email->subject, server_config.alert_email_from, body);
+        }
     }
 
     return result;
+}
+
+/* safe_srncpy() is Copyright 1998 by Mark Whitis
+ * All Rights reserved.
+ * use it or distribute it (including for profit) at your own risk
+ * but please don't GPL it.  Retain this notice.  Modified versions
+ * should be clearly labeled as such.
+ * This Version has stripped out the error code
+ */
+char *sstrncpy (char *dst, const char *src, unsigned long size)
+{
+	/* Make sure destination buffer exists and has positive size */
+
+	if(!dst) {
+		return(dst);
+	}
+	if(size<1) {
+		return(dst);
+	}
+
+	/* treat NULL and "", identically */
+	if(!src) {
+	 dst[0]=0;
+	 return(dst);
+	}
+
+	size--;  /* leave room for trailing zero */
+	while(*src && ( size-- > 0 ) ) {
+		*(dst+1) = 0; // moving zero terminator
+		*dst++ = *src++;
+	}
+	*dst = 0;
+
+	// zero fill rest of dst buffer
+	while( size-- > 0 ) {
+	 *dst++ = 0;
+	}
+
+	return(dst);
 }

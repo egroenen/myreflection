@@ -161,7 +161,7 @@ static boolean parse_tuples(char *configuration, jsmntok_t *tokens) {
                     /* Email address */
                     char *email_address = json_token_to_str(configuration, token);
                     if (email_address) {
-                        strncpy(server_config.alert_email_to, email_address, EMAIL_MAX-1);
+                        sstrncpy(server_config.alert_email_to, email_address, EMAIL_MAX);
                     }
                 }
                 (*token_ptr)++;
@@ -172,7 +172,7 @@ static boolean parse_tuples(char *configuration, jsmntok_t *tokens) {
                     /* Email address */
                     char *email_address = json_token_to_str(configuration, token);
                     if (email_address) {
-                        strncpy(server_config.alert_email_from, email_address, EMAIL_MAX-1);
+                        sstrncpy(server_config.alert_email_from, email_address, EMAIL_MAX);
                     }
                 }
                 (*token_ptr)++;
@@ -183,7 +183,7 @@ static boolean parse_tuples(char *configuration, jsmntok_t *tokens) {
                     /* Email address */
                     char *path = json_token_to_str(configuration, token);
                     if (path) {
-                        strncpy(server_config.modules_path, path, FILEPATH_MAX-1);
+                        sstrncpy(server_config.modules_path, path, FILEPATH_MAX);
                     }
                 }
                 (*token_ptr)++;
@@ -194,7 +194,7 @@ static boolean parse_tuples(char *configuration, jsmntok_t *tokens) {
                     /* Email address */
                     char *path = json_token_to_str(configuration, token);
                     if (path) {
-                        strncpy(server_config.http_root, path, FILEPATH_MAX-1);
+                        sstrncpy(server_config.http_root, path, FILEPATH_MAX);
                     }
                 }
                 (*token_ptr)++;
@@ -205,7 +205,7 @@ static boolean parse_tuples(char *configuration, jsmntok_t *tokens) {
                     /* Email address */
                     char *path = json_token_to_str(configuration, token);
                     if (path) {
-                        strncpy(server_config.http_port, path, HTTP_PORT_MAX-1);
+                        sstrncpy(server_config.http_port, path, HTTP_PORT_MAX);
                     }
                 }
                 (*token_ptr)++;
@@ -216,11 +216,24 @@ static boolean parse_tuples(char *configuration, jsmntok_t *tokens) {
                     /* Email address */
                     char *smtp_hostname = json_token_to_str(configuration, token);
                     if (smtp_hostname) {
-                        strncpy(server_config.smtp_hostname, smtp_hostname, HOSTNAME_MAX-1);
+                        sstrncpy(server_config.smtp_hostname, smtp_hostname, HOSTNAME_MAX);
                     }
                 }
                 (*token_ptr)++;
-            } else if (json_token_streq(configuration, token, "enabled-modules")) {
+            } else if (json_token_streq(configuration, token, "use-sendmail")) {
+                (*token_ptr)++;
+                token = *token_ptr;
+                if (is_valid_token(token) && token->type == JSMN_PRIMITIVE) {
+                    /*Should Sendmail be used, true or false */
+                    char *use_sendmail = json_token_to_str(configuration, token);
+                    if (use_sendmail) {
+                    	if (strcmp(use_sendmail, "true") == 0) {
+                    		server_config.use_sendmail = TRUE;
+                    	}
+                    }
+                }
+                (*token_ptr)++;
+            }else if (json_token_streq(configuration, token, "enabled-modules")) {
                 // eg. enabled-modules: ['diag_postgres', 'diag_diskspace', 'diag_memory']
                 (*token_ptr)++;
                 token = *token_ptr;

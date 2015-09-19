@@ -50,9 +50,28 @@
 
 static struct mg_context *ctx;
 
+/**
+ * Return in JSON a list of the components in a tree format
+ */
+static int get_components_json(cli_info_element_t *element, char *content, int content_length) {
+	//content_length += snprintf(content + content_length, MAX_HTTP_RESPONSE_SIZE-content_length,
+	//                                    "                         Health \n"
+	//                                   "                Name   Now/Conf    Runs Passes  Fails\n");
+	content_length += snprintf(content + content_length, MAX_HTTP_RESPONSE_SIZE-content_length, "[");
+	while(element != NULL) {
+		content_length += snprintf(content + content_length, MAX_HTTP_RESPONSE_SIZE-content_length,
+				"{\"title\":\"%s\",\"health\":%5.1f,\"confidence\":%5.1f,\"runs\":%d,\"passes\":%d,\"failures\":%d}", element->name, element->health/10.0, element->confidence/10.0, element->stats.runs, element->stats.passes, element->stats.failures);
+		element = element->next;
+		if (element != NULL) {
+			content_length += snprintf(content + content_length, MAX_HTTP_RESPONSE_SIZE-content_length, ",");
+		}
+	}
+	content_length += snprintf(content + content_length, MAX_HTTP_RESPONSE_SIZE-content_length, "]");
+	return content_length;
+}
 
 static void *https_request_callback(enum mg_event event,
-        struct mg_connection *conn) {
+        							struct mg_connection *conn) {
 
     void *processed = "yes";
     const struct mg_request_info *request_info = mg_get_request_info(conn);
@@ -62,14 +81,22 @@ static void *https_request_callback(enum mg_event event,
         int content_length = 0;
         cli_info_element_t *element, *element_free, *element_instance, *element_instance_free;
         cli_type_t type;
+        char name[SWDIAG_MAX_NAME_LEN];
+
+        memset(name, 0, sizeof(name));
 
         content = malloc(MAX_HTTP_RESPONSE_SIZE);
 
         if (!content) {
             return NULL;
         }
-        if (strcmp(request_info->uri, "/tabcontent/1") == 0) {
+
+        if (strncmp(request_info->uri, "/comp/", 6) == 0) {
             type = CLI_COMPONENT;
+            if (strlen(request_info->uri) > 0) {
+            	// There is a component name
+            	strncpy(name, request_info->uri+6, SWDIAG_MAX_NAME_LEN);
+            }
         } else if (strcmp(request_info->uri, "/tabcontent/2") == 0) {
             type = CLI_TEST;
         } else if (strcmp(request_info->uri, "/tabcontent/3") == 0) {
@@ -81,7 +108,7 @@ static void *https_request_callback(enum mg_event event,
         }
 
         if (type != CLI_UNKNOWN) {
-            unsigned int handle = swdiag_cli_local_get_info_handle(NULL, type,
+            unsigned int handle = swdiag_cli_local_get_info_handle(name, type,
                     CLI_FILTER_NONE, NULL);
             // Now use the handle to get the actual information.
 
@@ -92,14 +119,7 @@ static void *https_request_callback(enum mg_event event,
                     element = info->elements;
                     switch(element->type) {
                     case CLI_COMPONENT:
-                        content_length += snprintf(content + content_length, MAX_HTTP_RESPONSE_SIZE-content_length,
-                                    "                         Health \n"
-                                    "                Name   Now/Conf    Runs Passes  Fails\n");
-                        while(element != NULL) {
-                            content_length += snprintf(content + content_length, MAX_HTTP_RESPONSE_SIZE-content_length,
-                                    "%20s %s%5.1f/%-5.1f%s %6d %6d %6d\n", element->name, (element->health/10 < 100) ? "<span style=\"color:red;\">" : ((element->confidence/10 < 100) ? "<span style=\"color:orange;\">" :""), element->health/10.0, element->confidence/10.0, element->confidence/10 < 100 ? "</span>" : "", element->stats.runs, element->stats.passes, element->stats.failures);
-                            element = element->next;
-                        }
+                    	content_length = get_components_json(element, content, content_length);
                         break;
                     case CLI_TEST:
                         while(element != NULL) {
@@ -141,10 +161,10 @@ static void *https_request_callback(enum mg_event event,
                 content_length += 12; // For pre's below
                 mg_printf(conn,
                         "HTTP/1.1 200 OK\r\n"
-                        "Content-Type: text/plain\r\n"
+                        "Content-Type: application/json\r\n"
                         "Content-Length: %d\r\n"        // Always set Content-Length
                         "\r\n"
-                        "<pre>%s</pre>",
+                        "%s",
                         content_length, content);
             }
         } else {
@@ -158,6 +178,7 @@ static void *https_request_callback(enum mg_event event,
 
     return processed;
 }
+
 
 boolean swdiag_webserver_start() {
     /*
