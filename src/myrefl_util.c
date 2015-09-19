@@ -2,6 +2,7 @@
  * myrefl_util.c - SW Diagnostics Utility module header
  *
  * Copyright (c) 2007-2009 Cisco Systems Inc.
+ * Copyright (c) 2010-2015 Edward Groenendaal
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
