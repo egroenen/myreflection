@@ -88,27 +88,27 @@ bin_PROGRAMS = $(am__EXEEXT_1)
 # Shouldn't really add the examples to libswdiag, use
 # a different target that is not installed.
 #
-#libswdiag_la_SOURCES += \
+#libmyreflection_la_SOURCES += \
 #    src/examples/example1_polledtest.c   
 @ADD_PLATFORM_POSIX_TRUE@am__append_1 = \
-@ADD_PLATFORM_POSIX_TRUE@    src/swdiag_posix.c                   
+@ADD_PLATFORM_POSIX_TRUE@    src/myrefl_posix.c                   
 
 @ADD_PLATFORM_WIN32_TRUE@am__append_2 = 
 
-#bin_PROGRAMS += swdiagcli
-@ADD_SERVER_TRUE@am__append_3 = swdiag
+#bin_PROGRAMS += myreflectioncli
+@ADD_SERVER_TRUE@am__append_3 = myreflection
 subdir = .
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
 	$(top_srcdir)/src/config.h.in \
 	$(top_srcdir)/include/project.h.in \
 	$(top_srcdir)/project/project.m4.in \
-	$(am__dist_swdiag_modules_SCRIPTS_DIST) \
+	$(am__dist_myreflection_modules_SCRIPTS_DIST) \
 	$(top_srcdir)/autoaux/depcomp \
-	$(am__dist_swdiag_conf_DATA_DIST) \
-	$(am__nobase_dist_swdiag_html_DATA_DIST) \
-	$(libswdiaginc_HEADERS) AUTHORS COPYING ChangeLog INSTALL NEWS \
-	README TODO autoaux/compile autoaux/config.guess \
+	$(am__dist_myreflection_conf_DATA_DIST) \
+	$(am__nobase_dist_myreflection_html_DATA_DIST) \
+	$(libmyreflectioninc_HEADERS) AUTHORS COPYING ChangeLog \
+	INSTALL NEWS README TODO autoaux/compile autoaux/config.guess \
 	autoaux/config.sub autoaux/depcomp autoaux/install-sh \
 	autoaux/missing autoaux/ltmain.sh \
 	$(top_srcdir)/autoaux/compile \
@@ -155,74 +155,76 @@ am__uninstall_files_from_dir = { \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" \
-	"$(DESTDIR)$(swdiag_modulesdir)" "$(DESTDIR)$(swdiag_confdir)" \
-	"$(DESTDIR)$(swdiag_htmldir)" "$(DESTDIR)$(libswdiagincdir)"
+	"$(DESTDIR)$(myreflection_modulesdir)" \
+	"$(DESTDIR)$(myreflection_confdir)" \
+	"$(DESTDIR)$(myreflection_htmldir)" \
+	"$(DESTDIR)$(libmyreflectionincdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libswdiag_la_LIBADD =
-am__libswdiag_la_SOURCES_DIST = src/swdiag_api.c src/swdiag_api.h \
-	src/swdiag_cli.h src/swdiag_cli_local.c src/swdiag_cli_local.h \
-	src/swdiag_cli_handle.h src/swdiag_linux.c src/swdiag_linux.h \
-	src/swdiag_obj.c src/swdiag_obj.h src/swdiag_rci.c \
-	src/swdiag_rci.h src/swdiag_sched.c src/swdiag_sched.h \
-	src/swdiag_sequence.c src/swdiag_sequence.h \
-	src/swdiag_syslog.c src/swdiag_thread.c src/swdiag_thread.h \
-	src/swdiag_trace.c src/swdiag_trace.h src/swdiag_types.h \
-	src/swdiag_util.c src/swdiag_util.h src/swdiag_xos.c \
-	src/swdiag_xos.h src/swdiag_posix.c
+libmyreflection_la_LIBADD =
+am__libmyreflection_la_SOURCES_DIST = src/myrefl_api.c \
+	src/myrefl_api.h src/myrefl_cli.h src/myrefl_cli_local.c \
+	src/myrefl_cli_local.h src/myrefl_cli_handle.h \
+	src/myrefl_linux.c src/myrefl_linux.h src/myrefl_obj.c \
+	src/myrefl_obj.h src/myrefl_rci.c src/myrefl_rci.h \
+	src/myrefl_sched.c src/myrefl_sched.h src/myrefl_sequence.c \
+	src/myrefl_sequence.h src/myrefl_syslog.c src/myrefl_thread.c \
+	src/myrefl_thread.h src/myrefl_trace.c src/myrefl_trace.h \
+	src/myrefl_types.h src/myrefl_util.c src/myrefl_util.h \
+	src/myrefl_xos.c src/myrefl_xos.h src/myrefl_posix.c
 am__dirstamp = $(am__leading_dot)dirstamp
-@ADD_PLATFORM_POSIX_TRUE@am__objects_1 = src/swdiag_posix.lo
+@ADD_PLATFORM_POSIX_TRUE@am__objects_1 = src/myrefl_posix.lo
 am__objects_2 =
-am_libswdiag_la_OBJECTS = src/swdiag_api.lo src/swdiag_cli_local.lo \
-	src/swdiag_linux.lo src/swdiag_obj.lo src/swdiag_rci.lo \
-	src/swdiag_sched.lo src/swdiag_sequence.lo \
-	src/swdiag_syslog.lo src/swdiag_thread.lo src/swdiag_trace.lo \
-	src/swdiag_util.lo src/swdiag_xos.lo $(am__objects_1) \
+am_libmyreflection_la_OBJECTS = src/myrefl_api.lo \
+	src/myrefl_cli_local.lo src/myrefl_linux.lo src/myrefl_obj.lo \
+	src/myrefl_rci.lo src/myrefl_sched.lo src/myrefl_sequence.lo \
+	src/myrefl_syslog.lo src/myrefl_thread.lo src/myrefl_trace.lo \
+	src/myrefl_util.lo src/myrefl_xos.lo $(am__objects_1) \
 	$(am__objects_2)
-libswdiag_la_OBJECTS = $(am_libswdiag_la_OBJECTS)
+libmyreflection_la_OBJECTS = $(am_libmyreflection_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libswdiag_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(libswdiag_la_LDFLAGS) $(LDFLAGS) -o $@
-@ADD_SERVER_TRUE@am__EXEEXT_1 = swdiag$(EXEEXT)
+libmyreflection_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
+	$(AM_CFLAGS) $(CFLAGS) $(libmyreflection_la_LDFLAGS) \
+	$(LDFLAGS) -o $@
+@ADD_SERVER_TRUE@am__EXEEXT_1 = myreflection$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
-am__swdiag_SOURCES_DIST = server/src/swdiag_server.c \
-	server/src/swdiag_server_module.c \
-	server/src/swdiag_server_module.h \
-	server/src/swdiag_server_config.c \
-	server/src/swdiag_server_config.h \
+am__myreflection_SOURCES_DIST = server/src/myrefl_server.c \
+	server/src/myrefl_server_module.c \
+	server/src/myrefl_server_module.h \
+	server/src/myrefl_server_config.c \
+	server/src/myrefl_server_config.h \
 	server/src/mongoose/mongoose.c server/src/mongoose/mongoose.h \
 	server/src/jsmn/jsmn.c server/src/jsmn/jsmn.h \
 	server/src/smtpfuncs.c server/src/smtpfuncs.h \
-	server/src/swdiag_json_parser.c \
-	server/src/swdiag_json_parser.h server/src/swdiag_webserver.c \
-	server/src/swdiag_webserver.h \
-	server/src/swdiag_server_libinterface.c
-@ADD_SERVER_TRUE@am_swdiag_OBJECTS =  \
-@ADD_SERVER_TRUE@	server/src/swdiag-swdiag_server.$(OBJEXT) \
-@ADD_SERVER_TRUE@	server/src/swdiag-swdiag_server_module.$(OBJEXT) \
-@ADD_SERVER_TRUE@	server/src/swdiag-swdiag_server_config.$(OBJEXT) \
-@ADD_SERVER_TRUE@	server/src/mongoose/swdiag-mongoose.$(OBJEXT) \
-@ADD_SERVER_TRUE@	server/src/jsmn/swdiag-jsmn.$(OBJEXT) \
-@ADD_SERVER_TRUE@	server/src/swdiag-smtpfuncs.$(OBJEXT) \
-@ADD_SERVER_TRUE@	server/src/swdiag-swdiag_json_parser.$(OBJEXT) \
-@ADD_SERVER_TRUE@	server/src/swdiag-swdiag_webserver.$(OBJEXT) \
-@ADD_SERVER_TRUE@	server/src/swdiag-swdiag_server_libinterface.$(OBJEXT)
-swdiag_OBJECTS = $(am_swdiag_OBJECTS)
-@ADD_SERVER_TRUE@swdiag_DEPENDENCIES = libswdiag.la
-swdiag_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(swdiag_CFLAGS) $(CFLAGS) \
-	$(swdiag_LDFLAGS) $(LDFLAGS) -o $@
-am__dist_swdiag_modules_SCRIPTS_DIST =  \
+	server/src/myrefl_json_parser.c \
+	server/src/myrefl_json_parser.h server/src/myrefl_webserver.c \
+	server/src/myrefl_webserver.h \
+	server/src/myrefl_server_libinterface.c
+@ADD_SERVER_TRUE@am_myreflection_OBJECTS = server/src/myreflection-myrefl_server.$(OBJEXT) \
+@ADD_SERVER_TRUE@	server/src/myreflection-myrefl_server_module.$(OBJEXT) \
+@ADD_SERVER_TRUE@	server/src/myreflection-myrefl_server_config.$(OBJEXT) \
+@ADD_SERVER_TRUE@	server/src/mongoose/myreflection-mongoose.$(OBJEXT) \
+@ADD_SERVER_TRUE@	server/src/jsmn/myreflection-jsmn.$(OBJEXT) \
+@ADD_SERVER_TRUE@	server/src/myreflection-smtpfuncs.$(OBJEXT) \
+@ADD_SERVER_TRUE@	server/src/myreflection-myrefl_json_parser.$(OBJEXT) \
+@ADD_SERVER_TRUE@	server/src/myreflection-myrefl_webserver.$(OBJEXT) \
+@ADD_SERVER_TRUE@	server/src/myreflection-myrefl_server_libinterface.$(OBJEXT)
+myreflection_OBJECTS = $(am_myreflection_OBJECTS)
+@ADD_SERVER_TRUE@myreflection_DEPENDENCIES = libmyreflection.la
+myreflection_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(myreflection_CFLAGS) \
+	$(CFLAGS) $(myreflection_LDFLAGS) $(LDFLAGS) -o $@
+am__dist_myreflection_modules_SCRIPTS_DIST =  \
 	server/modules/diag_diskspace.sh \
 	server/modules/diag_diskspace.sh.conf \
 	server/modules/diag_memory_conf.py \
 	server/modules/diag_memory.py \
 	server/modules/diag_postgres_conf.py \
 	server/modules/diag_postgres.py
-SCRIPTS = $(dist_swdiag_modules_SCRIPTS)
+SCRIPTS = $(dist_myreflection_modules_SCRIPTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -257,9 +259,9 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libswdiag_la_SOURCES) $(swdiag_SOURCES)
-DIST_SOURCES = $(am__libswdiag_la_SOURCES_DIST) \
-	$(am__swdiag_SOURCES_DIST)
+SOURCES = $(libmyreflection_la_SOURCES) $(myreflection_SOURCES)
+DIST_SOURCES = $(am__libmyreflection_la_SOURCES_DIST) \
+	$(am__myreflection_SOURCES_DIST)
 RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \
 	ctags-recursive dvi-recursive html-recursive info-recursive \
 	install-data-recursive install-dvi-recursive \
@@ -273,11 +275,12 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-am__dist_swdiag_conf_DATA_DIST = server/swdiag.cfg
-am__nobase_dist_swdiag_html_DATA_DIST = server/http/index.html \
+am__dist_myreflection_conf_DATA_DIST = server/myreflection.cfg
+am__nobase_dist_myreflection_html_DATA_DIST = server/http/index.html \
 	server/http/assets/js/get-shit-done.js
-DATA = $(dist_swdiag_conf_DATA) $(nobase_dist_swdiag_html_DATA)
-HEADERS = $(libswdiaginc_HEADERS)
+DATA = $(dist_myreflection_conf_DATA) \
+	$(nobase_dist_myreflection_html_DATA)
+HEADERS = $(libmyreflectioninc_HEADERS)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 am__recursive_targets = \
@@ -506,70 +509,70 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-lib_LTLIBRARIES = libswdiag.la
+lib_LTLIBRARIES = libmyreflection.la
 SUBDIRS = . tests
 
 ###############################################################################
 EXTRA_DIST = LICENSE project/project.m4
 
 ###############################################################################
-libswdiag_la_LDFLAGS = \
+libmyreflection_la_LDFLAGS = \
     $(AM_LDFLAGS) \
-    -version-number $(PROJECT_version_major):$(PROJECT_version_minor):$(PROJECT_version_point) $(X_libswdiag_la_LDFLAGS)
+    -version-number $(PROJECT_version_major):$(PROJECT_version_minor):$(PROJECT_version_point) $(X_libmyrefl_la_LDFLAGS)
 
-libswdiag_la_SOURCES = src/swdiag_api.c src/swdiag_api.h \
-	src/swdiag_cli.h src/swdiag_cli_local.c src/swdiag_cli_local.h \
-	src/swdiag_cli_handle.h src/swdiag_linux.c src/swdiag_linux.h \
-	src/swdiag_obj.c src/swdiag_obj.h src/swdiag_rci.c \
-	src/swdiag_rci.h src/swdiag_sched.c src/swdiag_sched.h \
-	src/swdiag_sequence.c src/swdiag_sequence.h \
-	src/swdiag_syslog.c src/swdiag_thread.c src/swdiag_thread.h \
-	src/swdiag_trace.c src/swdiag_trace.h src/swdiag_types.h \
-	src/swdiag_util.c src/swdiag_util.h src/swdiag_xos.c \
-	src/swdiag_xos.h $(am__append_1) $(am__append_2)
+libmyreflection_la_SOURCES = src/myrefl_api.c src/myrefl_api.h \
+	src/myrefl_cli.h src/myrefl_cli_local.c src/myrefl_cli_local.h \
+	src/myrefl_cli_handle.h src/myrefl_linux.c src/myrefl_linux.h \
+	src/myrefl_obj.c src/myrefl_obj.h src/myrefl_rci.c \
+	src/myrefl_rci.h src/myrefl_sched.c src/myrefl_sched.h \
+	src/myrefl_sequence.c src/myrefl_sequence.h \
+	src/myrefl_syslog.c src/myrefl_thread.c src/myrefl_thread.h \
+	src/myrefl_trace.c src/myrefl_trace.h src/myrefl_types.h \
+	src/myrefl_util.c src/myrefl_util.h src/myrefl_xos.c \
+	src/myrefl_xos.h $(am__append_1) $(am__append_2)
 
 #
 # Add RPC Network support, unconditional for now.
 #
-#libswdiag_la_SOURCES += \
-#    src/swdiag_unix_rpc.h                \
-#    src/swdiag_unix_rpc_xdr.c            \
-#    src/swdiag_unix_rpc_clnt.c           \
-#    src/swdiag_unix_rpc_svc.c            \
-#    src/swdiag_unix_rpc.x
+#libmyreflection_la_SOURCES += \
+#    src/myrefl_unix_rpc.h                \
+#    src/myrefl_unix_rpc_xdr.c            \
+#    src/myrefl_unix_rpc_clnt.c           \
+#    src/myrefl_unix_rpc_svc.c            \
+#    src/myrefl_unix_rpc.x
 @ADD_RPC_TRUE@CLEANFILES = \
-@ADD_RPC_TRUE@    src/swdiag_unix_rpc.h                \
-@ADD_RPC_TRUE@    src/swdiag_unix_rpc_xdr.c            \
-@ADD_RPC_TRUE@    src/swdiag_unix_rpc_clnt.c           \
-@ADD_RPC_TRUE@    src/swdiag_unix_rpc_svc.c            
+@ADD_RPC_TRUE@    src/myrefl_unix_rpc.h                \
+@ADD_RPC_TRUE@    src/myrefl_unix_rpc_xdr.c            \
+@ADD_RPC_TRUE@    src/myrefl_unix_rpc_clnt.c           \
+@ADD_RPC_TRUE@    src/myrefl_unix_rpc_svc.c            
 
-#bin_PROGRAMS += swdiagtest
-@ADD_SERVER_TRUE@swdiag_SOURCES = server/src/swdiag_server.c \
-@ADD_SERVER_TRUE@                    server/src/swdiag_server_module.c \
-@ADD_SERVER_TRUE@                    server/src/swdiag_server_module.h \
-@ADD_SERVER_TRUE@                    server/src/swdiag_server_config.c \
-@ADD_SERVER_TRUE@                    server/src/swdiag_server_config.h \
+#bin_PROGRAMS += myreflectiontest
+@ADD_SERVER_TRUE@myreflection_SOURCES = server/src/myrefl_server.c \
+@ADD_SERVER_TRUE@                    server/src/myrefl_server_module.c \
+@ADD_SERVER_TRUE@                    server/src/myrefl_server_module.h \
+@ADD_SERVER_TRUE@                    server/src/myrefl_server_config.c \
+@ADD_SERVER_TRUE@                    server/src/myrefl_server_config.h \
 @ADD_SERVER_TRUE@                    server/src/mongoose/mongoose.c \
 @ADD_SERVER_TRUE@                    server/src/mongoose/mongoose.h \
 @ADD_SERVER_TRUE@                    server/src/jsmn/jsmn.c \
 @ADD_SERVER_TRUE@                    server/src/jsmn/jsmn.h \
 @ADD_SERVER_TRUE@                    server/src/smtpfuncs.c \
 @ADD_SERVER_TRUE@                    server/src/smtpfuncs.h \
-@ADD_SERVER_TRUE@                    server/src/swdiag_json_parser.c \
-@ADD_SERVER_TRUE@                    server/src/swdiag_json_parser.h \
-@ADD_SERVER_TRUE@                    server/src/swdiag_webserver.c \
-@ADD_SERVER_TRUE@                    server/src/swdiag_webserver.h \
-@ADD_SERVER_TRUE@                    server/src/swdiag_server_libinterface.c
+@ADD_SERVER_TRUE@                    server/src/myrefl_json_parser.c \
+@ADD_SERVER_TRUE@                    server/src/myrefl_json_parser.h \
+@ADD_SERVER_TRUE@                    server/src/myrefl_webserver.c \
+@ADD_SERVER_TRUE@                    server/src/myrefl_webserver.h \
+@ADD_SERVER_TRUE@                    server/src/myrefl_server_libinterface.c
 
-@ADD_SERVER_TRUE@swdiag_CFLAGS = -DNO_SSL_DL
+@ADD_SERVER_TRUE@myreflection_CFLAGS = -DNO_SSL_DL
 
 # dynamically linked
-@ADD_SERVER_TRUE@swdiag_LDADD = libswdiag.la $(X_LDFLAGS) -lnsl -lpthread -lrt -ldl -lssl -lcrypto
+@ADD_SERVER_TRUE@myreflection_LDADD = libmyreflection.la $(X_LDFLAGS) -lnsl -lpthread -lrt -ldl -lssl -lcrypto
 
 # static link it
-@ADD_SERVER_TRUE@swdiag_LDFLAGS = -static
-@ADD_SERVER_TRUE@swdiag_modulesdir = $(datadir)/swdiag/server/modules
-@ADD_SERVER_TRUE@dist_swdiag_modules_SCRIPTS = \
+@ADD_SERVER_TRUE@myreflection_LDFLAGS = -static
+@ADD_SERVER_TRUE@myreflection_modulesdir = $(datadir)/myreflection/server/modules
+@ADD_SERVER_TRUE@dist_myreflection_modules_SCRIPTS = \
 @ADD_SERVER_TRUE@                    server/modules/diag_diskspace.sh \
 @ADD_SERVER_TRUE@                    server/modules/diag_diskspace.sh.conf \
 @ADD_SERVER_TRUE@                    server/modules/diag_memory_conf.py \
@@ -577,21 +580,21 @@ libswdiag_la_SOURCES = src/swdiag_api.c src/swdiag_api.h \
 @ADD_SERVER_TRUE@                    server/modules/diag_postgres_conf.py \
 @ADD_SERVER_TRUE@                    server/modules/diag_postgres.py
 
-@ADD_SERVER_TRUE@swdiag_htmldir = $(datadir)/swdiag/
-@ADD_SERVER_TRUE@nobase_dist_swdiag_html_DATA = \
+@ADD_SERVER_TRUE@myreflection_htmldir = $(datadir)/myreflection/
+@ADD_SERVER_TRUE@nobase_dist_myreflection_html_DATA = \
 @ADD_SERVER_TRUE@                    server/http/index.html \
 @ADD_SERVER_TRUE@                    server/http/assets/js/get-shit-done.js
 
 
 #init_ddir         = $(sysconfdir)/rc.d/init.d
-#init_d_SCRIPTS    = server/init/swdiag
-@ADD_SERVER_TRUE@swdiag_confdir = $(sysconfdir)
-@ADD_SERVER_TRUE@dist_swdiag_conf_DATA = server/swdiag.cfg
-libswdiagincdir = $(pkgincludedir)
-libswdiaginc_HEADERS = \
+#init_d_SCRIPTS    = server/init/myreflection
+@ADD_SERVER_TRUE@myreflection_confdir = $(sysconfdir)
+@ADD_SERVER_TRUE@dist_myreflection_conf_DATA = server/myreflection.cfg
+libmyreflectionincdir = $(pkgincludedir)
+libmyreflectioninc_HEADERS = \
     include/project.h \
     \
-    include/swdiag_client.h
+    include/myrefl_client.h
 
 
 ###############################################################################
@@ -705,26 +708,26 @@ src/$(am__dirstamp):
 src/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) src/$(DEPDIR)
 	@: > src/$(DEPDIR)/$(am__dirstamp)
-src/swdiag_api.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/swdiag_cli_local.lo: src/$(am__dirstamp) \
+src/myrefl_api.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/myrefl_cli_local.lo: src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/swdiag_linux.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/swdiag_obj.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/swdiag_rci.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/swdiag_sched.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/swdiag_sequence.lo: src/$(am__dirstamp) \
+src/myrefl_linux.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/myrefl_obj.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/myrefl_rci.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/myrefl_sched.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/myrefl_sequence.lo: src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/swdiag_syslog.lo: src/$(am__dirstamp) \
+src/myrefl_syslog.lo: src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/swdiag_thread.lo: src/$(am__dirstamp) \
+src/myrefl_thread.lo: src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/swdiag_trace.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/swdiag_util.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/swdiag_xos.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/swdiag_posix.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/myrefl_trace.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/myrefl_util.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/myrefl_xos.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/myrefl_posix.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 
-libswdiag.la: $(libswdiag_la_OBJECTS) $(libswdiag_la_DEPENDENCIES) $(EXTRA_libswdiag_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(libswdiag_la_LINK) -rpath $(libdir) $(libswdiag_la_OBJECTS) $(libswdiag_la_LIBADD) $(LIBS)
+libmyreflection.la: $(libmyreflection_la_OBJECTS) $(libmyreflection_la_DEPENDENCIES) $(EXTRA_libmyreflection_la_DEPENDENCIES) 
+	$(AM_V_CCLD)$(libmyreflection_la_LINK) -rpath $(libdir) $(libmyreflection_la_OBJECTS) $(libmyreflection_la_LIBADD) $(LIBS)
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
 	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \
@@ -780,12 +783,13 @@ server/src/$(am__dirstamp):
 server/src/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) server/src/$(DEPDIR)
 	@: > server/src/$(DEPDIR)/$(am__dirstamp)
-server/src/swdiag-swdiag_server.$(OBJEXT): server/src/$(am__dirstamp) \
-	server/src/$(DEPDIR)/$(am__dirstamp)
-server/src/swdiag-swdiag_server_module.$(OBJEXT):  \
+server/src/myreflection-myrefl_server.$(OBJEXT):  \
 	server/src/$(am__dirstamp) \
 	server/src/$(DEPDIR)/$(am__dirstamp)
-server/src/swdiag-swdiag_server_config.$(OBJEXT):  \
+server/src/myreflection-myrefl_server_module.$(OBJEXT):  \
+	server/src/$(am__dirstamp) \
+	server/src/$(DEPDIR)/$(am__dirstamp)
+server/src/myreflection-myrefl_server_config.$(OBJEXT):  \
 	server/src/$(am__dirstamp) \
 	server/src/$(DEPDIR)/$(am__dirstamp)
 server/src/mongoose/$(am__dirstamp):
@@ -794,7 +798,7 @@ server/src/mongoose/$(am__dirstamp):
 server/src/mongoose/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) server/src/mongoose/$(DEPDIR)
 	@: > server/src/mongoose/$(DEPDIR)/$(am__dirstamp)
-server/src/mongoose/swdiag-mongoose.$(OBJEXT):  \
+server/src/mongoose/myreflection-mongoose.$(OBJEXT):  \
 	server/src/mongoose/$(am__dirstamp) \
 	server/src/mongoose/$(DEPDIR)/$(am__dirstamp)
 server/src/jsmn/$(am__dirstamp):
@@ -803,30 +807,31 @@ server/src/jsmn/$(am__dirstamp):
 server/src/jsmn/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) server/src/jsmn/$(DEPDIR)
 	@: > server/src/jsmn/$(DEPDIR)/$(am__dirstamp)
-server/src/jsmn/swdiag-jsmn.$(OBJEXT):  \
+server/src/jsmn/myreflection-jsmn.$(OBJEXT):  \
 	server/src/jsmn/$(am__dirstamp) \
 	server/src/jsmn/$(DEPDIR)/$(am__dirstamp)
-server/src/swdiag-smtpfuncs.$(OBJEXT): server/src/$(am__dirstamp) \
-	server/src/$(DEPDIR)/$(am__dirstamp)
-server/src/swdiag-swdiag_json_parser.$(OBJEXT):  \
+server/src/myreflection-smtpfuncs.$(OBJEXT):  \
 	server/src/$(am__dirstamp) \
 	server/src/$(DEPDIR)/$(am__dirstamp)
-server/src/swdiag-swdiag_webserver.$(OBJEXT):  \
+server/src/myreflection-myrefl_json_parser.$(OBJEXT):  \
 	server/src/$(am__dirstamp) \
 	server/src/$(DEPDIR)/$(am__dirstamp)
-server/src/swdiag-swdiag_server_libinterface.$(OBJEXT):  \
+server/src/myreflection-myrefl_webserver.$(OBJEXT):  \
+	server/src/$(am__dirstamp) \
+	server/src/$(DEPDIR)/$(am__dirstamp)
+server/src/myreflection-myrefl_server_libinterface.$(OBJEXT):  \
 	server/src/$(am__dirstamp) \
 	server/src/$(DEPDIR)/$(am__dirstamp)
 
-swdiag$(EXEEXT): $(swdiag_OBJECTS) $(swdiag_DEPENDENCIES) $(EXTRA_swdiag_DEPENDENCIES) 
-	@rm -f swdiag$(EXEEXT)
-	$(AM_V_CCLD)$(swdiag_LINK) $(swdiag_OBJECTS) $(swdiag_LDADD) $(LIBS)
-install-dist_swdiag_modulesSCRIPTS: $(dist_swdiag_modules_SCRIPTS)
+myreflection$(EXEEXT): $(myreflection_OBJECTS) $(myreflection_DEPENDENCIES) $(EXTRA_myreflection_DEPENDENCIES) 
+	@rm -f myreflection$(EXEEXT)
+	$(AM_V_CCLD)$(myreflection_LINK) $(myreflection_OBJECTS) $(myreflection_LDADD) $(LIBS)
+install-dist_myreflection_modulesSCRIPTS: $(dist_myreflection_modules_SCRIPTS)
 	@$(NORMAL_INSTALL)
-	@list='$(dist_swdiag_modules_SCRIPTS)'; test -n "$(swdiag_modulesdir)" || list=; \
+	@list='$(dist_myreflection_modules_SCRIPTS)'; test -n "$(myreflection_modulesdir)" || list=; \
 	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(swdiag_modulesdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(swdiag_modulesdir)" || exit 1; \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(myreflection_modulesdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(myreflection_modulesdir)" || exit 1; \
 	fi; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
@@ -845,17 +850,17 @@ install-dist_swdiag_modulesSCRIPTS: $(dist_swdiag_modules_SCRIPTS)
 	while read type dir files; do \
 	     if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
 	     test -z "$$files" || { \
-	       echo " $(INSTALL_SCRIPT) $$files '$(DESTDIR)$(swdiag_modulesdir)$$dir'"; \
-	       $(INSTALL_SCRIPT) $$files "$(DESTDIR)$(swdiag_modulesdir)$$dir" || exit $$?; \
+	       echo " $(INSTALL_SCRIPT) $$files '$(DESTDIR)$(myreflection_modulesdir)$$dir'"; \
+	       $(INSTALL_SCRIPT) $$files "$(DESTDIR)$(myreflection_modulesdir)$$dir" || exit $$?; \
 	     } \
 	; done
 
-uninstall-dist_swdiag_modulesSCRIPTS:
+uninstall-dist_myreflection_modulesSCRIPTS:
 	@$(NORMAL_UNINSTALL)
-	@list='$(dist_swdiag_modules_SCRIPTS)'; test -n "$(swdiag_modulesdir)" || exit 0; \
+	@list='$(dist_myreflection_modules_SCRIPTS)'; test -n "$(myreflection_modulesdir)" || exit 0; \
 	files=`for p in $$list; do echo "$$p"; done | \
 	       sed -e 's,.*/,,;$(transform)'`; \
-	dir='$(DESTDIR)$(swdiag_modulesdir)'; $(am__uninstall_files_from_dir)
+	dir='$(DESTDIR)$(myreflection_modulesdir)'; $(am__uninstall_files_from_dir)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -868,28 +873,28 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@server/src/$(DEPDIR)/swdiag-smtpfuncs.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@server/src/$(DEPDIR)/swdiag-swdiag_json_parser.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@server/src/$(DEPDIR)/swdiag-swdiag_server.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@server/src/$(DEPDIR)/swdiag-swdiag_server_config.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@server/src/$(DEPDIR)/swdiag-swdiag_server_libinterface.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@server/src/$(DEPDIR)/swdiag-swdiag_server_module.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@server/src/$(DEPDIR)/swdiag-swdiag_webserver.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@server/src/jsmn/$(DEPDIR)/swdiag-jsmn.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@server/src/mongoose/$(DEPDIR)/swdiag-mongoose.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/swdiag_api.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/swdiag_cli_local.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/swdiag_linux.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/swdiag_obj.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/swdiag_posix.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/swdiag_rci.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/swdiag_sched.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/swdiag_sequence.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/swdiag_syslog.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/swdiag_thread.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/swdiag_trace.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/swdiag_util.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/swdiag_xos.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@server/src/$(DEPDIR)/myreflection-myrefl_json_parser.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@server/src/$(DEPDIR)/myreflection-myrefl_server.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@server/src/$(DEPDIR)/myreflection-myrefl_server_config.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@server/src/$(DEPDIR)/myreflection-myrefl_server_libinterface.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@server/src/$(DEPDIR)/myreflection-myrefl_server_module.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@server/src/$(DEPDIR)/myreflection-myrefl_webserver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@server/src/$(DEPDIR)/myreflection-smtpfuncs.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@server/src/jsmn/$(DEPDIR)/myreflection-jsmn.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@server/src/mongoose/$(DEPDIR)/myreflection-mongoose.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/myrefl_api.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/myrefl_cli_local.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/myrefl_linux.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/myrefl_obj.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/myrefl_posix.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/myrefl_rci.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/myrefl_sched.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/myrefl_sequence.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/myrefl_syslog.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/myrefl_thread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/myrefl_trace.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/myrefl_util.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/myrefl_xos.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -915,131 +920,131 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
 
-server/src/swdiag-swdiag_server.o: server/src/swdiag_server.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/swdiag-swdiag_server.o -MD -MP -MF server/src/$(DEPDIR)/swdiag-swdiag_server.Tpo -c -o server/src/swdiag-swdiag_server.o `test -f 'server/src/swdiag_server.c' || echo '$(srcdir)/'`server/src/swdiag_server.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/swdiag-swdiag_server.Tpo server/src/$(DEPDIR)/swdiag-swdiag_server.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/swdiag_server.c' object='server/src/swdiag-swdiag_server.o' libtool=no @AMDEPBACKSLASH@
+server/src/myreflection-myrefl_server.o: server/src/myrefl_server.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/myreflection-myrefl_server.o -MD -MP -MF server/src/$(DEPDIR)/myreflection-myrefl_server.Tpo -c -o server/src/myreflection-myrefl_server.o `test -f 'server/src/myrefl_server.c' || echo '$(srcdir)/'`server/src/myrefl_server.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/myreflection-myrefl_server.Tpo server/src/$(DEPDIR)/myreflection-myrefl_server.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/myrefl_server.c' object='server/src/myreflection-myrefl_server.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/swdiag-swdiag_server.o `test -f 'server/src/swdiag_server.c' || echo '$(srcdir)/'`server/src/swdiag_server.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/myreflection-myrefl_server.o `test -f 'server/src/myrefl_server.c' || echo '$(srcdir)/'`server/src/myrefl_server.c
 
-server/src/swdiag-swdiag_server.obj: server/src/swdiag_server.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/swdiag-swdiag_server.obj -MD -MP -MF server/src/$(DEPDIR)/swdiag-swdiag_server.Tpo -c -o server/src/swdiag-swdiag_server.obj `if test -f 'server/src/swdiag_server.c'; then $(CYGPATH_W) 'server/src/swdiag_server.c'; else $(CYGPATH_W) '$(srcdir)/server/src/swdiag_server.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/swdiag-swdiag_server.Tpo server/src/$(DEPDIR)/swdiag-swdiag_server.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/swdiag_server.c' object='server/src/swdiag-swdiag_server.obj' libtool=no @AMDEPBACKSLASH@
+server/src/myreflection-myrefl_server.obj: server/src/myrefl_server.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/myreflection-myrefl_server.obj -MD -MP -MF server/src/$(DEPDIR)/myreflection-myrefl_server.Tpo -c -o server/src/myreflection-myrefl_server.obj `if test -f 'server/src/myrefl_server.c'; then $(CYGPATH_W) 'server/src/myrefl_server.c'; else $(CYGPATH_W) '$(srcdir)/server/src/myrefl_server.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/myreflection-myrefl_server.Tpo server/src/$(DEPDIR)/myreflection-myrefl_server.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/myrefl_server.c' object='server/src/myreflection-myrefl_server.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/swdiag-swdiag_server.obj `if test -f 'server/src/swdiag_server.c'; then $(CYGPATH_W) 'server/src/swdiag_server.c'; else $(CYGPATH_W) '$(srcdir)/server/src/swdiag_server.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/myreflection-myrefl_server.obj `if test -f 'server/src/myrefl_server.c'; then $(CYGPATH_W) 'server/src/myrefl_server.c'; else $(CYGPATH_W) '$(srcdir)/server/src/myrefl_server.c'; fi`
 
-server/src/swdiag-swdiag_server_module.o: server/src/swdiag_server_module.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/swdiag-swdiag_server_module.o -MD -MP -MF server/src/$(DEPDIR)/swdiag-swdiag_server_module.Tpo -c -o server/src/swdiag-swdiag_server_module.o `test -f 'server/src/swdiag_server_module.c' || echo '$(srcdir)/'`server/src/swdiag_server_module.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/swdiag-swdiag_server_module.Tpo server/src/$(DEPDIR)/swdiag-swdiag_server_module.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/swdiag_server_module.c' object='server/src/swdiag-swdiag_server_module.o' libtool=no @AMDEPBACKSLASH@
+server/src/myreflection-myrefl_server_module.o: server/src/myrefl_server_module.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/myreflection-myrefl_server_module.o -MD -MP -MF server/src/$(DEPDIR)/myreflection-myrefl_server_module.Tpo -c -o server/src/myreflection-myrefl_server_module.o `test -f 'server/src/myrefl_server_module.c' || echo '$(srcdir)/'`server/src/myrefl_server_module.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/myreflection-myrefl_server_module.Tpo server/src/$(DEPDIR)/myreflection-myrefl_server_module.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/myrefl_server_module.c' object='server/src/myreflection-myrefl_server_module.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/swdiag-swdiag_server_module.o `test -f 'server/src/swdiag_server_module.c' || echo '$(srcdir)/'`server/src/swdiag_server_module.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/myreflection-myrefl_server_module.o `test -f 'server/src/myrefl_server_module.c' || echo '$(srcdir)/'`server/src/myrefl_server_module.c
 
-server/src/swdiag-swdiag_server_module.obj: server/src/swdiag_server_module.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/swdiag-swdiag_server_module.obj -MD -MP -MF server/src/$(DEPDIR)/swdiag-swdiag_server_module.Tpo -c -o server/src/swdiag-swdiag_server_module.obj `if test -f 'server/src/swdiag_server_module.c'; then $(CYGPATH_W) 'server/src/swdiag_server_module.c'; else $(CYGPATH_W) '$(srcdir)/server/src/swdiag_server_module.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/swdiag-swdiag_server_module.Tpo server/src/$(DEPDIR)/swdiag-swdiag_server_module.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/swdiag_server_module.c' object='server/src/swdiag-swdiag_server_module.obj' libtool=no @AMDEPBACKSLASH@
+server/src/myreflection-myrefl_server_module.obj: server/src/myrefl_server_module.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/myreflection-myrefl_server_module.obj -MD -MP -MF server/src/$(DEPDIR)/myreflection-myrefl_server_module.Tpo -c -o server/src/myreflection-myrefl_server_module.obj `if test -f 'server/src/myrefl_server_module.c'; then $(CYGPATH_W) 'server/src/myrefl_server_module.c'; else $(CYGPATH_W) '$(srcdir)/server/src/myrefl_server_module.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/myreflection-myrefl_server_module.Tpo server/src/$(DEPDIR)/myreflection-myrefl_server_module.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/myrefl_server_module.c' object='server/src/myreflection-myrefl_server_module.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/swdiag-swdiag_server_module.obj `if test -f 'server/src/swdiag_server_module.c'; then $(CYGPATH_W) 'server/src/swdiag_server_module.c'; else $(CYGPATH_W) '$(srcdir)/server/src/swdiag_server_module.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/myreflection-myrefl_server_module.obj `if test -f 'server/src/myrefl_server_module.c'; then $(CYGPATH_W) 'server/src/myrefl_server_module.c'; else $(CYGPATH_W) '$(srcdir)/server/src/myrefl_server_module.c'; fi`
 
-server/src/swdiag-swdiag_server_config.o: server/src/swdiag_server_config.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/swdiag-swdiag_server_config.o -MD -MP -MF server/src/$(DEPDIR)/swdiag-swdiag_server_config.Tpo -c -o server/src/swdiag-swdiag_server_config.o `test -f 'server/src/swdiag_server_config.c' || echo '$(srcdir)/'`server/src/swdiag_server_config.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/swdiag-swdiag_server_config.Tpo server/src/$(DEPDIR)/swdiag-swdiag_server_config.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/swdiag_server_config.c' object='server/src/swdiag-swdiag_server_config.o' libtool=no @AMDEPBACKSLASH@
+server/src/myreflection-myrefl_server_config.o: server/src/myrefl_server_config.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/myreflection-myrefl_server_config.o -MD -MP -MF server/src/$(DEPDIR)/myreflection-myrefl_server_config.Tpo -c -o server/src/myreflection-myrefl_server_config.o `test -f 'server/src/myrefl_server_config.c' || echo '$(srcdir)/'`server/src/myrefl_server_config.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/myreflection-myrefl_server_config.Tpo server/src/$(DEPDIR)/myreflection-myrefl_server_config.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/myrefl_server_config.c' object='server/src/myreflection-myrefl_server_config.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/swdiag-swdiag_server_config.o `test -f 'server/src/swdiag_server_config.c' || echo '$(srcdir)/'`server/src/swdiag_server_config.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/myreflection-myrefl_server_config.o `test -f 'server/src/myrefl_server_config.c' || echo '$(srcdir)/'`server/src/myrefl_server_config.c
 
-server/src/swdiag-swdiag_server_config.obj: server/src/swdiag_server_config.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/swdiag-swdiag_server_config.obj -MD -MP -MF server/src/$(DEPDIR)/swdiag-swdiag_server_config.Tpo -c -o server/src/swdiag-swdiag_server_config.obj `if test -f 'server/src/swdiag_server_config.c'; then $(CYGPATH_W) 'server/src/swdiag_server_config.c'; else $(CYGPATH_W) '$(srcdir)/server/src/swdiag_server_config.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/swdiag-swdiag_server_config.Tpo server/src/$(DEPDIR)/swdiag-swdiag_server_config.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/swdiag_server_config.c' object='server/src/swdiag-swdiag_server_config.obj' libtool=no @AMDEPBACKSLASH@
+server/src/myreflection-myrefl_server_config.obj: server/src/myrefl_server_config.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/myreflection-myrefl_server_config.obj -MD -MP -MF server/src/$(DEPDIR)/myreflection-myrefl_server_config.Tpo -c -o server/src/myreflection-myrefl_server_config.obj `if test -f 'server/src/myrefl_server_config.c'; then $(CYGPATH_W) 'server/src/myrefl_server_config.c'; else $(CYGPATH_W) '$(srcdir)/server/src/myrefl_server_config.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/myreflection-myrefl_server_config.Tpo server/src/$(DEPDIR)/myreflection-myrefl_server_config.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/myrefl_server_config.c' object='server/src/myreflection-myrefl_server_config.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/swdiag-swdiag_server_config.obj `if test -f 'server/src/swdiag_server_config.c'; then $(CYGPATH_W) 'server/src/swdiag_server_config.c'; else $(CYGPATH_W) '$(srcdir)/server/src/swdiag_server_config.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/myreflection-myrefl_server_config.obj `if test -f 'server/src/myrefl_server_config.c'; then $(CYGPATH_W) 'server/src/myrefl_server_config.c'; else $(CYGPATH_W) '$(srcdir)/server/src/myrefl_server_config.c'; fi`
 
-server/src/mongoose/swdiag-mongoose.o: server/src/mongoose/mongoose.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/mongoose/swdiag-mongoose.o -MD -MP -MF server/src/mongoose/$(DEPDIR)/swdiag-mongoose.Tpo -c -o server/src/mongoose/swdiag-mongoose.o `test -f 'server/src/mongoose/mongoose.c' || echo '$(srcdir)/'`server/src/mongoose/mongoose.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/mongoose/$(DEPDIR)/swdiag-mongoose.Tpo server/src/mongoose/$(DEPDIR)/swdiag-mongoose.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/mongoose/mongoose.c' object='server/src/mongoose/swdiag-mongoose.o' libtool=no @AMDEPBACKSLASH@
+server/src/mongoose/myreflection-mongoose.o: server/src/mongoose/mongoose.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/mongoose/myreflection-mongoose.o -MD -MP -MF server/src/mongoose/$(DEPDIR)/myreflection-mongoose.Tpo -c -o server/src/mongoose/myreflection-mongoose.o `test -f 'server/src/mongoose/mongoose.c' || echo '$(srcdir)/'`server/src/mongoose/mongoose.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/mongoose/$(DEPDIR)/myreflection-mongoose.Tpo server/src/mongoose/$(DEPDIR)/myreflection-mongoose.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/mongoose/mongoose.c' object='server/src/mongoose/myreflection-mongoose.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/mongoose/swdiag-mongoose.o `test -f 'server/src/mongoose/mongoose.c' || echo '$(srcdir)/'`server/src/mongoose/mongoose.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/mongoose/myreflection-mongoose.o `test -f 'server/src/mongoose/mongoose.c' || echo '$(srcdir)/'`server/src/mongoose/mongoose.c
 
-server/src/mongoose/swdiag-mongoose.obj: server/src/mongoose/mongoose.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/mongoose/swdiag-mongoose.obj -MD -MP -MF server/src/mongoose/$(DEPDIR)/swdiag-mongoose.Tpo -c -o server/src/mongoose/swdiag-mongoose.obj `if test -f 'server/src/mongoose/mongoose.c'; then $(CYGPATH_W) 'server/src/mongoose/mongoose.c'; else $(CYGPATH_W) '$(srcdir)/server/src/mongoose/mongoose.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/mongoose/$(DEPDIR)/swdiag-mongoose.Tpo server/src/mongoose/$(DEPDIR)/swdiag-mongoose.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/mongoose/mongoose.c' object='server/src/mongoose/swdiag-mongoose.obj' libtool=no @AMDEPBACKSLASH@
+server/src/mongoose/myreflection-mongoose.obj: server/src/mongoose/mongoose.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/mongoose/myreflection-mongoose.obj -MD -MP -MF server/src/mongoose/$(DEPDIR)/myreflection-mongoose.Tpo -c -o server/src/mongoose/myreflection-mongoose.obj `if test -f 'server/src/mongoose/mongoose.c'; then $(CYGPATH_W) 'server/src/mongoose/mongoose.c'; else $(CYGPATH_W) '$(srcdir)/server/src/mongoose/mongoose.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/mongoose/$(DEPDIR)/myreflection-mongoose.Tpo server/src/mongoose/$(DEPDIR)/myreflection-mongoose.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/mongoose/mongoose.c' object='server/src/mongoose/myreflection-mongoose.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/mongoose/swdiag-mongoose.obj `if test -f 'server/src/mongoose/mongoose.c'; then $(CYGPATH_W) 'server/src/mongoose/mongoose.c'; else $(CYGPATH_W) '$(srcdir)/server/src/mongoose/mongoose.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/mongoose/myreflection-mongoose.obj `if test -f 'server/src/mongoose/mongoose.c'; then $(CYGPATH_W) 'server/src/mongoose/mongoose.c'; else $(CYGPATH_W) '$(srcdir)/server/src/mongoose/mongoose.c'; fi`
 
-server/src/jsmn/swdiag-jsmn.o: server/src/jsmn/jsmn.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/jsmn/swdiag-jsmn.o -MD -MP -MF server/src/jsmn/$(DEPDIR)/swdiag-jsmn.Tpo -c -o server/src/jsmn/swdiag-jsmn.o `test -f 'server/src/jsmn/jsmn.c' || echo '$(srcdir)/'`server/src/jsmn/jsmn.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/jsmn/$(DEPDIR)/swdiag-jsmn.Tpo server/src/jsmn/$(DEPDIR)/swdiag-jsmn.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/jsmn/jsmn.c' object='server/src/jsmn/swdiag-jsmn.o' libtool=no @AMDEPBACKSLASH@
+server/src/jsmn/myreflection-jsmn.o: server/src/jsmn/jsmn.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/jsmn/myreflection-jsmn.o -MD -MP -MF server/src/jsmn/$(DEPDIR)/myreflection-jsmn.Tpo -c -o server/src/jsmn/myreflection-jsmn.o `test -f 'server/src/jsmn/jsmn.c' || echo '$(srcdir)/'`server/src/jsmn/jsmn.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/jsmn/$(DEPDIR)/myreflection-jsmn.Tpo server/src/jsmn/$(DEPDIR)/myreflection-jsmn.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/jsmn/jsmn.c' object='server/src/jsmn/myreflection-jsmn.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/jsmn/swdiag-jsmn.o `test -f 'server/src/jsmn/jsmn.c' || echo '$(srcdir)/'`server/src/jsmn/jsmn.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/jsmn/myreflection-jsmn.o `test -f 'server/src/jsmn/jsmn.c' || echo '$(srcdir)/'`server/src/jsmn/jsmn.c
 
-server/src/jsmn/swdiag-jsmn.obj: server/src/jsmn/jsmn.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/jsmn/swdiag-jsmn.obj -MD -MP -MF server/src/jsmn/$(DEPDIR)/swdiag-jsmn.Tpo -c -o server/src/jsmn/swdiag-jsmn.obj `if test -f 'server/src/jsmn/jsmn.c'; then $(CYGPATH_W) 'server/src/jsmn/jsmn.c'; else $(CYGPATH_W) '$(srcdir)/server/src/jsmn/jsmn.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/jsmn/$(DEPDIR)/swdiag-jsmn.Tpo server/src/jsmn/$(DEPDIR)/swdiag-jsmn.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/jsmn/jsmn.c' object='server/src/jsmn/swdiag-jsmn.obj' libtool=no @AMDEPBACKSLASH@
+server/src/jsmn/myreflection-jsmn.obj: server/src/jsmn/jsmn.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/jsmn/myreflection-jsmn.obj -MD -MP -MF server/src/jsmn/$(DEPDIR)/myreflection-jsmn.Tpo -c -o server/src/jsmn/myreflection-jsmn.obj `if test -f 'server/src/jsmn/jsmn.c'; then $(CYGPATH_W) 'server/src/jsmn/jsmn.c'; else $(CYGPATH_W) '$(srcdir)/server/src/jsmn/jsmn.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/jsmn/$(DEPDIR)/myreflection-jsmn.Tpo server/src/jsmn/$(DEPDIR)/myreflection-jsmn.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/jsmn/jsmn.c' object='server/src/jsmn/myreflection-jsmn.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/jsmn/swdiag-jsmn.obj `if test -f 'server/src/jsmn/jsmn.c'; then $(CYGPATH_W) 'server/src/jsmn/jsmn.c'; else $(CYGPATH_W) '$(srcdir)/server/src/jsmn/jsmn.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/jsmn/myreflection-jsmn.obj `if test -f 'server/src/jsmn/jsmn.c'; then $(CYGPATH_W) 'server/src/jsmn/jsmn.c'; else $(CYGPATH_W) '$(srcdir)/server/src/jsmn/jsmn.c'; fi`
 
-server/src/swdiag-smtpfuncs.o: server/src/smtpfuncs.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/swdiag-smtpfuncs.o -MD -MP -MF server/src/$(DEPDIR)/swdiag-smtpfuncs.Tpo -c -o server/src/swdiag-smtpfuncs.o `test -f 'server/src/smtpfuncs.c' || echo '$(srcdir)/'`server/src/smtpfuncs.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/swdiag-smtpfuncs.Tpo server/src/$(DEPDIR)/swdiag-smtpfuncs.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/smtpfuncs.c' object='server/src/swdiag-smtpfuncs.o' libtool=no @AMDEPBACKSLASH@
+server/src/myreflection-smtpfuncs.o: server/src/smtpfuncs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/myreflection-smtpfuncs.o -MD -MP -MF server/src/$(DEPDIR)/myreflection-smtpfuncs.Tpo -c -o server/src/myreflection-smtpfuncs.o `test -f 'server/src/smtpfuncs.c' || echo '$(srcdir)/'`server/src/smtpfuncs.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/myreflection-smtpfuncs.Tpo server/src/$(DEPDIR)/myreflection-smtpfuncs.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/smtpfuncs.c' object='server/src/myreflection-smtpfuncs.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/swdiag-smtpfuncs.o `test -f 'server/src/smtpfuncs.c' || echo '$(srcdir)/'`server/src/smtpfuncs.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/myreflection-smtpfuncs.o `test -f 'server/src/smtpfuncs.c' || echo '$(srcdir)/'`server/src/smtpfuncs.c
 
-server/src/swdiag-smtpfuncs.obj: server/src/smtpfuncs.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/swdiag-smtpfuncs.obj -MD -MP -MF server/src/$(DEPDIR)/swdiag-smtpfuncs.Tpo -c -o server/src/swdiag-smtpfuncs.obj `if test -f 'server/src/smtpfuncs.c'; then $(CYGPATH_W) 'server/src/smtpfuncs.c'; else $(CYGPATH_W) '$(srcdir)/server/src/smtpfuncs.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/swdiag-smtpfuncs.Tpo server/src/$(DEPDIR)/swdiag-smtpfuncs.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/smtpfuncs.c' object='server/src/swdiag-smtpfuncs.obj' libtool=no @AMDEPBACKSLASH@
+server/src/myreflection-smtpfuncs.obj: server/src/smtpfuncs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/myreflection-smtpfuncs.obj -MD -MP -MF server/src/$(DEPDIR)/myreflection-smtpfuncs.Tpo -c -o server/src/myreflection-smtpfuncs.obj `if test -f 'server/src/smtpfuncs.c'; then $(CYGPATH_W) 'server/src/smtpfuncs.c'; else $(CYGPATH_W) '$(srcdir)/server/src/smtpfuncs.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/myreflection-smtpfuncs.Tpo server/src/$(DEPDIR)/myreflection-smtpfuncs.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/smtpfuncs.c' object='server/src/myreflection-smtpfuncs.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/swdiag-smtpfuncs.obj `if test -f 'server/src/smtpfuncs.c'; then $(CYGPATH_W) 'server/src/smtpfuncs.c'; else $(CYGPATH_W) '$(srcdir)/server/src/smtpfuncs.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/myreflection-smtpfuncs.obj `if test -f 'server/src/smtpfuncs.c'; then $(CYGPATH_W) 'server/src/smtpfuncs.c'; else $(CYGPATH_W) '$(srcdir)/server/src/smtpfuncs.c'; fi`
 
-server/src/swdiag-swdiag_json_parser.o: server/src/swdiag_json_parser.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/swdiag-swdiag_json_parser.o -MD -MP -MF server/src/$(DEPDIR)/swdiag-swdiag_json_parser.Tpo -c -o server/src/swdiag-swdiag_json_parser.o `test -f 'server/src/swdiag_json_parser.c' || echo '$(srcdir)/'`server/src/swdiag_json_parser.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/swdiag-swdiag_json_parser.Tpo server/src/$(DEPDIR)/swdiag-swdiag_json_parser.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/swdiag_json_parser.c' object='server/src/swdiag-swdiag_json_parser.o' libtool=no @AMDEPBACKSLASH@
+server/src/myreflection-myrefl_json_parser.o: server/src/myrefl_json_parser.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/myreflection-myrefl_json_parser.o -MD -MP -MF server/src/$(DEPDIR)/myreflection-myrefl_json_parser.Tpo -c -o server/src/myreflection-myrefl_json_parser.o `test -f 'server/src/myrefl_json_parser.c' || echo '$(srcdir)/'`server/src/myrefl_json_parser.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/myreflection-myrefl_json_parser.Tpo server/src/$(DEPDIR)/myreflection-myrefl_json_parser.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/myrefl_json_parser.c' object='server/src/myreflection-myrefl_json_parser.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/swdiag-swdiag_json_parser.o `test -f 'server/src/swdiag_json_parser.c' || echo '$(srcdir)/'`server/src/swdiag_json_parser.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/myreflection-myrefl_json_parser.o `test -f 'server/src/myrefl_json_parser.c' || echo '$(srcdir)/'`server/src/myrefl_json_parser.c
 
-server/src/swdiag-swdiag_json_parser.obj: server/src/swdiag_json_parser.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/swdiag-swdiag_json_parser.obj -MD -MP -MF server/src/$(DEPDIR)/swdiag-swdiag_json_parser.Tpo -c -o server/src/swdiag-swdiag_json_parser.obj `if test -f 'server/src/swdiag_json_parser.c'; then $(CYGPATH_W) 'server/src/swdiag_json_parser.c'; else $(CYGPATH_W) '$(srcdir)/server/src/swdiag_json_parser.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/swdiag-swdiag_json_parser.Tpo server/src/$(DEPDIR)/swdiag-swdiag_json_parser.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/swdiag_json_parser.c' object='server/src/swdiag-swdiag_json_parser.obj' libtool=no @AMDEPBACKSLASH@
+server/src/myreflection-myrefl_json_parser.obj: server/src/myrefl_json_parser.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/myreflection-myrefl_json_parser.obj -MD -MP -MF server/src/$(DEPDIR)/myreflection-myrefl_json_parser.Tpo -c -o server/src/myreflection-myrefl_json_parser.obj `if test -f 'server/src/myrefl_json_parser.c'; then $(CYGPATH_W) 'server/src/myrefl_json_parser.c'; else $(CYGPATH_W) '$(srcdir)/server/src/myrefl_json_parser.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/myreflection-myrefl_json_parser.Tpo server/src/$(DEPDIR)/myreflection-myrefl_json_parser.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/myrefl_json_parser.c' object='server/src/myreflection-myrefl_json_parser.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/swdiag-swdiag_json_parser.obj `if test -f 'server/src/swdiag_json_parser.c'; then $(CYGPATH_W) 'server/src/swdiag_json_parser.c'; else $(CYGPATH_W) '$(srcdir)/server/src/swdiag_json_parser.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/myreflection-myrefl_json_parser.obj `if test -f 'server/src/myrefl_json_parser.c'; then $(CYGPATH_W) 'server/src/myrefl_json_parser.c'; else $(CYGPATH_W) '$(srcdir)/server/src/myrefl_json_parser.c'; fi`
 
-server/src/swdiag-swdiag_webserver.o: server/src/swdiag_webserver.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/swdiag-swdiag_webserver.o -MD -MP -MF server/src/$(DEPDIR)/swdiag-swdiag_webserver.Tpo -c -o server/src/swdiag-swdiag_webserver.o `test -f 'server/src/swdiag_webserver.c' || echo '$(srcdir)/'`server/src/swdiag_webserver.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/swdiag-swdiag_webserver.Tpo server/src/$(DEPDIR)/swdiag-swdiag_webserver.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/swdiag_webserver.c' object='server/src/swdiag-swdiag_webserver.o' libtool=no @AMDEPBACKSLASH@
+server/src/myreflection-myrefl_webserver.o: server/src/myrefl_webserver.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/myreflection-myrefl_webserver.o -MD -MP -MF server/src/$(DEPDIR)/myreflection-myrefl_webserver.Tpo -c -o server/src/myreflection-myrefl_webserver.o `test -f 'server/src/myrefl_webserver.c' || echo '$(srcdir)/'`server/src/myrefl_webserver.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/myreflection-myrefl_webserver.Tpo server/src/$(DEPDIR)/myreflection-myrefl_webserver.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/myrefl_webserver.c' object='server/src/myreflection-myrefl_webserver.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/swdiag-swdiag_webserver.o `test -f 'server/src/swdiag_webserver.c' || echo '$(srcdir)/'`server/src/swdiag_webserver.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/myreflection-myrefl_webserver.o `test -f 'server/src/myrefl_webserver.c' || echo '$(srcdir)/'`server/src/myrefl_webserver.c
 
-server/src/swdiag-swdiag_webserver.obj: server/src/swdiag_webserver.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/swdiag-swdiag_webserver.obj -MD -MP -MF server/src/$(DEPDIR)/swdiag-swdiag_webserver.Tpo -c -o server/src/swdiag-swdiag_webserver.obj `if test -f 'server/src/swdiag_webserver.c'; then $(CYGPATH_W) 'server/src/swdiag_webserver.c'; else $(CYGPATH_W) '$(srcdir)/server/src/swdiag_webserver.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/swdiag-swdiag_webserver.Tpo server/src/$(DEPDIR)/swdiag-swdiag_webserver.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/swdiag_webserver.c' object='server/src/swdiag-swdiag_webserver.obj' libtool=no @AMDEPBACKSLASH@
+server/src/myreflection-myrefl_webserver.obj: server/src/myrefl_webserver.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/myreflection-myrefl_webserver.obj -MD -MP -MF server/src/$(DEPDIR)/myreflection-myrefl_webserver.Tpo -c -o server/src/myreflection-myrefl_webserver.obj `if test -f 'server/src/myrefl_webserver.c'; then $(CYGPATH_W) 'server/src/myrefl_webserver.c'; else $(CYGPATH_W) '$(srcdir)/server/src/myrefl_webserver.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/myreflection-myrefl_webserver.Tpo server/src/$(DEPDIR)/myreflection-myrefl_webserver.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/myrefl_webserver.c' object='server/src/myreflection-myrefl_webserver.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/swdiag-swdiag_webserver.obj `if test -f 'server/src/swdiag_webserver.c'; then $(CYGPATH_W) 'server/src/swdiag_webserver.c'; else $(CYGPATH_W) '$(srcdir)/server/src/swdiag_webserver.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/myreflection-myrefl_webserver.obj `if test -f 'server/src/myrefl_webserver.c'; then $(CYGPATH_W) 'server/src/myrefl_webserver.c'; else $(CYGPATH_W) '$(srcdir)/server/src/myrefl_webserver.c'; fi`
 
-server/src/swdiag-swdiag_server_libinterface.o: server/src/swdiag_server_libinterface.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/swdiag-swdiag_server_libinterface.o -MD -MP -MF server/src/$(DEPDIR)/swdiag-swdiag_server_libinterface.Tpo -c -o server/src/swdiag-swdiag_server_libinterface.o `test -f 'server/src/swdiag_server_libinterface.c' || echo '$(srcdir)/'`server/src/swdiag_server_libinterface.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/swdiag-swdiag_server_libinterface.Tpo server/src/$(DEPDIR)/swdiag-swdiag_server_libinterface.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/swdiag_server_libinterface.c' object='server/src/swdiag-swdiag_server_libinterface.o' libtool=no @AMDEPBACKSLASH@
+server/src/myreflection-myrefl_server_libinterface.o: server/src/myrefl_server_libinterface.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/myreflection-myrefl_server_libinterface.o -MD -MP -MF server/src/$(DEPDIR)/myreflection-myrefl_server_libinterface.Tpo -c -o server/src/myreflection-myrefl_server_libinterface.o `test -f 'server/src/myrefl_server_libinterface.c' || echo '$(srcdir)/'`server/src/myrefl_server_libinterface.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/myreflection-myrefl_server_libinterface.Tpo server/src/$(DEPDIR)/myreflection-myrefl_server_libinterface.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/myrefl_server_libinterface.c' object='server/src/myreflection-myrefl_server_libinterface.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/swdiag-swdiag_server_libinterface.o `test -f 'server/src/swdiag_server_libinterface.c' || echo '$(srcdir)/'`server/src/swdiag_server_libinterface.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/myreflection-myrefl_server_libinterface.o `test -f 'server/src/myrefl_server_libinterface.c' || echo '$(srcdir)/'`server/src/myrefl_server_libinterface.c
 
-server/src/swdiag-swdiag_server_libinterface.obj: server/src/swdiag_server_libinterface.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -MT server/src/swdiag-swdiag_server_libinterface.obj -MD -MP -MF server/src/$(DEPDIR)/swdiag-swdiag_server_libinterface.Tpo -c -o server/src/swdiag-swdiag_server_libinterface.obj `if test -f 'server/src/swdiag_server_libinterface.c'; then $(CYGPATH_W) 'server/src/swdiag_server_libinterface.c'; else $(CYGPATH_W) '$(srcdir)/server/src/swdiag_server_libinterface.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/swdiag-swdiag_server_libinterface.Tpo server/src/$(DEPDIR)/swdiag-swdiag_server_libinterface.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/swdiag_server_libinterface.c' object='server/src/swdiag-swdiag_server_libinterface.obj' libtool=no @AMDEPBACKSLASH@
+server/src/myreflection-myrefl_server_libinterface.obj: server/src/myrefl_server_libinterface.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -MT server/src/myreflection-myrefl_server_libinterface.obj -MD -MP -MF server/src/$(DEPDIR)/myreflection-myrefl_server_libinterface.Tpo -c -o server/src/myreflection-myrefl_server_libinterface.obj `if test -f 'server/src/myrefl_server_libinterface.c'; then $(CYGPATH_W) 'server/src/myrefl_server_libinterface.c'; else $(CYGPATH_W) '$(srcdir)/server/src/myrefl_server_libinterface.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) server/src/$(DEPDIR)/myreflection-myrefl_server_libinterface.Tpo server/src/$(DEPDIR)/myreflection-myrefl_server_libinterface.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='server/src/myrefl_server_libinterface.c' object='server/src/myreflection-myrefl_server_libinterface.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(swdiag_CFLAGS) $(CFLAGS) -c -o server/src/swdiag-swdiag_server_libinterface.obj `if test -f 'server/src/swdiag_server_libinterface.c'; then $(CYGPATH_W) 'server/src/swdiag_server_libinterface.c'; else $(CYGPATH_W) '$(srcdir)/server/src/swdiag_server_libinterface.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(myreflection_CFLAGS) $(CFLAGS) -c -o server/src/myreflection-myrefl_server_libinterface.obj `if test -f 'server/src/myrefl_server_libinterface.c'; then $(CYGPATH_W) 'server/src/myrefl_server_libinterface.c'; else $(CYGPATH_W) '$(srcdir)/server/src/myrefl_server_libinterface.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -1050,33 +1055,33 @@ clean-libtool:
 
 distclean-libtool:
 	-rm -f libtool config.lt
-install-dist_swdiag_confDATA: $(dist_swdiag_conf_DATA)
+install-dist_myreflection_confDATA: $(dist_myreflection_conf_DATA)
 	@$(NORMAL_INSTALL)
-	@list='$(dist_swdiag_conf_DATA)'; test -n "$(swdiag_confdir)" || list=; \
+	@list='$(dist_myreflection_conf_DATA)'; test -n "$(myreflection_confdir)" || list=; \
 	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(swdiag_confdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(swdiag_confdir)" || exit 1; \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(myreflection_confdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(myreflection_confdir)" || exit 1; \
 	fi; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(swdiag_confdir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(swdiag_confdir)" || exit $$?; \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(myreflection_confdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(myreflection_confdir)" || exit $$?; \
 	done
 
-uninstall-dist_swdiag_confDATA:
+uninstall-dist_myreflection_confDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(dist_swdiag_conf_DATA)'; test -n "$(swdiag_confdir)" || list=; \
+	@list='$(dist_myreflection_conf_DATA)'; test -n "$(myreflection_confdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(swdiag_confdir)'; $(am__uninstall_files_from_dir)
-install-nobase_dist_swdiag_htmlDATA: $(nobase_dist_swdiag_html_DATA)
+	dir='$(DESTDIR)$(myreflection_confdir)'; $(am__uninstall_files_from_dir)
+install-nobase_dist_myreflection_htmlDATA: $(nobase_dist_myreflection_html_DATA)
 	@$(NORMAL_INSTALL)
-	@list='$(nobase_dist_swdiag_html_DATA)'; test -n "$(swdiag_htmldir)" || list=; \
+	@list='$(nobase_dist_myreflection_html_DATA)'; test -n "$(myreflection_htmldir)" || list=; \
 	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(swdiag_htmldir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(swdiag_htmldir)" || exit 1; \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(myreflection_htmldir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(myreflection_htmldir)" || exit 1; \
 	fi; \
 	$(am__nobase_list) | while read dir files; do \
 	  xfiles=; for file in $$files; do \
@@ -1084,38 +1089,38 @@ install-nobase_dist_swdiag_htmlDATA: $(nobase_dist_swdiag_html_DATA)
 	    else xfiles="$$xfiles $(srcdir)/$$file"; fi; done; \
 	  test -z "$$xfiles" || { \
 	    test "x$$dir" = x. || { \
-	      echo " $(MKDIR_P) '$(DESTDIR)$(swdiag_htmldir)/$$dir'"; \
-	      $(MKDIR_P) "$(DESTDIR)$(swdiag_htmldir)/$$dir"; }; \
-	    echo " $(INSTALL_DATA) $$xfiles '$(DESTDIR)$(swdiag_htmldir)/$$dir'"; \
-	    $(INSTALL_DATA) $$xfiles "$(DESTDIR)$(swdiag_htmldir)/$$dir" || exit $$?; }; \
+	      echo " $(MKDIR_P) '$(DESTDIR)$(myreflection_htmldir)/$$dir'"; \
+	      $(MKDIR_P) "$(DESTDIR)$(myreflection_htmldir)/$$dir"; }; \
+	    echo " $(INSTALL_DATA) $$xfiles '$(DESTDIR)$(myreflection_htmldir)/$$dir'"; \
+	    $(INSTALL_DATA) $$xfiles "$(DESTDIR)$(myreflection_htmldir)/$$dir" || exit $$?; }; \
 	done
 
-uninstall-nobase_dist_swdiag_htmlDATA:
+uninstall-nobase_dist_myreflection_htmlDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(nobase_dist_swdiag_html_DATA)'; test -n "$(swdiag_htmldir)" || list=; \
+	@list='$(nobase_dist_myreflection_html_DATA)'; test -n "$(myreflection_htmldir)" || list=; \
 	$(am__nobase_strip_setup); files=`$(am__nobase_strip)`; \
-	dir='$(DESTDIR)$(swdiag_htmldir)'; $(am__uninstall_files_from_dir)
-install-libswdiagincHEADERS: $(libswdiaginc_HEADERS)
+	dir='$(DESTDIR)$(myreflection_htmldir)'; $(am__uninstall_files_from_dir)
+install-libmyreflectionincHEADERS: $(libmyreflectioninc_HEADERS)
 	@$(NORMAL_INSTALL)
-	@list='$(libswdiaginc_HEADERS)'; test -n "$(libswdiagincdir)" || list=; \
+	@list='$(libmyreflectioninc_HEADERS)'; test -n "$(libmyreflectionincdir)" || list=; \
 	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(libswdiagincdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(libswdiagincdir)" || exit 1; \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(libmyreflectionincdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(libmyreflectionincdir)" || exit 1; \
 	fi; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(libswdiagincdir)'"; \
-	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(libswdiagincdir)" || exit $$?; \
+	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(libmyreflectionincdir)'"; \
+	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(libmyreflectionincdir)" || exit $$?; \
 	done
 
-uninstall-libswdiagincHEADERS:
+uninstall-libmyreflectionincHEADERS:
 	@$(NORMAL_UNINSTALL)
-	@list='$(libswdiaginc_HEADERS)'; test -n "$(libswdiagincdir)" || list=; \
+	@list='$(libmyreflectioninc_HEADERS)'; test -n "$(libmyreflectionincdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(libswdiagincdir)'; $(am__uninstall_files_from_dir)
+	dir='$(DESTDIR)$(libmyreflectionincdir)'; $(am__uninstall_files_from_dir)
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run 'make' without going through this Makefile.
@@ -1421,7 +1426,7 @@ install-binPROGRAMS: install-libLTLIBRARIES
 
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(swdiag_modulesdir)" "$(DESTDIR)$(swdiag_confdir)" "$(DESTDIR)$(swdiag_htmldir)" "$(DESTDIR)$(libswdiagincdir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(myreflection_modulesdir)" "$(DESTDIR)$(myreflection_confdir)" "$(DESTDIR)$(myreflection_htmldir)" "$(DESTDIR)$(libmyreflectionincdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -1487,9 +1492,10 @@ info: info-recursive
 
 info-am:
 
-install-data-am: install-dist_swdiag_confDATA \
-	install-dist_swdiag_modulesSCRIPTS install-libswdiagincHEADERS \
-	install-nobase_dist_swdiag_htmlDATA
+install-data-am: install-dist_myreflection_confDATA \
+	install-dist_myreflection_modulesSCRIPTS \
+	install-libmyreflectionincHEADERS \
+	install-nobase_dist_myreflection_htmlDATA
 
 install-dvi: install-dvi-recursive
 
@@ -1537,10 +1543,11 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS uninstall-dist_swdiag_confDATA \
-	uninstall-dist_swdiag_modulesSCRIPTS uninstall-libLTLIBRARIES \
-	uninstall-libswdiagincHEADERS \
-	uninstall-nobase_dist_swdiag_htmlDATA
+uninstall-am: uninstall-binPROGRAMS \
+	uninstall-dist_myreflection_confDATA \
+	uninstall-dist_myreflection_modulesSCRIPTS \
+	uninstall-libLTLIBRARIES uninstall-libmyreflectionincHEADERS \
+	uninstall-nobase_dist_myreflection_htmlDATA
 
 .MAKE: $(am__recursive_targets) install-am install-strip
 
@@ -1554,21 +1561,22 @@ uninstall-am: uninstall-binPROGRAMS uninstall-dist_swdiag_confDATA \
 	distclean-local distclean-tags distcleancheck distdir \
 	distuninstallcheck dvi dvi-am html html-am info info-am \
 	install install-am install-binPROGRAMS install-data \
-	install-data-am install-dist_swdiag_confDATA \
-	install-dist_swdiag_modulesSCRIPTS install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-libLTLIBRARIES \
-	install-libswdiagincHEADERS install-man \
-	install-nobase_dist_swdiag_htmlDATA install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags tags-am uninstall uninstall-am uninstall-binPROGRAMS \
-	uninstall-dist_swdiag_confDATA \
-	uninstall-dist_swdiag_modulesSCRIPTS uninstall-libLTLIBRARIES \
-	uninstall-libswdiagincHEADERS \
-	uninstall-nobase_dist_swdiag_htmlDATA
+	install-data-am install-dist_myreflection_confDATA \
+	install-dist_myreflection_modulesSCRIPTS install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am \
+	install-libLTLIBRARIES install-libmyreflectionincHEADERS \
+	install-man install-nobase_dist_myreflection_htmlDATA \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	installdirs-am maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
+	uninstall-am uninstall-binPROGRAMS \
+	uninstall-dist_myreflection_confDATA \
+	uninstall-dist_myreflection_modulesSCRIPTS \
+	uninstall-libLTLIBRARIES uninstall-libmyreflectionincHEADERS \
+	uninstall-nobase_dist_myreflection_htmlDATA
 
 
 @ADD_SERVER_TRUE@dist-hook:
@@ -1595,7 +1603,7 @@ rpm:
 	tar cvzf $(PACKAGE)-0.0.1.tar.gz $(PACKAGE)-0.0.1 ; \
 	$(RM) -rf $(PACKAGE)-0.0.1 ; \
 	RPM_TOPDIR=`rpm --showrc | perl -n -e 'print if(s/.*_topdir\s+(.*)/$$1/)'` ; \
-	cp $(srcdir)/packages/rpm/swdiag.spec $$RPM_TOPDIR/SPECS ; \
+	cp $(srcdir)/packages/rpm/myreflection.spec $$RPM_TOPDIR/SPECS ; \
 	cp $(PACKAGE)-0.0.1.tar.gz $$RPM_TOPDIR/SOURCES/ ; \
 	rpmbuild -ba --clean --rmsource $$RPM_TOPDIR/SPECS/$(PACKAGE).spec ; \
 	mv $$RPM_TOPDIR/RPMS/x86_64/$(PACKAGE)-*.rpm . ; \

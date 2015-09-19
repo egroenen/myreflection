@@ -1,5 +1,5 @@
 /*
- * check_sched.c - Unit Test Harness for swdiag_sched.c
+ * check_sched.c - Unit Test Harness for myrefl_sched.c
  *
  * Copyright (c) 2014 Edward Groenendaal.
  *
@@ -23,7 +23,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * Test the contents of swdiag_sched.c using the "check" UT framework.
+ * Test the contents of myrefl_sched.c using the "check" UT framework.
  * Use "make check" to run these tests.
  *
  * Use ck_assert_msg() for things being tested in that test, and ck_assert()
@@ -32,7 +32,7 @@
  * April 2014, Edward Groenendaal
  */
 #include <check.h>
-#include "../src/swdiag_obj.h"
+#include "../src/myrefl_obj.h"
 
 int
 main (void)

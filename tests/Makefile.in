@@ -97,7 +97,7 @@ CONFIG_CLEAN_VPATH_FILES =
 am_check_obj_OBJECTS = check_obj-check_obj.$(OBJEXT) \
 	check_obj-check_base_xos_stubs.$(OBJEXT)
 check_obj_OBJECTS = $(am_check_obj_OBJECTS)
-check_obj_DEPENDENCIES = $(top_builddir)/libswdiag.la
+check_obj_DEPENDENCIES = $(top_builddir)/libmyreflection.la
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -108,28 +108,28 @@ check_obj_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 am_check_sched_OBJECTS = check_sched-check_sched.$(OBJEXT) \
 	check_sched-check_base_xos_stubs.$(OBJEXT)
 check_sched_OBJECTS = $(am_check_sched_OBJECTS)
-check_sched_DEPENDENCIES = $(top_builddir)/libswdiag.la
+check_sched_DEPENDENCIES = $(top_builddir)/libmyreflection.la
 check_sched_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(check_sched_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 am_check_thread_OBJECTS = check_thread-check_thread.$(OBJEXT) \
 	check_thread-check_base_xos_stubs.$(OBJEXT)
 check_thread_OBJECTS = $(am_check_thread_OBJECTS)
-check_thread_DEPENDENCIES = $(top_builddir)/libswdiag.la
+check_thread_DEPENDENCIES = $(top_builddir)/libmyreflection.la
 check_thread_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(check_thread_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 am_check_util_OBJECTS = check_util-check_util.$(OBJEXT) \
 	check_util-check_base_xos_stubs.$(OBJEXT)
 check_util_OBJECTS = $(am_check_util_OBJECTS)
-check_util_DEPENDENCIES = $(top_builddir)/libswdiag.la
+check_util_DEPENDENCIES = $(top_builddir)/libmyreflection.la
 check_util_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(check_util_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 am_check_xos_OBJECTS = check_xos-check_xos.$(OBJEXT) \
 	check_xos-check_base_xos_stubs.$(OBJEXT)
 check_xos_OBJECTS = $(am_check_xos_OBJECTS)
-check_xos_DEPENDENCIES = $(top_builddir)/libswdiag.la
+check_xos_DEPENDENCIES = $(top_builddir)/libmyreflection.la
 check_xos_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(check_xos_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
@@ -559,21 +559,21 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-check_util_SOURCES = check_util.c check_base_xos_stubs.c $(top_builddir)/src/swdiag_sched.h
+check_util_SOURCES = check_util.c check_base_xos_stubs.c $(top_builddir)/src/myrefl_sched.h
 check_util_CFLAGS = @CHECK_CFLAGS@ -I../include
-check_util_LDADD = $(top_builddir)/libswdiag.la @CHECK_LIBS@ -lm -lrt -lpthread
-check_xos_SOURCES = check_xos.c check_base_xos_stubs.c $(top_builddir)/src/swdiag_sched.h
+check_util_LDADD = $(top_builddir)/libmyreflection.la @CHECK_LIBS@ -lm -lrt -lpthread
+check_xos_SOURCES = check_xos.c check_base_xos_stubs.c $(top_builddir)/src/myrefl_sched.h
 check_xos_CFLAGS = @CHECK_CFLAGS@ -I../include
-check_xos_LDADD = $(top_builddir)/libswdiag.la @CHECK_LIBS@ -lm -lrt -lpthread
-check_thread_SOURCES = check_thread.c check_base_xos_stubs.c $(top_builddir)/src/swdiag_sched.h
+check_xos_LDADD = $(top_builddir)/libmyreflection.la @CHECK_LIBS@ -lm -lrt -lpthread
+check_thread_SOURCES = check_thread.c check_base_xos_stubs.c $(top_builddir)/src/myrefl_sched.h
 check_thread_CFLAGS = @CHECK_CFLAGS@ -I../include
-check_thread_LDADD = $(top_builddir)/libswdiag.la @CHECK_LIBS@ -lm -lrt -lpthread
-check_obj_SOURCES = check_obj.c check_base_xos_stubs.c $(top_builddir)/src/swdiag_obj.h
+check_thread_LDADD = $(top_builddir)/libmyreflection.la @CHECK_LIBS@ -lm -lrt -lpthread
+check_obj_SOURCES = check_obj.c check_base_xos_stubs.c $(top_builddir)/src/myrefl_obj.h
 check_obj_CFLAGS = @CHECK_CFLAGS@ -I../include
-check_obj_LDADD = $(top_builddir)/libswdiag.la @CHECK_LIBS@ -lm -lrt -lpthread
-check_sched_SOURCES = check_sched.c check_base_xos_stubs.c $(top_builddir)/src/swdiag_sched.h
+check_obj_LDADD = $(top_builddir)/libmyreflection.la @CHECK_LIBS@ -lm -lrt -lpthread
+check_sched_SOURCES = check_sched.c check_base_xos_stubs.c $(top_builddir)/src/myrefl_sched.h
 check_sched_CFLAGS = @CHECK_CFLAGS@ -I../include
-check_sched_LDADD = $(top_builddir)/libswdiag.la @CHECK_LIBS@ -lm -lrt -lpthread
+check_sched_LDADD = $(top_builddir)/libmyreflection.la @CHECK_LIBS@ -lm -lrt -lpthread
 all: all-am
 
 .SUFFIXES:

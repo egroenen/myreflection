@@ -7,19 +7,19 @@
  *      Author: eddyg
  */
 
-#include <swdiag_client.h>
-#include "../src/swdiag_linux.h"
+#include <myrefl_client.h>
+#include "../src/myrefl_linux.h"
 
-void swdiag_xos_notify_user (const char *instance, const char *message)
+void myrefl_xos_notify_user (const char *instance, const char *message)
 {
 }
 
 /*
- * swdiag_xos_notify_test_result()
+ * myrefl_xos_notify_test_result()
  * Notify the results of a test.
  *
  */
-void swdiag_xos_notify_test_result (const char *test_name,
+void myrefl_xos_notify_test_result (const char *test_name,
                                     const char *instance_name,
                                     boolean result,
                                     long value)
@@ -30,11 +30,11 @@ void swdiag_xos_notify_test_result (const char *test_name,
 }
 
 /*
- * swdiag_xos_notify_rule_result()
+ * myrefl_xos_notify_rule_result()
  * Notify the results of a rule.
  *
  */
-void swdiag_xos_notify_rule_result (const char *rule_name,
+void myrefl_xos_notify_rule_result (const char *rule_name,
                                     const char *instance_name,
                                     boolean result,
                                     long value)
@@ -45,11 +45,11 @@ void swdiag_xos_notify_rule_result (const char *rule_name,
 }
 
 /*
- * swdiag_xos_notify_action_result()
+ * myrefl_xos_notify_action_result()
  * Notify the results of an action.
  *
  */
-void swdiag_xos_notify_action_result (const char *action_name,
+void myrefl_xos_notify_action_result (const char *action_name,
                                       const char *instance_name,
                                       boolean result,
                                       long value)
@@ -60,11 +60,11 @@ void swdiag_xos_notify_action_result (const char *action_name,
 }
 
 /*
- * swdiag_xos_notify_action_result()
+ * myrefl_xos_notify_action_result()
  * Notify of changes to a components health.
  *
  */
-void swdiag_xos_notify_component_health (const char *comp_name,
+void myrefl_xos_notify_component_health (const char *comp_name,
                                          int health)
 
 {
@@ -72,46 +72,46 @@ void swdiag_xos_notify_component_health (const char *comp_name,
     //       comp_name);
 }
 
-swdiag_result_t swdiag_xos_reload (void)
+myrefl_result_t myrefl_xos_reload (void)
 {
-    return(SWDIAG_RESULT_ABORT);
+    return(MYREFL_RESULT_ABORT);
 }
 
-swdiag_result_t swdiag_xos_scheduled_reload (void)
+myrefl_result_t myrefl_xos_scheduled_reload (void)
 {
-    return(SWDIAG_RESULT_ABORT);
+    return(MYREFL_RESULT_ABORT);
 }
 
-swdiag_result_t swdiag_xos_switchover (void)
+myrefl_result_t myrefl_xos_switchover (void)
 {
-    return(SWDIAG_RESULT_ABORT);
+    return(MYREFL_RESULT_ABORT);
 }
 
-swdiag_result_t swdiag_xos_scheduled_switchover (void)
+myrefl_result_t myrefl_xos_scheduled_switchover (void)
 {
-    return(SWDIAG_RESULT_ABORT);
+    return(MYREFL_RESULT_ABORT);
 }
 
-swdiag_result_t swdiag_xos_reload_standby (void)
+myrefl_result_t myrefl_xos_reload_standby (void)
 {
-    return(SWDIAG_RESULT_ABORT);
+    return(MYREFL_RESULT_ABORT);
 }
 
 /*
  * Using the swdiag library requires that some functions be implemented, we will
  * leave these as stubs for now.
  */
-void swdiag_xos_register_with_master (const char *component)
+void myrefl_xos_register_with_master (const char *component)
 {
 
 }
 
-void swdiag_xos_register_as_master (void)
+void myrefl_xos_register_as_master (void)
 {
 
 }
 
-void swdiag_xos_slave_to_master (void)
+void myrefl_xos_slave_to_master (void)
 {
 
 }

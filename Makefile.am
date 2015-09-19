@@ -1,4 +1,4 @@
-lib_LTLIBRARIES = libswdiag.la
+lib_LTLIBRARIES = libmyreflection.la
 
 bin_PROGRAMS =
 
@@ -8,107 +8,107 @@ EXTRA_DIST = LICENSE
 
 ###############################################################################
 
-libswdiag_la_LDFLAGS = \
+libmyreflection_la_LDFLAGS = \
     $(AM_LDFLAGS) \
-    -version-number $(PROJECT_version_major):$(PROJECT_version_minor):$(PROJECT_version_point) $(X_libswdiag_la_LDFLAGS)
+    -version-number $(PROJECT_version_major):$(PROJECT_version_minor):$(PROJECT_version_point) $(X_libmyrefl_la_LDFLAGS)
 
 
-libswdiag_la_SOURCES = \
-    src/swdiag_api.c                     \
-    src/swdiag_api.h                     \
-    src/swdiag_cli.h                     \
-    src/swdiag_cli_local.c               \
-    src/swdiag_cli_local.h               \
-    src/swdiag_cli_handle.h              \
-    src/swdiag_linux.c                   \
-    src/swdiag_linux.h                   \
-    src/swdiag_obj.c                     \
-    src/swdiag_obj.h                     \
-    src/swdiag_rci.c                     \
-    src/swdiag_rci.h                     \
-    src/swdiag_sched.c                   \
-    src/swdiag_sched.h                   \
-    src/swdiag_sequence.c                \
-    src/swdiag_sequence.h                \
-    src/swdiag_syslog.c                  \
-    src/swdiag_thread.c                  \
-    src/swdiag_thread.h                  \
-    src/swdiag_trace.c                   \
-    src/swdiag_trace.h                   \
-    src/swdiag_types.h                   \
-    src/swdiag_util.c                    \
-    src/swdiag_util.h                    \
-    src/swdiag_xos.c                     \
-    src/swdiag_xos.h                    
+libmyreflection_la_SOURCES = \
+    src/myrefl_api.c                     \
+    src/myrefl_api.h                     \
+    src/myrefl_cli.h                     \
+    src/myrefl_cli_local.c               \
+    src/myrefl_cli_local.h               \
+    src/myrefl_cli_handle.h              \
+    src/myrefl_linux.c                   \
+    src/myrefl_linux.h                   \
+    src/myrefl_obj.c                     \
+    src/myrefl_obj.h                     \
+    src/myrefl_rci.c                     \
+    src/myrefl_rci.h                     \
+    src/myrefl_sched.c                   \
+    src/myrefl_sched.h                   \
+    src/myrefl_sequence.c                \
+    src/myrefl_sequence.h                \
+    src/myrefl_syslog.c                  \
+    src/myrefl_thread.c                  \
+    src/myrefl_thread.h                  \
+    src/myrefl_trace.c                   \
+    src/myrefl_trace.h                   \
+    src/myrefl_types.h                   \
+    src/myrefl_util.c                    \
+    src/myrefl_util.h                    \
+    src/myrefl_xos.c                     \
+    src/myrefl_xos.h                    
 
 if ADD_RPC
 #
 # Add RPC Network support, unconditional for now.
 #
-#libswdiag_la_SOURCES += \
-#    src/swdiag_unix_rpc.h                \
-#    src/swdiag_unix_rpc_xdr.c            \
-#    src/swdiag_unix_rpc_clnt.c           \
-#    src/swdiag_unix_rpc_svc.c            \
-#    src/swdiag_unix_rpc.x
+#libmyreflection_la_SOURCES += \
+#    src/myrefl_unix_rpc.h                \
+#    src/myrefl_unix_rpc_xdr.c            \
+#    src/myrefl_unix_rpc_clnt.c           \
+#    src/myrefl_unix_rpc_svc.c            \
+#    src/myrefl_unix_rpc.x
 
 CLEANFILES = \
-    src/swdiag_unix_rpc.h                \
-    src/swdiag_unix_rpc_xdr.c            \
-    src/swdiag_unix_rpc_clnt.c           \
-    src/swdiag_unix_rpc_svc.c            
+    src/myrefl_unix_rpc.h                \
+    src/myrefl_unix_rpc_xdr.c            \
+    src/myrefl_unix_rpc_clnt.c           \
+    src/myrefl_unix_rpc_svc.c            
 endif
 
 #
 # Shouldn't really add the examples to libswdiag, use
 # a different target that is not installed.
 #
-#libswdiag_la_SOURCES += \
+#libmyreflection_la_SOURCES += \
 #    src/examples/example1_polledtest.c   
 
 if ADD_PLATFORM_POSIX
-    libswdiag_la_SOURCES += \
-    src/swdiag_posix.c                   
+    libmyreflection_la_SOURCES += \
+    src/myrefl_posix.c                   
 endif
 if ADD_PLATFORM_WIN32
-    libswdiag_la_SOURCES += 
+    libmyreflection_la_SOURCES += 
 
 endif
 
 if ADD_SERVER
 
-#bin_PROGRAMS += swdiagcli
-bin_PROGRAMS += swdiag
-#bin_PROGRAMS += swdiagtest
+#bin_PROGRAMS += myreflectioncli
+bin_PROGRAMS += myreflection
+#bin_PROGRAMS += myreflectiontest
 
 
-swdiag_SOURCES    = server/src/swdiag_server.c \
-                    server/src/swdiag_server_module.c \
-                    server/src/swdiag_server_module.h \
-                    server/src/swdiag_server_config.c \
-                    server/src/swdiag_server_config.h \
+myreflection_SOURCES    = server/src/myrefl_server.c \
+                    server/src/myrefl_server_module.c \
+                    server/src/myrefl_server_module.h \
+                    server/src/myrefl_server_config.c \
+                    server/src/myrefl_server_config.h \
                     server/src/mongoose/mongoose.c \
                     server/src/mongoose/mongoose.h \
                     server/src/jsmn/jsmn.c \
                     server/src/jsmn/jsmn.h \
                     server/src/smtpfuncs.c \
                     server/src/smtpfuncs.h \
-                    server/src/swdiag_json_parser.c \
-                    server/src/swdiag_json_parser.h \
-                    server/src/swdiag_webserver.c \
-                    server/src/swdiag_webserver.h \
-                    server/src/swdiag_server_libinterface.c
+                    server/src/myrefl_json_parser.c \
+                    server/src/myrefl_json_parser.h \
+                    server/src/myrefl_webserver.c \
+                    server/src/myrefl_webserver.h \
+                    server/src/myrefl_server_libinterface.c
 
-swdiag_CFLAGS = -DNO_SSL_DL
+myreflection_CFLAGS = -DNO_SSL_DL
 
 # dynamically linked
-swdiag_LDADD      = libswdiag.la $(X_LDFLAGS) -lnsl -lpthread -lrt -ldl -lssl -lcrypto
+myreflection_LDADD      = libmyreflection.la $(X_LDFLAGS) -lnsl -lpthread -lrt -ldl -lssl -lcrypto
 
 # static link it
-swdiag_LDFLAGS    = -static
+myreflection_LDFLAGS    = -static
 
-swdiag_modulesdir    = $(datadir)/swdiag/server/modules
-dist_swdiag_modules_SCRIPTS = \
+myreflection_modulesdir    = $(datadir)/myreflection/server/modules
+dist_myreflection_modules_SCRIPTS = \
                     server/modules/diag_diskspace.sh \
                     server/modules/diag_diskspace.sh.conf \
                     server/modules/diag_memory_conf.py \
@@ -116,8 +116,8 @@ dist_swdiag_modules_SCRIPTS = \
                     server/modules/diag_postgres_conf.py \
                     server/modules/diag_postgres.py
 
-swdiag_htmldir    = $(datadir)/swdiag/
-nobase_dist_swdiag_html_DATA = \
+myreflection_htmldir    = $(datadir)/myreflection/
+nobase_dist_myreflection_html_DATA = \
                     server/http/index.html \
                     server/http/assets/js/get-shit-done.js
                     
@@ -125,22 +125,22 @@ nobase_dist_swdiag_html_DATA = \
 
 
 #init_ddir         = $(sysconfdir)/rc.d/init.d
-#init_d_SCRIPTS    = server/init/swdiag
+#init_d_SCRIPTS    = server/init/myreflection
 
-swdiag_confdir    = $(sysconfdir)
-dist_swdiag_conf_DATA = server/swdiag.cfg
+myreflection_confdir    = $(sysconfdir)
+dist_myreflection_conf_DATA = server/myreflection.cfg
 
 dist-hook:
 	rm -rf `find $(distdir)/server -type d -name .svn`
 
 endif
 
-libswdiagincdir = $(pkgincludedir)
+libmyreflectionincdir = $(pkgincludedir)
 
-libswdiaginc_HEADERS = \
+libmyreflectioninc_HEADERS = \
     include/project.h \
     \
-    include/swdiag_client.h
+    include/myrefl_client.h
 
 ###############################################################################
 
@@ -167,7 +167,7 @@ rpm:
 	tar cvzf $(PACKAGE)-0.0.1.tar.gz $(PACKAGE)-0.0.1 ; \
 	$(RM) -rf $(PACKAGE)-0.0.1 ; \
 	RPM_TOPDIR=`rpm --showrc | perl -n -e 'print if(s/.*_topdir\s+(.*)/$$1/)'` ; \
-	cp $(srcdir)/packages/rpm/swdiag.spec $$RPM_TOPDIR/SPECS ; \
+	cp $(srcdir)/packages/rpm/myreflection.spec $$RPM_TOPDIR/SPECS ; \
 	cp $(PACKAGE)-0.0.1.tar.gz $$RPM_TOPDIR/SOURCES/ ; \
 	rpmbuild -ba --clean --rmsource $$RPM_TOPDIR/SPECS/$(PACKAGE).spec ; \
 	mv $$RPM_TOPDIR/RPMS/x86_64/$(PACKAGE)-*.rpm . ; \
