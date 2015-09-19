@@ -595,7 +595,7 @@ PACKAGE_STRING='SWDiag -'
 PACKAGE_BUGREPORT='eddyg@myreflection.org'
 PACKAGE_URL=''
 
-ac_unique_file="src/swdiag_api.c"
+ac_unique_file="src/myrefl_api.c"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>

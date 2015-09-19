@@ -5,45 +5,45 @@
  * action.
  *
  */
-#include "swdiag_client.h"
+#include "myrefl_client.h"
 
 extern int check_foo(void);
 extern int fix_foo(void);
 
-static swdiag_result_t example_test (const char *instance, void *context, 
+static myrefl_result_t example_test (const char *instance, void *context, 
                                      long *value)
 {
     if (check_foo()) {
-        return(SWDIAG_RESULT_PASS);
+        return(MYREFL_RESULT_PASS);
     } else {
-        return(SWDIAG_RESULT_FAIL);
+        return(MYREFL_RESULT_FAIL);
     }
 }
 
-static swdiag_result_t example_action (const char *instance, void *context)
+static myrefl_result_t example_action (const char *instance, void *context)
 {
     if (fix_foo()) {
-        return(SWDIAG_RESULT_PASS);
+        return(MYREFL_RESULT_PASS);
     } else {
-        return(SWDIAG_RESULT_FAIL);
+        return(MYREFL_RESULT_FAIL);
     }
 }
 
 void example1_polledtest (void)
 {
-    swdiag_test_create_polled("ExampleTest",
+    myrefl_test_create_polled("ExampleTest",
                               example_test,
                               0,
-                              SWDIAG_PERIOD_NORMAL);
+                              MYREFL_PERIOD_NORMAL);
     
-    swdiag_action_create("ExampleAction",
+    myrefl_action_create("ExampleAction",
                          example_action,
                          0);
 
-    swdiag_rule_create("ExampleRule",
+    myrefl_rule_create("ExampleRule",
                        "ExampleTest",
                        "ExampleAction");
 
-    swdiag_test_chain_ready("ExampleTest");
+    myrefl_test_chain_ready("ExampleTest");
 
 }

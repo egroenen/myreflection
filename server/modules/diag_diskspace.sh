@@ -29,14 +29,14 @@ cat <<EOF
 
 "rule":{"name":"diskspace_low_free_rule",
 		"input":"diskspace_low_free_test",
-		"operator":"SWDIAG_RULE_LESS_THAN_N",
+		"operator":"MYREFL_RULE_LESS_THAN_N",
 		"n":$THRESHOLD,
 		"comp":"Diskspace"},
 
 "rule":{"name":"diskspace_low_free_rule_time",
         "input":"diskspace_low_free_rule",
         "action":"diskspace_notification",
-        "operator":"SWDIAG_RULE_N_IN_ROW"
+        "operator":"MYREFL_RULE_N_IN_ROW"
         "n":3,
         "comp":"Diskspace"},
 EOF
