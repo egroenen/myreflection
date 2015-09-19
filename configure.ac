@@ -37,7 +37,7 @@ AC_MSG_NOTICE([
 
 AC_CONFIG_AUX_DIR([autoaux])
 AM_INIT_AUTOMAKE([1.9.2 foreign subdir-objects nostdinc no-dist-gzip dist-bzip2 dist-zip])
-AC_CONFIG_SRCDIR([src/swdiag_api.c])
+AC_CONFIG_SRCDIR([src/myrefl_api.c])
 
 # disable unused langs (improves config speed, reduces configure file size)
 AC_DEFUN([_LT_AC_LANG_F77_CONFIG], [:])
